@@ -3571,6 +3571,17 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
       var barTrack = mv.barTrack != null ? mv.barTrack : 31.48;
       var expandedBarW = mv.expandedBarFull != null ? mv.expandedBarFull : 292;
       var expandedBarTrack = mv.expandedBarTrack != null ? mv.expandedBarTrack : 77;
+      var iconTitle = mv.iconTitle || '오늘 날씨에 딱 맞는\n플레이리스트';
+      var iconSubtitle = mv.iconSubtitle || 'Jim Hall - Concierto';
+      var iconHtml = window.renderAtomicForRole({
+        role: 'dot-music-1x2-icon',
+        variant: {
+          title: iconTitle,
+          subtitle: iconSubtitle,
+          barFull: expandedBarW,
+          barTrack: expandedBarTrack
+        }
+      }, rect);
       var isTabRoot = window.currentSurfaceType === window.SURFACE_TYPES.TAB_ROOT;
       var orangeClass = isTabRoot ? ' is-orange' : '';
       return '' +
@@ -3642,6 +3653,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
               '</div>' +
             '</div>' +
           '</div>' +
+          '<div class="dot-music1__icon" aria-hidden="true">' + iconHtml + '</div>' +
         '</div>';
     }
 
@@ -3721,26 +3733,26 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
               '<span class="dot-music3__iconBg"></span>' +
               '<svg class="dot-music3__noteSvg" width="32" height="32" viewBox="-2 -2 68 68" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
                 // Dot-note icon reconstructed from Figma ellipse positions (percent grid) ·r≈3.5 on 64 canvas
+                '<circle cx="19.85" cy="3.49" r="3.5" fill="#FFFFFF"/>' +   // x=25.57, y=0
                 '<circle cx="27.98" cy="3.49" r="3.5" fill="#FFFFFF"/>' +   // x=38.28, y=0
                 '<circle cx="35.66" cy="3.49" r="3.5" fill="#FFFFFF"/>' +   // x=50.99, y=0
                 '<circle cx="44.25" cy="3.49" r="3.5" fill="#FFFFFF"/>' +   // x=63.69, y=0
                 '<circle cx="52.39" cy="3.49" r="3.5" fill="#FFFFFF"/>' +   // x=76.41, y=0
                 '<circle cx="60.52" cy="3.49" r="3.5" fill="#FFFFFF"/>' +   // x=89.11, y=0
-                '<circle cx="19.85" cy="3.49" r="3.5" fill="#FFFFFF"/>' +   // x=25.57, y=0
 
-                '<circle cx="27.98" cy="11.62" r="3.5" fill="#FFFFFF"/>' +  // x=38.28, y=12.71
-                '<circle cx="44.25" cy="11.62" r="3.5" fill="#FFFFFF"/>' +  // x=63.69, y=12.71
-                '<circle cx="60.52" cy="11.62" r="3.5" fill="#FFFFFF"/>' +  // x=89.11, y=12.71
                 '<circle cx="19.85" cy="11.62" r="3.5" fill="#FFFFFF"/>' +  // x=25.57, y=12.71
+                '<circle cx="27.98" cy="11.62" r="3.5" fill="#FFFFFF"/>' +  // x=38.28, y=12.71
                 '<circle cx="35.66" cy="11.62" r="3.5" fill="#FFFFFF"/>' +  // x=50.99, y=12.71
+                '<circle cx="44.25" cy="11.62" r="3.5" fill="#FFFFFF"/>' +  // x=63.69, y=12.71
                 '<circle cx="52.39" cy="11.62" r="3.5" fill="#FFFFFF"/>' +  // x=76.41, y=12.71
+                '<circle cx="60.52" cy="11.62" r="3.5" fill="#FFFFFF"/>' +  // x=89.11, y=12.71
 
-                '<circle cx="27.98" cy="19.76" r="3.5" fill="#FFFFFF"/>' +  // x=38.28, y=25.43
-                '<circle cx="44.25" cy="19.76" r="3.5" fill="#FFFFFF"/>' +  // x=63.69, y=25.43
-                '<circle cx="60.52" cy="19.76" r="3.5" fill="#FFFFFF"/>' +  // x=89.11, y=25.43
                 '<circle cx="19.85" cy="19.76" r="3.5" fill="#FFFFFF"/>' +  // x=25.57, y=25.43
+                '<circle cx="27.98" cy="19.76" r="3.5" fill="#FFFFFF"/>' +  // x=38.28, y=25.43
                 '<circle cx="35.66" cy="19.76" r="3.5" fill="#FFFFFF"/>' +  // x=50.99, y=25.43
+                '<circle cx="44.25" cy="19.76" r="3.5" fill="#FFFFFF"/>' +  // x=63.69, y=25.43
                 '<circle cx="52.39" cy="19.76" r="3.5" fill="#FFFFFF"/>' +  // x=76.41, y=25.43
+                '<circle cx="60.52" cy="19.76" r="3.5" fill="#FFFFFF"/>' +  // x=89.11, y=25.43
 
                 '<circle cx="19.85" cy="28.80" r="3.5" fill="#FFFFFF"/>' +  // x=25.57, y=38.14
                 '<circle cx="60.52" cy="28.80" r="3.5" fill="#FFFFFF"/>' +  // x=89.11, y=38.14
@@ -3751,17 +3763,17 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
                 '<circle cx="19.85" cy="45.18" r="3.5" fill="#FFFFFF"/>' +  // x=25.57, y=63.57
                 '<circle cx="60.52" cy="45.18" r="3.5" fill="#FFFFFF"/>' +  // x=89.11, y=63.57
 
-                '<circle cx="11.62" cy="53.32" r="3.5" fill="#FFFFFF"/>' +  // x=12.71, y=76.28
                 '<circle cx="3.49"  cy="53.32" r="3.5" fill="#FFFFFF"/>' +  // x=0,     y=76.28
-                '<circle cx="52.39" cy="53.32" r="3.5" fill="#FFFFFF"/>' +  // x=63.7,  y=76.28
+                '<circle cx="11.62" cy="53.32" r="3.5" fill="#FFFFFF"/>' +  // x=12.71, y=76.28
                 '<circle cx="19.85" cy="53.32" r="3.5" fill="#FFFFFF"/>' +  // x=25.57, y=76.28
+                '<circle cx="44.25" cy="53.32" r="3.5" fill="#FFFFFF"/>' +  // restored upper-left dot of the right note head
+                '<circle cx="52.39" cy="53.32" r="3.5" fill="#FFFFFF"/>' +  // x=63.7,  y=76.28
                 '<circle cx="60.52" cy="53.32" r="3.5" fill="#FFFFFF"/>' +  // x=89.11, y=76.28
 
-                '<circle cx="11.62" cy="61.45" r="3.5" fill="#FFFFFF"/>' +  // x=12.71, y=89
                 '<circle cx="3.49"  cy="61.45" r="3.5" fill="#FFFFFF"/>' +  // x=0,     y=89
-                '<circle cx="52.39" cy="61.45" r="3.5" fill="#FFFFFF"/>' +  // x=63.7,  y=89
-                '<circle cx="52.39" cy="53.32" r="3.5" fill="#FFFFFF"/>' +  // x=76.41? (kept as spec's 63.7 block)
-                '<circle cx="52.39" cy="61.45" r="3.5" fill="#FFFFFF"/>' +  // duplicate-safe (dedup handled by SVG renderer)
+                '<circle cx="11.62" cy="61.45" r="3.5" fill="#FFFFFF"/>' +  // x=12.71, y=89
+                '<circle cx="44.25" cy="61.45" r="3.5" fill="#FFFFFF"/>' +
+                '<circle cx="52.39" cy="61.45" r="3.5" fill="#FFFFFF"/>' +
               '</svg>' +
             '</div>' +
             '<div class="dot-music3__title">' + safeTitle + '</div>' +
