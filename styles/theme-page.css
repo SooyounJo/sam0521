@@ -2459,13 +2459,15 @@
     right: 6.88px;
     top: calc(50% - 12px/2 + 0.17px);
   }
-  .detail-stage .dot-gframe1.is-focus {
+  .detail-stage .dot-gframe1.is-focus,
+  .dot-gframe3.is-focus {
     width: 162px;
     height: 218px;
     display: block;
     position: relative;
   }
-  .detail-stage .dot-gframe1.is-focus .dot-gcell {
+  .detail-stage .dot-gframe1.is-focus .dot-gcell,
+  .dot-gframe3.is-focus .dot-gcell {
     position: absolute;
     will-change: transform, opacity;
     transition:
@@ -2477,7 +2479,8 @@
       border-radius 680ms cubic-bezier(0.16, 1, 0.3, 1),
       transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .detail-stage .dot-gframe1.is-focus .dot-gcell.is-selected {
+  .detail-stage .dot-gframe1.is-focus .dot-gcell.is-selected,
+  .dot-gframe3.is-focus .dot-gcell.is-selected {
     left: var(--dot-gallery-origin-left, 0);
     top: var(--dot-gallery-origin-top, 0);
     width: 48px;
@@ -2485,7 +2488,8 @@
     z-index: 2;
     animation: dotGalleryBubble18 680ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
-  .detail-stage .dot-gframe1.is-focus .dot-gcell.is-selected .dot-gcell__img {
+  .detail-stage .dot-gframe1.is-focus .dot-gcell.is-selected .dot-gcell__img,
+  .dot-gframe3.is-focus .dot-gcell.is-selected .dot-gcell__img {
     left: 50% !important;
     right: auto !important;
     top: 50% !important;
@@ -2496,14 +2500,16 @@
     transform: translate(-50%, -50%) scaleX(var(--dot-gallery-img-x, 1)) !important;
     transition: object-position 680ms cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .detail-stage .dot-gframe1.is-focus .dot-gcell.is-selected .dot-gcell__shade {
+  .detail-stage .dot-gframe1.is-focus .dot-gcell.is-selected .dot-gcell__shade,
+  .dot-gframe3.is-focus .dot-gcell.is-selected .dot-gcell__shade {
     inset: 0;
     width: auto;
     height: auto;
     left: 0;
     top: 0;
   }
-  .detail-stage .dot-gframe1.is-focus .dot-gcell.is-selected .dot-gcell__label {
+  .detail-stage .dot-gframe1.is-focus .dot-gcell.is-selected .dot-gcell__label,
+  .dot-gframe3.is-focus .dot-gcell.is-selected .dot-gcell__label {
     left: 24px;
     top: 18px;
     right: auto;
@@ -2517,7 +2523,8 @@
       top 680ms cubic-bezier(0.16, 1, 0.3, 1),
       font-size 680ms cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .detail-stage .dot-gframe1.is-focus .dot-gcell:not(.is-selected) {
+  .detail-stage .dot-gframe1.is-focus .dot-gcell:not(.is-selected),
+  .dot-gframe3.is-focus .dot-gcell:not(.is-selected) {
     opacity: 1;
     transform: translateX(0) scale(1);
     pointer-events: auto;
@@ -2554,6 +2561,31 @@
     background: transparent;
     border-radius: 0;
     overflow: visible;
+  }
+  .dot-gframe3 > .dot-gcell:nth-child(1) {
+    left: 1px;
+    top: 1px;
+    width: 104px;
+    height: 104px;
+    border-radius: 32px;
+    z-index: 2;
+  }
+  .dot-gframe3 > .dot-gcell:nth-child(2) { left: 113px; top: 1px; }
+  .dot-gframe3 > .dot-gcell:nth-child(3) { left: 113px; top: 57px; }
+  .dot-gframe3 > .dot-gcell:nth-child(4) { left: 1px; top: 113px; }
+  .dot-gframe3 > .dot-gcell:nth-child(5) { left: 57px; top: 113px; }
+  .dot-gframe3 > .dot-gcell:nth-child(6) { left: 113px; top: 113px; }
+  .dot-gframe3 > .dot-gcell:nth-child(7) { left: 1px; top: 169px; }
+  .dot-gframe3 > .dot-gcell:nth-child(8) { left: 57px; top: 169px; }
+  .dot-gframe3 > .dot-gcell:nth-child(9) { left: 113px; top: 169px; }
+  .dot-gframe3 > .dot-gcell:nth-child(1) .dot-gcell__label {
+    font-size: 14px;
+    line-height: 100%;
+    width: 16px;
+    height: 14px;
+    left: calc(50% - 16px/2 - 28px);
+    top: calc(50% - 14px/2 - 33px);
+    transform: none;
   }
   .dot-gframe3__big {
     position: absolute;

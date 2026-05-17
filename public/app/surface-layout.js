@@ -3489,8 +3489,11 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
       if (typeof window !== 'undefined' && !window.__dotGalleryFrame1Focus) {
         window.__dotGalleryFrame1Focus = function (cell) {
           var frame = cell && cell.parentNode;
-          if (!frame || !frame.closest || !frame.closest('.detail-stage')) return;
-          var cells = Array.prototype.slice.call(frame.children);
+          if (!frame || !frame.closest) return;
+          if (!frame.closest('.detail-stage') && !frame.classList.contains('dot-gframe3')) return;
+          var cells = Array.prototype.slice.call(frame.children).filter(function (item) {
+            return item.classList && item.classList.contains('dot-gcell');
+          });
           var activeIndex = cells.indexOf(cell);
           if (activeIndex < 0) return;
 
@@ -3578,27 +3581,23 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
       var tile = function (label, isBig, op, src) {
         var useSrc = src || imgSrc3;
         return '' +
-          '<div class="dot-gtile' + (isBig ? ' is-big' : '') + '">' +
-            '<img class="dot-gtile__img" src="' + useSrc + '" alt="" style="--op:' + op + ';" onerror="this.style.display=`none`;" />' +
-            '<div class="dot-gtile__shade" aria-hidden="true"></div>' +
-            '<div class="dot-gtile__label">' + label + '</div>' +
+          '<div class="dot-gcell dot-gtile' + (isBig ? ' is-big' : '') + '" onclick="window.__dotGalleryFrame1Focus&&window.__dotGalleryFrame1Focus(this)" role="button" tabindex="0">' +
+            '<img class="dot-gcell__img dot-gtile__img" src="' + useSrc + '" alt="" style="--op:' + op + ';--dot-gallery-img-x:1;" onerror="this.style.display=`none`;" />' +
+            '<div class="dot-gcell__shade dot-gtile__shade" aria-hidden="true"></div>' +
+            '<div class="dot-gcell__label dot-gtile__label">' + label + '</div>' +
           '</div>';
       };
       return '' +
-        '<div class="dot-card dot-gframe3" data-state="' + (f3v.state || 'idle') + '">' +
-          '<div class="dot-gframe3__big">' + tile(labs3[0] || '18', true, '28% 28%', (imgs3 && imgs3[0]) ? imgs3[0] : null) + '</div>' +
-          '<div class="dot-gframe3__right">' +
+        '<div class="dot-card dot-gframe3 is-focus" data-state="' + (f3v.state || 'idle') + '">' +
+          tile(labs3[0] || '18', true, '28% 28%', (imgs3 && imgs3[0]) ? imgs3[0] : null) +
             tile(labs3[1] || '19', false, '70% 18%', (imgs3 && imgs3[1]) ? imgs3[1] : null) +
             tile(labs3[2] || '20', false, '82% 35%', (imgs3 && imgs3[2]) ? imgs3[2] : null) +
-          '</div>' +
-          '<div class="dot-gframe3__grid">' +
             tile(labs3[3] || '21', false, '60% 30%', (imgs3 && imgs3[3]) ? imgs3[3] : null) +
             tile(labs3[4] || '22', false, '60% 30%', (imgs3 && imgs3[4]) ? imgs3[4] : null) +
             tile(labs3[5] || '23', false, '60% 30%', (imgs3 && imgs3[5]) ? imgs3[5] : null) +
             tile(labs3[6] || '24', false, '60% 30%', (imgs3 && imgs3[6]) ? imgs3[6] : null) +
             tile(labs3[7] || '25', false, '60% 30%', (imgs3 && imgs3[7]) ? imgs3[7] : null) +
             tile(labs3[8] || 'Today', false, '60% 30%', (imgs3 && imgs3[8]) ? imgs3[8] : null) +
-          '</div>' +
           '<div class="dot-gframe3__dots" aria-hidden="true">' +
             '<span class="' + (active3 === 0 ? 'is-active' : '') + '"></span>' +
             '<span class="' + (active3 === 1 ? 'is-active' : '') + '"></span>' +
