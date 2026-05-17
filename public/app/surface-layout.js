@@ -3486,7 +3486,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
         // 8: image114313
         'width:48.81px;height:86.77px;left:calc(50% - 48.81px/2 + 0.38px);top:calc(50% - 86.77px/2 + 0.91px);'
       ];
-      var out = '<div class="dot-card dot-gframe1" data-state="' + (f1v.state || 'idle') + '">';
+      var out = '<div class="dot-card dot-gframe1" data-state="' + (f1v.state || 'idle') + '" onclick="this.classList.add(&quot;is-focus-18&quot;)" role="button" tabindex="0">';
       for (var i = 0; i < 9; i++) {
         var label = labs[i] != null ? String(labs[i]) : String(i + 18);
         var isToday = (i === 8);
