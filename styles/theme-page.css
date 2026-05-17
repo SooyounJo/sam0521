@@ -2681,6 +2681,9 @@
     background: rgba(0, 0, 0, 0.8);
   }
   .dot-gframe3__dots span.is-active { background: #FFFFFF; }
+  .preview-cell .dot-gframe3__dots {
+    display: none;
+  }
   .preview-cell .dot-gframe3 {
     animation: dotGalleryFrame3PreviewBoot 1ms linear 1 both;
   }
