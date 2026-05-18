@@ -1,5 +1,4 @@
 import Script from "next/script";
-import { useEffect } from "react";
 import CameraDotTransition from "../components/prototype/CameraDotTransition";
 
 export default function ThemePage() {
@@ -112,7 +111,6 @@ export default function ThemePage() {
       <Script src="/typography-rules.js" strategy="beforeInteractive" />
       <Script src="/app/atomics.js" strategy="beforeInteractive" />
       <Script src="/app/surface-layout.js?v=runpanel-dot-level-1" strategy="beforeInteractive" />
-      <Script src="/app/dot-clock21-mask-calibrate.js?v=1" strategy="afterInteractive" />
       <Script src="/datasets/normalPreviewCards.js" strategy="beforeInteractive" />
       <Script src="/datasets/dotPreviewCards.js?v=runpanel-frames-3" strategy="beforeInteractive" />
       <Script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" strategy="beforeInteractive" />
