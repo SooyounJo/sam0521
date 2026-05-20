@@ -2580,7 +2580,7 @@
     animation:
       dotScheduleBgGradientIn 520ms cubic-bezier(0.16, 1, 0.3, 1) 5.86s forwards,
       dotScheduleBgGradientFlow 2.1s ease-in-out 5.86s 2 alternate forwards,
-      dotScheduleBgGradientOut 900ms cubic-bezier(0.16, 1, 0.3, 1) 11.88s forwards;
+      dotScheduleBgGradientOut 900ms cubic-bezier(0.16, 1, 0.3, 1) 12s forwards;
   }
   .detail-stage .dot-sch22__expanded {
     opacity: 1;
@@ -2607,18 +2607,18 @@
     animation: dotScheduleExpandedDateHold 420ms cubic-bezier(0.16, 1, 0.3, 1) 10.10s forwards;
   }
   .detail-stage .dot-sch22__expanded .dot-sch__row {
-    animation: dotScheduleRowIn 420ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: dotScheduleRowIn 540ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
-  .detail-stage .dot-sch22__expanded .dot-sch__row:nth-child(1) { animation-delay: 11.88s; }
-  .detail-stage .dot-sch22__expanded .dot-sch__row:nth-child(2) { animation-delay: 11.98s; }
-  .detail-stage .dot-sch22__expanded .dot-sch__row:nth-child(3) { animation-delay: 12.08s; }
-  .detail-stage .dot-sch22__expanded .dot-sch__row:nth-child(4) { animation-delay: 12.18s; }
+  .detail-stage .dot-sch22__expanded .dot-sch__row:nth-child(1) { animation-delay: 12s; }
+  .detail-stage .dot-sch22__expanded .dot-sch__row:nth-child(2) { animation-delay: 12.15s; }
+  .detail-stage .dot-sch22__expanded .dot-sch__row:nth-child(3) { animation-delay: 12.30s; }
+  .detail-stage .dot-sch22__expanded .dot-sch__row:nth-child(4) { animation-delay: 12.45s; }
   .detail-stage .dot-sch22__expanded .dot-sch__row:nth-child(1) .dot-sch__text {
     font-weight: 700;
     color: #FF7F24;
   }
   .detail-stage .dot-sch22__expanded .dot-sch__row:nth-child(1) .dot-sch__time-note {
-    animation: dotScheduleTimeNoteIn 480ms cubic-bezier(0.16, 1, 0.3, 1) 12.08s forwards;
+    animation: dotScheduleTimeNoteIn 480ms cubic-bezier(0.16, 1, 0.3, 1) 12.30s forwards;
   }
   .detail-stage .dot-sch22__expanded .dot-sch__row .dot-sch__bullet {
     background: #303030;
@@ -2647,6 +2647,8 @@
       dotScheduleDateSettleOrange 240ms ease-out 10.10s forwards;
   }
   .detail-stage .dot-sch22__compact .dot-sch__list .dot-sch__text {
+    color: #FFFFFF;
+    -webkit-text-fill-color: #FFFFFF;
     background-image:
       linear-gradient(90deg, var(--dot-sch-gradient-from, rgba(255, 255, 255, 0.7)) 0%, var(--dot-sch-gradient-to, rgba(255, 255, 255, 0.3)) 12.5%, var(--dot-sch-gradient-from, rgba(255, 255, 255, 0.7)) 25%, var(--dot-sch-gradient-to, rgba(255, 255, 255, 0.3)) 37.5%, var(--dot-sch-gradient-from, rgba(255, 255, 255, 0.7)) 50%, var(--dot-sch-gradient-to, rgba(255, 255, 255, 0.3)) 62.5%, var(--dot-sch-gradient-from, rgba(255, 255, 255, 0.7)) 75%, var(--dot-sch-gradient-to, rgba(255, 255, 255, 0.3)) 87.5%, var(--dot-sch-gradient-from, rgba(255, 255, 255, 0.7)) 100%);
     background-size: 420% 100%;
@@ -2656,6 +2658,12 @@
     animation:
       dotScheduleTextGradientIn 460ms cubic-bezier(0.16, 1, 0.3, 1) 3s forwards,
       dotScheduleTextGradientFlow 3.3s linear 3s forwards;
+  }
+  .detail-stage .dot-sch22__compact .dot-sch__list .dot-sch__text.is-muted,
+  .detail-stage .dot-sch22__compact .dot-sch__list .dot-sch__text.is-accent,
+  .detail-stage .dot-sch22__compact .dot-sch__list .dot-sch__text.is-strong {
+    color: #FFFFFF;
+    -webkit-text-fill-color: #FFFFFF;
   }
   .detail-stage .dot-sch22__compact .dot-sch__list .dot-sch__text.is-strong {
     --dot-sch-gradient-from: rgba(255, 255, 255, 1);
@@ -2735,9 +2743,9 @@
   }
   .preview-cell .dot-sch22__expanded .dot-sch__date { animation-delay: 0s; }
   .preview-cell .dot-sch22__expanded .dot-sch__row:nth-child(1) { animation-delay: 0s; }
-  .preview-cell .dot-sch22__expanded .dot-sch__row:nth-child(2) { animation-delay: 0.10s; }
-  .preview-cell .dot-sch22__expanded .dot-sch__row:nth-child(3) { animation-delay: 0.20s; }
-  .preview-cell .dot-sch22__expanded .dot-sch__row:nth-child(4) { animation-delay: 0.30s; }
+  .preview-cell .dot-sch22__expanded .dot-sch__row:nth-child(2) { animation-delay: 0.14s; }
+  .preview-cell .dot-sch22__expanded .dot-sch__row:nth-child(3) { animation-delay: 0.28s; }
+  .preview-cell .dot-sch22__expanded .dot-sch__row:nth-child(4) { animation-delay: 0.42s; }
   .preview-cell .dot-sch22__expanded .dot-sch__row:nth-child(1) .dot-sch__text {
     font-weight: 700;
     color: #FF7F24;
@@ -2760,6 +2768,8 @@
     color: #FF7F24;
   }
   .preview-cell .dot-sch22__compact .dot-sch__list .dot-sch__text {
+    color: #FFFFFF;
+    -webkit-text-fill-color: #FFFFFF;
     background-image:
       linear-gradient(90deg, var(--dot-sch-gradient-from, rgba(255, 255, 255, 0.7)) 0%, var(--dot-sch-gradient-to, rgba(255, 255, 255, 0.3)) 12.5%, var(--dot-sch-gradient-from, rgba(255, 255, 255, 0.7)) 25%, var(--dot-sch-gradient-to, rgba(255, 255, 255, 0.3)) 37.5%, var(--dot-sch-gradient-from, rgba(255, 255, 255, 0.7)) 50%, var(--dot-sch-gradient-to, rgba(255, 255, 255, 0.3)) 62.5%, var(--dot-sch-gradient-from, rgba(255, 255, 255, 0.7)) 75%, var(--dot-sch-gradient-to, rgba(255, 255, 255, 0.3)) 87.5%, var(--dot-sch-gradient-from, rgba(255, 255, 255, 0.7)) 100%);
     background-size: 420% 100%;
@@ -2769,6 +2779,12 @@
     animation:
       dotSchedulePreviewTextGradient 18.2s cubic-bezier(0.16, 1, 0.3, 1) infinite,
       dotScheduleTextGradientFlow 5.6s linear infinite;
+  }
+  .preview-cell .dot-sch22__compact .dot-sch__list .dot-sch__text.is-muted,
+  .preview-cell .dot-sch22__compact .dot-sch__list .dot-sch__text.is-accent,
+  .preview-cell .dot-sch22__compact .dot-sch__list .dot-sch__text.is-strong {
+    color: #FFFFFF;
+    -webkit-text-fill-color: #FFFFFF;
   }
   .preview-cell .dot-sch22__compact .dot-sch__list .dot-sch__text.is-muted {
     opacity: 1;
@@ -3030,8 +3046,8 @@
   }
   @keyframes dotScheduleTextGradientIn {
     from {
-      -webkit-text-fill-color: var(--dot-sch-gradient-from, currentColor);
-      color: var(--dot-sch-gradient-from, currentColor);
+      -webkit-text-fill-color: #FFFFFF;
+      color: #FFFFFF;
     }
     to {
       -webkit-text-fill-color: transparent;
@@ -3098,7 +3114,7 @@
       opacity: 0;
       transform: translateX(10px);
     }
-    67.6%, 93% {
+    69.2%, 93% {
       opacity: 1;
       transform: translateX(0);
     }
@@ -3159,8 +3175,8 @@
   }
   @keyframes dotSchedulePreviewTextGradient {
     0%, 16.4%, 93%, 100% {
-      -webkit-text-fill-color: var(--dot-sch-gradient-from, currentColor);
-      color: var(--dot-sch-gradient-from, currentColor);
+      -webkit-text-fill-color: #FFFFFF;
+      color: #FFFFFF;
     }
     19.0%, 34.6% {
       -webkit-text-fill-color: transparent;
