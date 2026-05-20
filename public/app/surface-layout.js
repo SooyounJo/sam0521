@@ -337,6 +337,31 @@ window.composeSurfacePlan = function composeSurfacePlan(surfaceType, layout) {
           ]
         };
       }
+      if (window.__mlpTestConfig && window.__mlpTestConfig.id === 'test1') {
+        return {
+          surfaceType,
+          components: [
+            { id: 'status-bar', role: 'status-bar', zone: 'topSystem' },
+            { id: 'p1-goal', role: 'dot-goal', zone: 'viewing',
+              variant: { title: "Today's Goal", time: '01:42:43', timeSuffix: 'Within', distance: '15km' },
+              _rect: { x: 32, y: 70, w: 324, h: 132 } },
+            { id: 'p1-run', role: 'dot-running-compact', zone: 'viewing',
+              variant: { label: 'Jogging', time: '10:35' },
+              _rect: { x: 32, y: 210, w: 156, h: 62 } },
+            { id: 'p1-steps', role: 'dot-total-steps-2x1', zone: 'viewing',
+              variant: { count: '5,543' },
+              _rect: { x: 192, y: 210, w: 164, h: 62 } },
+            { id: 'p1-timemat', role: 'dot-time-matrix', zone: 'viewing',
+              variant: { bgColor: 'transparent', bgDotColor: 'rgba(25,45,74,0.28)', dotColor: '#FF7F24', time: '12:45', meta: 'MON', dayDigits: '  ' },
+              _rect: { x: 32, y: 280, w: 324, h: 150 } },
+            { id: 'test1-page-dots', role: 'test3-page-dots', zone: 'viewing',
+              _rect: { x: 0, y: 642, w: 320, h: 24 } },
+            { id: 'app-dock', role: 'app-dock', zone: 'bottomNav',
+              content: { apps: ['Camera','Gallery','Maps','YT Music'] } },
+            { id: 'gesture-bar', role: 'gestureBar', zone: 'bottomAction' }
+          ]
+        };
+      }
       if (window.__mlpTestConfig && window.__mlpTestConfig.id === 'test3') {
         return {
           surfaceType,
