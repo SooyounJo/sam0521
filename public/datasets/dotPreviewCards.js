@@ -158,6 +158,23 @@
       variant: { artist: 'Jimmy Hall', album: 'Album', song: 'Concierto', current: '0:40', remaining: '-1:10', barFull: 120, barTrack: 31.48 }
     },
     {
+      name: 'Music 1×2 (actions) (dot)',
+      editSections: ['Page', 'Card globals'],
+      role: 'dot-music-1x2-actions',
+      variant: { artist: 'Jimmy Hall', album: 'Album', song: 'Concierto', current: '0:40', remaining: '-1:10', barFull: 292, barTrack: 77 }
+    },
+    {
+      name: 'Music 1×2 (icon) (dot)',
+      editSections: ['Page', 'Card globals'],
+      role: 'dot-music-1x2-icon',
+      variant: {
+        title: '오늘 날씨엔 부드럽고 상쾌한\nConcierto가 좋을거같아요!',
+        subtitle: 'Jim Hall - Concierto',
+        barFull: 292,
+        barTrack: 77
+      }
+    },
+    {
       name: 'Clock 2×1 (dot)',
       editSections: ['Page', 'Card globals'],
       role: 'dot-clock-2x1',
@@ -180,6 +197,20 @@
           { text: 'Blue Mountains', tone: 'muted' },
           { text: 'Darling Harbour', tone: 'accent' },
           { text: 'Opera House', tone: 'muted' }
+        ]
+      }
+    },
+    {
+      name: 'Schedule 4×2 (dot)',
+      editSections: ['Page', 'Card globals'],
+      role: 'dot-schedule-4x2',
+      variant: {
+        date: 'May 15',
+        items: [
+          { text: 'Design standup', time: '10:00', tone: 'muted' },
+          { text: 'Coffee w/ Sarah', time: '14:00', tone: 'muted' },
+          { text: 'Run 5km', time: '18:30', tone: 'accent' },
+          { text: 'Dinner reservation', time: '20:00', tone: 'strong' }
         ]
       }
     },
@@ -212,6 +243,12 @@
       editSections: ['Page', 'Card globals'],
       role: 'dot-weather-2x1-v1-1',
       variant: { location: 'Seoul', weather: 'Sunny' }
+    },
+    {
+      name: 'Weather 2×1 V1_1 Copy (dot)',
+      editSections: ['Page', 'Card globals'],
+      role: 'dot-weather-2x1-v1-1',
+      variant: { location: 'Seoul', weather: 'Sunny', theme: 'dark' }
     }
   ];
 })();

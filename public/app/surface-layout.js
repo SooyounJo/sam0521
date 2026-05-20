@@ -991,7 +991,7 @@ window.resolveComponentRect = function resolveComponentRect(comp, layout, plan) 
     case 'persona2-widgets':
       return {
         x: 0,
-        y: 310 + 28, // Adjusted higher
+        y: 310 + 46,
         w: vw,
         h: 450
       };
@@ -3919,27 +3919,23 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
 
     case 'dot-camera': {
       var camv = (comp && comp.variant) || {};
-      var img = camv.img || '';
-      var imgHtml = img ? '<img class="dot-cam__img" src="' + img + '" alt="" />' : '';
-      var camId = 'dotcam_' + Math.random().toString(36).slice(2, 9);
       return '' +
-        '<div class="dot-card dot-cam dot-cam--morph" data-state="' + (camv.state || 'idle') + '">' +
-          '<input class="dot-cam__toggle" type="checkbox" id="' + camId + '" aria-label="Open camera card" style="display:none;" />' +
-          '<label class="dot-cam__trigger" for="' + camId + '" aria-hidden="true">' +
-            '<svg width="82" height="82" viewBox="0 0 82 82" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-              '<rect width="82" height="82" rx="41" fill="#FF7F24"/>' +
-              '<path d="M31.6667 53C30.9333 53 30.3056 52.7389 29.7833 52.2167C29.2611 51.6944 29 51.0667 29 50.3333V45H31.6667V50.3333H37V53H31.6667ZM45 53V50.3333H50.3333V45H53V50.3333C53 51.0667 52.7389 51.6944 52.2167 52.2167C51.6944 52.7389 51.0667 53 50.3333 53H45ZM29 37V31.6667C29 30.9333 29.2611 30.3056 29.7833 29.7833C30.3056 29.2611 30.9333 29 31.6667 29H37V31.6667H31.6667V37H29ZM50.3333 37V31.6667H45V29H50.3333C51.0667 29 51.6944 29.2611 52.2167 29.7833C52.7389 30.3056 53 30.9333 53 31.6667V37H50.3333Z" fill="#1A1D1C"/>' +
-              '<path fill-rule="evenodd" clip-rule="evenodd" d="M41 43.6665C42.4728 43.6665 43.6667 42.4726 43.6667 40.9998C43.6667 39.5271 42.4728 38.3332 41 38.3332C39.5273 38.3332 38.3334 39.5271 38.3334 40.9998C38.3334 42.4726 39.5273 43.6665 41 43.6665ZM41 46.3332C43.9455 46.3332 46.3334 43.9454 46.3334 40.9998C46.3334 38.0543 43.9455 35.6665 41 35.6665C38.0545 35.6665 35.6667 38.0543 35.6667 40.9998C35.6667 43.9454 38.0545 46.3332 41 46.3332Z" fill="#1A1D1C"/>' +
+        '<div class="dot-camera-motion" data-state="' + (camv.state || 'idle') + '">' +
+          '<div class="dot-camera-motion__intro" aria-hidden="true">' +
+            '<svg class="dot-camera-motion__introIcon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+              '<path d="M6.66667 28C5.93333 28 5.30556 27.7389 4.78333 27.2167C4.26111 26.6944 4 26.0667 4 25.3333V20H6.66667V25.3333H12V28H6.66667ZM20 28V25.3333H25.3333V20H28V25.3333C28 26.0667 27.7389 26.6944 27.2167 27.2167C26.6944 27.7389 26.0667 28 25.3333 28H20ZM4 12V6.66667C4 5.93333 4.26111 5.30556 4.78333 4.78333C5.30556 4.26111 5.93333 4 6.66667 4H12V6.66667H6.66667V12H4ZM25.3333 12V6.66667H20V4H25.3333C26.0667 4 26.6944 4.26111 27.2167 4.78333C27.7389 5.30556 28 5.93333 28 6.66667V12H25.3333Z" fill="#1A1D1C"/>' +
+              '<path fill-rule="evenodd" clip-rule="evenodd" d="M16.0003 18.667C17.4731 18.667 18.667 17.4731 18.667 16.0003C18.667 14.5276 17.4731 13.3337 16.0003 13.3337C14.5276 13.3337 13.3337 14.5276 13.3337 16.0003C13.3337 17.4731 14.5276 18.667 16.0003 18.667ZM16.0003 21.3337C18.9458 21.3337 21.3337 18.9458 21.3337 16.0003C21.3337 13.0548 18.9458 10.667 16.0003 10.667C13.0548 10.667 10.667 13.0548 10.667 16.0003C10.667 18.9458 13.0548 21.3337 16.0003 21.3337Z" fill="#1A1D1C"/>' +
             '</svg>' +
-          '</label>' +
-          '<div class="dot-cam__body">' +
-            imgHtml +
-            '<div class="dot-cam__fade" aria-hidden="true"></div>' +
-            '<div class="dot-cam__shutter" aria-hidden="true"></div>' +
-            '<div class="dot-cam__expand" aria-hidden="true">' +
-              '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-                '<path d="M15 3h6v6h-2V6.41l-4.29 4.3-1.42-1.42L17.59 5H15V3Z" fill="#FFFFFF"/>' +
-                '<path d="M9 21H3v-6h2v3.59l4.29-4.3 1.42 1.42L6.41 19H9v2Z" fill="#FFFFFF"/>' +
+          '</div>' +
+          '<div class="camera-widget-key-color-ver" aria-hidden="true">' +
+            '<div class="camera-widget__img"></div>' +
+            '<div class="camera-widget__bg-gradient"></div>' +
+            '<div class="camera-widget__shot-button">' +
+              '<div class="camera-widget__shot-button-graphic"></div>' +
+            '</div>' +
+            '<div class="camera-widget__expand-button">' +
+              '<svg class="camera-widget__expand-svg" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+                '<path d="M23 8C22.7348 8 22.4804 8.10536 22.2929 8.29289C22.1054 8.48043 22 8.73478 22 9C22 9.26522 22.1054 9.51957 22.2929 9.70711C22.4804 9.89464 22.7348 10 23 10H24.586L20.293 14.293C20.1108 14.4816 20.01 14.7342 20.0123 14.9964C20.0146 15.2586 20.1198 15.5094 20.3052 15.6948C20.4906 15.8802 20.7414 15.9854 21.0036 15.9877C21.2658 15.99 21.5184 15.8892 21.707 15.707L26 11.414V13C26 13.2652 26.1054 13.5196 26.2929 13.7071C26.4804 13.8946 26.7348 14 27 14C27.2652 14 27.5196 13.8946 27.7071 13.7071C27.8946 13.5196 28 13.2652 28 13V9C28 8.73478 27.8946 8.48043 27.7071 8.29289C27.5196 8.10536 27.2652 8 27 8H23ZM10 24.586V23C10 22.7348 9.89464 22.4804 9.70711 22.2929C9.51957 22.1054 9.26522 22 9 22C8.73478 22 8.48043 22.1054 8.29289 22.2929C8.10536 22.4804 8 22.7348 8 23V27C8 27.2652 8.10536 27.5196 8.29289 27.7071C8.48043 27.8946 8.73478 28 9 28H13C13.2652 28 13.5196 27.8946 13.7071 27.7071C13.8946 27.5196 14 27.2652 14 27C14 26.7348 13.8946 26.4804 13.7071 26.2929C13.5196 26.1054 13.2652 26 13 26H11.414L15.707 21.707C15.8892 21.5184 15.99 21.2658 15.9877 21.0036C15.9854 20.7414 15.8802 20.4906 15.6948 20.3052C15.5094 20.1198 15.2586 20.0146 14.9964 20.0123C14.7342 20.01 14.4816 20.1108 14.293 20.293L10 24.586Z" fill="white"/>' +
               '</svg>' +
             '</div>' +
           '</div>' +
@@ -3948,16 +3944,9 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
 
     case 'dot-music-1x1': {
       var mv = (comp && comp.variant) || {};
-      var artist = mv.artist || 'Jimmy Hall';
-      var album = mv.album || 'Album';
-      var song = mv.song || 'Concierto';
-      var current = mv.current || '0:40';
-      var remaining = mv.remaining || '-1:10';
-      var barW = mv.barFull != null ? mv.barFull : 120;
-      var barTrack = mv.barTrack != null ? mv.barTrack : 31.48;
       var expandedBarW = mv.expandedBarFull != null ? mv.expandedBarFull : 292;
       var expandedBarTrack = mv.expandedBarTrack != null ? mv.expandedBarTrack : 77;
-      var iconTitle = mv.iconTitle || '오늘 날씨에 딱 맞는\n플레이리스트';
+      var iconTitle = mv.iconTitle || '오늘 날씨엔 부드럽고 상쾌한\nConcierto가 좋을거같아요!';
       var iconSubtitle = mv.iconSubtitle || 'Jim Hall - Concierto';
       var iconHtml = window.renderAtomicForRole({
         role: 'dot-music-1x2-icon',
@@ -3968,77 +3957,41 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
           barTrack: expandedBarTrack
         }
       }, rect);
+      var compactTitle = mv.compactTitle || '햇빛이 쨍쨍한\n날씨에 듣기 좋은\n곡을 찾아드릴게요';
+      var compactIconHtml = '' +
+        '<svg class="dot-music1__noteSvg" width="32" height="32" viewBox="-2 -2 68 68" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          '<circle cx="19.85" cy="3.49" r="3.5" fill="#000000"/><circle cx="27.98" cy="3.49" r="3.5" fill="#000000"/><circle cx="35.66" cy="3.49" r="3.5" fill="#000000"/><circle cx="44.25" cy="3.49" r="3.5" fill="#000000"/><circle cx="52.39" cy="3.49" r="3.5" fill="#000000"/><circle cx="60.52" cy="3.49" r="3.5" fill="#000000"/>' +
+          '<circle cx="19.85" cy="11.62" r="3.5" fill="#000000"/><circle cx="27.98" cy="11.62" r="3.5" fill="#000000"/><circle cx="35.66" cy="11.62" r="3.5" fill="#000000"/><circle cx="44.25" cy="11.62" r="3.5" fill="#000000"/><circle cx="52.39" cy="11.62" r="3.5" fill="#000000"/><circle cx="60.52" cy="11.62" r="3.5" fill="#000000"/>' +
+          '<circle cx="19.85" cy="19.76" r="3.5" fill="#000000"/><circle cx="27.98" cy="19.76" r="3.5" fill="#000000"/><circle cx="35.66" cy="19.76" r="3.5" fill="#000000"/><circle cx="44.25" cy="19.76" r="3.5" fill="#000000"/><circle cx="52.39" cy="19.76" r="3.5" fill="#000000"/><circle cx="60.52" cy="19.76" r="3.5" fill="#000000"/>' +
+          '<circle cx="19.85" cy="28.80" r="3.5" fill="#000000"/><circle cx="60.52" cy="28.80" r="3.5" fill="#000000"/>' +
+          '<circle cx="19.85" cy="36.94" r="3.5" fill="#000000"/><circle cx="60.52" cy="36.94" r="3.5" fill="#000000"/>' +
+          '<circle cx="19.85" cy="45.18" r="3.5" fill="#000000"/><circle cx="60.52" cy="45.18" r="3.5" fill="#000000"/>' +
+          '<circle cx="3.49" cy="53.32" r="3.5" fill="#000000"/><circle cx="11.62" cy="53.32" r="3.5" fill="#000000"/><circle cx="19.85" cy="53.32" r="3.5" fill="#000000"/><circle cx="44.25" cy="53.32" r="3.5" fill="#000000"/><circle cx="52.39" cy="53.32" r="3.5" fill="#000000"/><circle cx="60.52" cy="53.32" r="3.5" fill="#000000"/>' +
+          '<circle cx="3.49" cy="61.45" r="3.5" fill="#000000"/><circle cx="11.62" cy="61.45" r="3.5" fill="#000000"/><circle cx="44.25" cy="61.45" r="3.5" fill="#000000"/><circle cx="52.39" cy="61.45" r="3.5" fill="#000000"/>' +
+        '</svg>';
+      var compactHtml = '' +
+        '<div class="dot-music1__player" aria-hidden="true">' +
+          '<div class="dot-music1__singer-name">' + String(compactTitle).replace(/\n/g, '<br/>') + '</div>' +
+          '<div class="dot-music1__iconBg"></div>' +
+          '<div class="dot-music1__musicIcon">' + compactIconHtml + '</div>' +
+        '</div>';
+      var expandedIconHtml = compactIconHtml.replace('dot-music1__noteSvg', 'dot-music1__secondNoteSvg');
+      var expandedHtml = '' +
+        '<div class="dot-music1__secondPlayer">' +
+          '<div class="dot-music1__secondIconBg">' +
+            '<div class="dot-music1__secondMusicIcon">' + expandedIconHtml + '</div>' +
+          '</div>' +
+          '<div class="dot-music1__secondTitle">검색중이에요</div>' +
+        '</div>';
       var isTabRoot = window.currentSurfaceType === window.SURFACE_TYPES.TAB_ROOT;
       var orangeClass = isTabRoot ? ' is-orange' : '';
-      var widthStyle = (rect && rect.w === 340) ? 'width:340px;' : 'width:168px;';
       return '' +
-        '<div class="dot-card dot-music dot-music1' + orangeClass + '" data-state="' + (mv.state || 'idle') + '" style="' + widthStyle + '">' +
-          '<div class="dot-music1__compact">' +
-            '<div class="dot-music1__top">' +
-              '<div class="dot-music1__artist">' + artist + '</div>' +
-              '<div class="dot-music1__album">' + album + '</div>' +
-            '</div>' +
-            '<div class="dot-music__bottom">' +
-              '<div class="dot-music__song">' + song + '</div>' +
-              '<div class="dot-music__timeInfo">' +
-                '<div class="dot-music__timeRow">' +
-                  '<div class="dot-music__time dot-music__time--current">' + current + '</div>' +
-                  '<div class="dot-music__time dot-music__time--remaining">' + remaining + '</div>' +
-                '</div>' +
-                '<div class="dot-music__bar" style="--bar-w:' + barW + 'px;--bar-track:' + barTrack + 'px;">' +
-                  '<div class="dot-music__barFill" aria-hidden="true"></div>' +
-                  '<div class="dot-music__barTrack" aria-hidden="true"></div>' +
-                '</div>' +
-              '</div>' +
-            '</div>' +
+        '<div class="dot-card dot-music dot-music1' + orangeClass + '" data-state="' + (mv.state || 'idle') + '">' +
+          '<div class="dot-music1__compact dot-music1__compact--layout">' +
+            compactHtml +
           '</div>' +
-          '<div class="dot-music1__expanded dot-music2 dot-music2--actions" aria-hidden="true">' +
-            '<div class="dot-music2__top">' +
-              '<div class="dot-music2__artistBlock">' +
-                '<div class="dot-music2__artist">' + artist + '</div>' +
-                '<div class="dot-music2__album">' + album + '</div>' +
-              '</div>' +
-              '<div class="dot-music2__btnUnit" aria-hidden="true">' +
-                '<div class="dot-music2__btn">' +
-                  '<svg width="18" height="18" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-                    '<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.53L12 21.35Z" fill="#000000"/>' +
-                  '</svg>' +
-                '</div>' +
-                '<div class="dot-music2__btn">' +
-                  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-                    '<path d="M3 5.5h18v13H3v-13Z" stroke="#000000" stroke-width="2" fill="none" />' +
-                    '<path d="M5 17c1.9 0 3.6.8 4.8 2" stroke="#000000" stroke-width="2" stroke-linecap="round" fill="none" />' +
-                    '<path d="M5 13.5c3.1 0 5.8 1.3 7.8 3.2" stroke="#000000" stroke-width="2" stroke-linecap="round" fill="none" />' +
-                  '</svg>' +
-                '</div>' +
-              '</div>' +
-            '</div>' +
-            '<div class="dot-music__bottom dot-music2__bottom">' +
-              '<div class="dot-music2__playRow">' +
-                '<div class="dot-music__song">' + song + '</div>' +
-                '<div class="dot-music2__eq" aria-hidden="true">' +
-                  '<div class="dot-music2__eqCol is-tall">' +
-                    '<span></span><span></span><span></span><span></span><span></span>' +
-                  '</div>' +
-                  '<div class="dot-music2__eqCol is-mid">' +
-                    '<span></span><span></span><span></span>' +
-                  '</div>' +
-                  '<div class="dot-music2__eqCol is-small">' +
-                    '<span></span>' +
-                  '</div>' +
-                '</div>' +
-              '</div>' +
-              '<div class="dot-music__timeInfo dot-music__timeInfo--wide">' +
-                '<div class="dot-music__timeRow dot-music__timeRow--wide">' +
-                  '<div class="dot-music__time dot-music__time--current">' + current + '</div>' +
-                  '<div class="dot-music__time dot-music__time--remaining">' + remaining + '</div>' +
-                '</div>' +
-                '<div class="dot-music__bar dot-music__bar--wide" style="--bar-w:' + expandedBarW + 'px;--bar-track:' + expandedBarTrack + 'px;">' +
-                  '<div class="dot-music__barFill" aria-hidden="true"></div>' +
-                  '<div class="dot-music__barTrack" aria-hidden="true"></div>' +
-                '</div>' +
-              '</div>' +
-            '</div>' +
+          '<div class="dot-music1__expanded" aria-hidden="true">' +
+            expandedHtml +
           '</div>' +
           '<div class="dot-music1__icon" aria-hidden="true">' + iconHtml + '</div>' +
         '</div>';
@@ -4350,32 +4303,33 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
     case 'dot-schedule-2x2': {
       var sv = (comp && comp.variant) || {};
       var date = sv.date || '13 May';
-      var items = Array.isArray(sv.items) ? sv.items.slice(0, 3) : [
-        { text: 'Wild Life', tone: 'muted' },
+      var items = Array.isArray(sv.items) ? sv.items : [
+        { text: 'Wild Life', tone: 'strong' },
         { text: 'Blue Mountains', tone: 'muted' },
-        { text: 'Darling Harbour', tone: 'accent' }
+        { text: 'Darling Harbour', tone: 'muted' },
+        { text: 'Opera House', tone: 'muted' }
       ];
-      // Removed padding
+      while (items.length < 4) items.push({ text: 'Schedule item', tone: 'muted' });
       var row = function (it) {
-        if (!it) return '';
-        var tone = it.tone || 'muted';
+        var tone = (it && it.tone) || 'muted';
         var bulletClass = tone === 'accent' ? 'is-accent' : 'is-dark';
         var textClass = tone === 'accent' ? 'is-accent' : (tone === 'strong' ? 'is-strong' : 'is-muted');
         return '' +
           '<div class="dot-sch__row">' +
             '<span class="dot-sch__bullet ' + bulletClass + '" aria-hidden="true"></span>' +
-            '<span class="dot-sch__text ' + textClass + '">' + (it.text || '') + '</span>' +
+            '<span class="dot-sch__text ' + textClass + '" data-text="' + (it.text || '') + '">' + (it.text || '') + '</span>' +
           '</div>';
       };
       var expandedItems = Array.isArray(sv.expandedItems) ? sv.expandedItems : [
-        { text: 'Design standup', time: '10:00', tone: 'muted' },
-        { text: 'Coffee w/ Sarah', time: '14:00', tone: 'muted' },
-        { text: 'Run 5km', time: '18:30', tone: 'accent' }
+        { text: 'Darling Harbour', time: '9:00', note: 'Need to arrive until', tone: 'strong' },
+        { text: 'Wild Life', time: '10:00', tone: 'muted' },
+        { text: 'Blue Mountains', time: '14:00', tone: 'muted' },
+        { text: 'Opera House', time: '18:30', tone: 'muted' }
       ];
       var expandedHtml = window.renderAtomicForRole({
         role: 'dot-schedule-4x2',
         variant: {
-          date: sv.expandedDate || 'May 15',
+          date: sv.expandedDate || '13 May',
           items: expandedItems
         }
       }, rect);
@@ -4385,7 +4339,10 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
             '<div class="dot-sch__unit">' +
               '<div class="dot-sch__date">' + date + '</div>' +
               '<div class="dot-sch__list">' +
-                items.map(function(item) { return row(item); }).join('') +
+                row(items[0]) +
+                row(items[1]) +
+                row(items[2]) +
+                row(items[3]) +
               '</div>' +
             '</div>' +
           '</div>' +
@@ -4397,35 +4354,30 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
       var sv2 = (comp && comp.variant) || {};
       var date2 = sv2.date || 'May 15';
       var items2 = Array.isArray(sv2.items) ? sv2.items : [];
-      // Strictly limit to 3 items as requested for Scenario 2
-      var displayItems = items2.slice(0, 3);
-      // Removed the while loop that padded with dummy items
-      // while (displayItems.length < 3) displayItems.push({ text: 'Schedule item', time: '00:00', tone: 'muted' });
-      
-      var row2 = function (it, idx) {
-        if (!it) return ''; // Safegaurd
+      while (items2.length < 4) items2.push({ text: 'Schedule item', time: '00:00', tone: 'muted' });
+      var row2 = function (it) {
         var tone = (it && it.tone) || 'muted';
         var bulletClass = tone === 'accent' ? 'is-accent' : 'is-dark';
         var textClass = tone === 'accent' ? 'is-accent' : (tone === 'strong' ? 'is-strong' : 'is-muted');
-        // In dark mode, muted text should be white with opacity
-        var textStyle = 'font-family:\'Pretendard\', sans-serif; font-size:14px; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;';
-        if (tone === 'accent') textStyle += ' color:var(--p2-lavender, #B9A6FF);';
-        else if (tone === 'strong') textStyle += ' color:#FFFFFF; font-weight:700;';
-        else textStyle += ' color:rgba(255,255,255,0.7);';
-
+        var timeClass = tone === 'strong' ? 'is-strong' : 'is-time';
+        var noteHtml = it.note ? '<span class="dot-sch__time-note">' + it.note + '</span>' : '';
         return '' +
-          '<div class="dot-sch__row dot-sch__row--wide" style="display:flex; align-items:center; gap:12px; opacity:0; animation: p2ScheduleRowIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: ' + (0.2 + idx * 0.1) + 's;">' +
-            '<span class="dot-sch__bullet ' + bulletClass + '" aria-hidden="true" style="width:6px; height:6px; border-radius:50%; background:' + (tone === 'accent' ? 'var(--p2-lavender, #B9A6FF)' : 'rgba(255,255,255,0.3)') + '; flex-shrink:0;"></span>' +
-            '<span class="dot-sch__text ' + textClass + '" style="' + textStyle + '">' + (it.text || '') + '</span>' +
-            '<span class="dot-sch__time" style="font-family:var(--font-dot); font-size:14px; color:rgba(255,255,255,0.5); flex-shrink:0; letter-spacing:0.05em;">' + (it.time || '') + '</span>' +
+          '<div class="dot-sch__row dot-sch__row--wide' + (it.note ? ' dot-sch__row--has-note' : '') + '">' +
+            '<span class="dot-sch__bullet ' + bulletClass + '" aria-hidden="true"></span>' +
+            '<span class="dot-sch__text ' + textClass + '">' + (it.text || '') + '</span>' +
+            noteHtml +
+            '<span class="dot-sch__time ' + timeClass + '">' + (it.time || '') + '</span>' +
           '</div>';
       };
       return '' +
-        '<div class="dot-card dot-sch dot-sch42" data-state="' + (sv2.state || 'idle') + '" style="background:var(--p2-black, rgba(16,16,18,0.92)); border-radius:36px; display:flex; flex-direction:column; padding:26px; box-sizing:border-box; transition:background 0.5s ease; width:100%; height:100%; overflow:hidden; border: 1px solid rgba(255,255,255,0.08);">' +
-          '<div class="dot-sch__unit dot-sch__unit--wide" style="flex:1; display:flex; flex-direction:column; gap:16px;">' +
-            '<div class="dot-sch__date dot-sch__date--wide" style="font-family:var(--font-dot), sans-serif; font-size:24px; color:var(--p2-lavender, #B9A6FF); margin-bottom:4px; font-weight:bold; transition:color 0.5s ease; text-transform:uppercase; opacity:0; animation: p2ScheduleRowIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;">' + date2 + '</div>' +
-            '<div class="dot-sch__list dot-sch__list--wide" style="display:flex; flex-direction:column; gap:10px;">' +
-              displayItems.map(function(item, idx) { return row2(item, idx); }).join('') +
+        '<div class="dot-card dot-sch dot-sch42" data-state="' + (sv2.state || 'idle') + '">' +
+          '<div class="dot-sch__unit dot-sch__unit--wide">' +
+            '<div class="dot-sch__date dot-sch__date--wide">' + date2 + '</div>' +
+            '<div class="dot-sch__list dot-sch__list--wide">' +
+              row2(items2[0]) +
+              row2(items2[1]) +
+              row2(items2[2]) +
+              row2(items2[3]) +
             '</div>' +
           '</div>' +
         '</div>';
@@ -4533,6 +4485,72 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
           '<div class="dot-temp11__center">' +
             '<div class="dot-temp11__value">' + val + '</div>' +
             '<div class="dot-temp11__unit">' + unit + '</div>' +
+          '</div>' +
+        '</div>';
+    }
+
+    case 'dot-icon-orange-badge-1x1': {
+      var iv = (comp && comp.variant) || {};
+      var src = iv.src || '/assets/dot-icons/orange-badge.svg';
+      return '' +
+        '<div class="dot-card dot-icon11 dot-icon11--orange" data-state="' + (iv.state || 'idle') + '">' +
+          '<img class="dot-icon11__layer dot-icon11__layer--from" src="' + src + '" alt="" />' +
+          '<div class="dot-icon11__layer dot-icon11__layer--to" aria-hidden="true">' +
+            '<div class="dot-icon11__grad" aria-hidden="true"></div>' +
+            '<svg class="dot-icon11__dotsSvg" width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+              '<circle class="dot-icon11__waveDot dot-icon11__waveDot--a" cx="7.5" cy="36.5" r="2.5" fill="white"/>' +
+              '<circle class="dot-icon11__waveDot dot-icon11__waveDot--b" cx="14.5" cy="36.5" r="2.5" fill="white"/>' +
+              '<circle class="dot-icon11__waveDot dot-icon11__waveDot--c" cx="21.5" cy="36.5" r="2.5" fill="white"/>' +
+              '<ellipse class="dot-icon11__waveDot dot-icon11__waveDot--d" cx="35.5" cy="36" rx="2.5" ry="5" fill="white"/>' +
+              '<ellipse class="dot-icon11__waveDot dot-icon11__waveDot--b" cx="35.5" cy="27" rx="2.5" ry="3" fill="white"/>' +
+              '<ellipse class="dot-icon11__waveDot dot-icon11__waveDot--a" cx="42.5" cy="28" rx="1.5" ry="2" fill="white"/>' +
+              '<ellipse class="dot-icon11__waveDot dot-icon11__waveDot--c" cx="49.5" cy="31" rx="1.5" ry="2" fill="white"/>' +
+              '<ellipse class="dot-icon11__waveDot dot-icon11__waveDot--d" cx="28.5" cy="28" rx="1.5" ry="2" fill="white"/>' +
+              '<ellipse class="dot-icon11__waveDot dot-icon11__waveDot--b" cx="21.5" cy="31" rx="1.5" ry="2" fill="white"/>' +
+              '<ellipse class="dot-icon11__waveDot dot-icon11__waveDot--a" cx="42.5" cy="43" rx="1.5" ry="2" fill="white"/>' +
+              '<ellipse class="dot-icon11__waveDot dot-icon11__waveDot--c" cx="28.5" cy="43" rx="1.5" ry="2" fill="white"/>' +
+              '<ellipse class="dot-icon11__waveDot dot-icon11__waveDot--d" cx="35.5" cy="45" rx="2.5" ry="3" fill="white"/>' +
+              '<ellipse class="dot-icon11__waveDot dot-icon11__waveDot--b" cx="42.5" cy="36" rx="2.5" ry="4" fill="white"/>' +
+              '<ellipse class="dot-icon11__waveDot dot-icon11__waveDot--c" cx="28.5" cy="36" rx="2.5" ry="4" fill="white"/>' +
+              '<circle class="dot-icon11__waveDot dot-icon11__waveDot--a" cx="35.5" cy="20.5" r="2.5" fill="white"/>' +
+              '<circle class="dot-icon11__waveDot dot-icon11__waveDot--d" cx="35.5" cy="15.5" r="1.5" fill="white"/>' +
+              '<circle class="dot-icon11__waveDot dot-icon11__waveDot--c" cx="35.5" cy="56.5" r="1.5" fill="white"/>' +
+              '<circle class="dot-icon11__waveDot dot-icon11__waveDot--b" cx="35.5" cy="51.5" r="2.5" fill="white"/>' +
+              '<circle class="dot-icon11__waveDot dot-icon11__waveDot--a" cx="49.5" cy="36.5" r="2.5" fill="white"/>' +
+              '<circle class="dot-icon11__waveDot dot-icon11__waveDot--b" cx="56.5" cy="36.5" r="2.5" fill="white"/>' +
+              '<circle class="dot-icon11__waveDot dot-icon11__waveDot--c" cx="63.5" cy="36.5" r="2.5" fill="white"/>' +
+            '</svg>' +
+          '</div>' +
+        '</div>';
+    }
+
+    case 'dot-orange-badge-card': {
+      var bc = (comp && comp.variant) || {};
+      var reduceMotion = false;
+      try {
+        reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+      } catch (_) {}
+      var title = bc.title || '보고서 수정 니즈를 포착';
+      var subtitle = bc.subtitle || '정산 보고서를 수정해 노트에 저장\n해드릴게요';
+      return '' +
+        '<div class="dot-card dot-orange-badge-card" data-state="' + (bc.state || 'idle') + '">' +
+          '<div class="dot-orange-badge-card__inner">' +
+            '<div class="dot-orange-badge-card__text">' +
+              '<div class="dot-orange-badge-card__title p2-result-title' + (reduceMotion ? ' is-reduced' : '') + '">' + title + '</div>' +
+              '<div class="dot-orange-badge-card__subtitle p2-result-sub' + (reduceMotion ? ' is-reduced' : '') + '">' + String(subtitle || '').replace(/\\n/g, '<br/>') + '</div>' +
+            '</div>' +
+            '<div class="dot-orange-badge-card__exclaim p2-dotbar" aria-hidden="true">' +
+              '<span class="dot-orange-badge-card__dot d0"></span>' +
+              '<span class="dot-orange-badge-card__dot d1"></span>' +
+              '<span class="dot-orange-badge-card__dot d2"></span>' +
+              '<span class="dot-orange-badge-card__dot d3"></span>' +
+              '<span class="dot-orange-badge-card__dot d4"></span>' +
+              '<span class="dot-orange-badge-card__dot d5"></span>' +
+              '<span class="dot-orange-badge-card__dot d6"></span>' +
+              '<span class="dot-orange-badge-card__dot d7"></span>' +
+              '<span class="dot-orange-badge-card__dot d8"></span>' +
+              '<span class="dot-orange-badge-card__dot d9"></span>' +
+            '</div>' +
           '</div>' +
         '</div>';
     }
@@ -5210,8 +5228,8 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
     case 'persona2-widgets':
       return '<div class="p2-widgets" style="position:relative; width: 100%; height: 450px;">' +
         // Pill
-        '<div class="p2-pill" style="position:absolute; top:0; left: 24px; right: 24px; height: 80px; background: var(--p2-white); border-radius: 40px; display:flex; align-items:center; padding: 0 24px 0 12px; gap: 16px;">' +
-          '<div class="p2-pill__icon" style="width: 56px; height: 56px; background: var(--p2-lavender); border-radius: 28px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">' +
+        '<div class="p2-pill" style="position:absolute; top:0; left: 24px; right: 24px; height: 80px; background: radial-gradient(130px 90px at 16% 50%, rgba(255,151,72,0.30), transparent 70%), linear-gradient(90deg, rgba(255,255,255,0.96) 0%, rgba(255,241,190,0.94) 58%, rgba(255,197,90,0.92) 100%); border-radius: 40px; display:flex; align-items:center; padding: 0 24px 0 12px; gap: 16px;">' +
+          '<div class="p2-pill__icon" style="width: 56px; height: 56px; background: #FF9748; border-radius: 28px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">' +
              '<div class="p2-dot9" aria-hidden="true">' +
                '<span></span><span></span><span></span>' +
                '<span></span><span></span><span></span>' +
@@ -5219,10 +5237,10 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
              '</div>' +
           '</div>' +
           '<div style="display:flex; flex-direction:column; flex:1; margin-left:2px;">' +
-            '<span id="p2-pill-title" class="p2-grad-text" style="font-family:\'Pretendard\',sans-serif; font-weight:700; font-size:18px; line-height:1.3;">휴가는 즐거우셨나요?</span>' +
-            '<span id="p2-pill-sub" class="p2-grad-text p2-grad-text--subtle" style="font-family:\'Pretendard\',sans-serif; font-weight:600; font-size:13px;">밀린 일들은 제가 정리할게요..</span>' +
+            '<span id="p2-pill-title" style="font-family:\'Pretendard\',sans-serif; font-weight:800; font-size:18px; line-height:1.3; color:#1F160E;">휴가는 즐거우셨나요?</span>' +
+            '<span id="p2-pill-sub" style="font-family:\'Pretendard\',sans-serif; font-weight:700; font-size:13px; color:rgba(255,151,72,0.78);">밀린 일들은 제가 정리할게요..</span>' +
           '</div>' +
-          '<button id="p2-arrow" type="button" aria-label="AI Action" style="display:flex;justify-content:center;align-items:center;width:30px;height:30px;flex-shrink:0;border:0;padding:0;background:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent;color:var(--p2-lavender);z-index:5;">' +
+          '<button id="p2-arrow" type="button" aria-label="AI Action" style="display:flex;justify-content:center;align-items:center;width:30px;height:30px;flex-shrink:0;border:0;padding:0;background:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent;color:#FF9748;z-index:5;">' +
             '<div class="dot-running__dots-arrow" style="position:relative;left:auto;top:auto;transform:none;">' +
               '<svg width="30" height="30" viewBox="0 0 30 30" fill="none">' +
                 '<circle class="dot-run-arrow-dot dot-run-arrow-dot--0" cx="6" cy="15" r="2.1" fill="currentColor" />' +
@@ -5244,28 +5262,13 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
         '<div id="p2-area" style="position:absolute; top: 88px; left: 24px; right: 24px; height: 168px; overflow:visible;">' +
           // Default State (Message + Star + Result Box)
           '<div id="p2-default-widgets" style="position:relative; width:100%; height:100%; transition: opacity 0.4s ease;">' +
-            // Message Circle
-            '<div style="position:absolute; top: 0; left: 0; width: 80px; height: 80px; background: var(--p2-white); border-radius: 40px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--p2-ink); gap: 2px;">' +
-              '<span style="font-family:\'Pretendard\',sans-serif; font-weight:700; font-size:11px; opacity:0.78; line-height:1;">메시지</span>' +
-              '<span class="dot-date11__text" style="font-family:var(--font-dot); font-size:36px; letter-spacing:1px; color:#000; line-height:1; margin-top: 2px;">14</span>' +
-            '</div>' +
             // Sparkle Circle (AI trigger)
-            '<button id="p2-star" type="button" aria-label="AI Voice" style="position:absolute; top: 88px; left: 0; width: 80px; height: 80px; background: var(--p2-lavender); border:0; padding:0; border-radius: 40px; display:flex; align-items:center; justify-content:center; cursor:pointer; -webkit-tap-highlight-color:transparent; z-index: 1001 !important;">' +
-              '<svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4L12 2z" fill="#fff"/><path d="M19 4l1 3 3 1-3 1-1 3-1-3-3-1 3-1z" fill="#fff"/></svg>' +
+            '<button id="p2-star" type="button" aria-label="AI Voice" style="position:absolute; top: 0; left: 0; width: 80px; height: 80px; background: transparent; border:0; padding:0; border-radius: 40px; display:flex; align-items:center; justify-content:center; cursor:pointer; -webkit-tap-highlight-color:transparent; z-index: 1001 !important; overflow:hidden;">' +
+              window.renderAtomicForRole({ role: 'dot-icon-orange-badge-1x1' }, { w: 80, h: 80 }) +
             '</button>' +
             // Dark Box (Initial text state)
-            '<div id="p2-result" class="p2-dark" style="position:absolute; top: 0; left: 88px; right: 0; height: 168px; background: var(--p2-black); border-radius: 36px; padding: 24px 26px; display:flex; flex-direction:column; justify-content:space-between; box-sizing:border-box; overflow:visible;">' +
-              '<div class="p2-dark__stack" style="position:relative;flex:1;min-height:0;">' +
-                '<div class="p2-dark__text" style="display:flex; flex-direction:column; gap:4px;">' +
-                  '<span class="p2-result-title p2-grad-text p2-grad-text--lav" style="font-family:\'Pretendard\',sans-serif; font-weight:800; font-size:16px; line-height:1.3;">정산 보고서를<br>수정했어요</span>' +
-                  '<span class="p2-result-sub p2-grad-text p2-grad-text--lav p2-grad-text--subtle" style="font-family:\'Pretendard\',sans-serif; font-weight:700; font-size:13px; margin-top:2px;">수식 2곳 자동 교정</span>' +
-                '</div>' +
-              '</div>' +
-              '<div style="align-self:flex-end; display:flex; align-items:flex-end; height:45px;">' +
-                 '<div class="p2-dotbar" aria-hidden="true">' +
-                   '<span></span><span></span><span></span><span></span><span></span><span></span>' +
-                 '</div>' +
-              '</div>' +
+            '<div id="p2-result" class="p2-dark p2-obc-host" style="position:absolute; top: 0; left: 88px; right: 0; height: 168px; background: transparent; border-radius: 36px; padding: 0; display:block; box-sizing:border-box; overflow:visible;">' +
+              window.renderAtomicForRole({ role: 'dot-orange-badge-card', variant: { title: '보고서 수정 니즈를 포착', subtitle: '정산 보고서를 수정해 노트에 저장\n해드릴게요' } }, { w: 252, h: 168 }) +
             '</div>' +
           '</div>' +
           // Full Slot (For AI-placed components)
@@ -5298,13 +5301,16 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
           '<div style="display:flex; flex-wrap:wrap; gap:12px; align-content:flex-start; justify-content:center;">';
         window.__p1_custom_widgets.forEach(function(c) {
           var sz = sizes[c.role] || {w: 340, h: 168};
+          var cycleClass = c.role === 'dot-music-1x1'
+            ? ' p1-cycle-item p1-cycle-music'
+            : (c.role === 'dot-schedule-2x2' ? ' p1-cycle-item p1-cycle-schedule' : '');
           // Apply exact sizing constraints to prevent overlaps, handle composite sets specifically
           if (c.role === 'composite-set') {
               customHtml += '<div style="width:100%; position:relative;">' +
                 window.renderAtomicForRole({ role: c.role, variant: c.variant || {} }, sz) +
               '</div>';
           } else {
-              customHtml += '<div style="width:' + sz.w + 'px; height:' + sz.h + 'px; position:relative;">' +
+              customHtml += '<div class="p1-widget-cell' + cycleClass + '" style="width:' + sz.w + 'px; height:' + sz.h + 'px; position:relative;">' +
                 window.renderAtomicForRole({ role: c.role, variant: c.variant || {} }, sz) +
               '</div>';
           }
@@ -5323,7 +5329,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
         // Row 2: Music, Total Steps, Running compact
         '<div style="display:flex;gap:8px;width:100%;justify-content:center;">' +
           '<div style="width:340px; height:168px; position:relative;display:flex;gap:8px;">' +
-            '<div style="width:168px;height:168px;">' +
+            '<div class="p1-widget-cell p1-cycle-item p1-cycle-music" style="width:168px;height:168px;position:relative;">' +
               window.renderAtomicForRole({ role: 'dot-music-1x1' }, { w: 168, h: 168 }) +
             '</div>' +
             '<div style="display:flex;flex-direction:column;gap:4px;width:168px;height:168px;">' +
@@ -5347,7 +5353,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
           window.renderAtomicForRole({ role: 'dot-temperature-1x1' }, { w: 82, h: 82 }) +
           window.renderAtomicForRole({ role: 'dot-date-1x1-v1-1' }, { w: 82, h: 82 }) +
         '</div>' +
-        '<div style="grid-column:2;grid-row:1/span 2;">' + window.renderAtomicForRole({ role: 'dot-schedule-2x2' }, { w: 168, h: 168 }) + '</div>' +
+        '<div class="p1-widget-cell p1-cycle-item p1-cycle-schedule" style="grid-column:2;grid-row:1/span 2;position:relative;">' + window.renderAtomicForRole({ role: 'dot-schedule-2x2' }, { w: 168, h: 168 }) + '</div>' +
       '</div>';
 
     case 'home-mid-widgets':
