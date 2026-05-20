@@ -4028,6 +4028,25 @@
     left: 24px;
     top: 21px;
   }
+  .dot-weather21-pair > div:first-child .dot-w21__sun {
+    width: 43px;
+    height: 43px;
+    left: 23px;
+    top: 20px;
+  }
+  .dot-weather21-pair > div:last-child .dot-w21__sun--pair-rain {
+    width: 59px;
+    height: 62px;
+    left: 17px;
+    top: 18px;
+  }
+  .dot-weather21-pair > div:last-child .dot-w21__sun--pair-rain circle {
+    opacity: 0;
+    transform: scale(0.35);
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: none !important;
+  }
   .dot-w21__sun circle {
     fill: #191919;
   }
@@ -4078,28 +4097,28 @@
     animation-delay: 140ms;
   }
   .dot-w11 .dot-w11__sun circle,
-  .dot-w21 .dot-w21__sun circle {
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle {
     transform-box: fill-box;
     transform-origin: center;
     animation: dotWeatherSunSpreadLoop 2.6s cubic-bezier(0.16, 1, 0.3, 1) infinite both;
   }
   .dot-w11 .dot-w11__sun circle,
-  .dot-w21 .dot-w21__sun circle {
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle {
     animation: dotWeatherSunOuterLoop 1.62s cubic-bezier(0.18, 0.86, 0.24, 1) infinite both !important;
     animation-delay: 0ms !important;
   }
   .dot-w11 .dot-w11__sun circle:nth-child(19),
-  .dot-w21 .dot-w21__sun circle:nth-child(19) {
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(19) {
     animation-name: dotWeatherSunCenterLoop !important;
   }
   .dot-w11 .dot-w11__sun circle:nth-child(14),
   .dot-w11 .dot-w11__sun circle:nth-child(18),
   .dot-w11 .dot-w11__sun circle:nth-child(20),
   .dot-w11 .dot-w11__sun circle:nth-child(24),
-  .dot-w21 .dot-w21__sun circle:nth-child(14),
-  .dot-w21 .dot-w21__sun circle:nth-child(18),
-  .dot-w21 .dot-w21__sun circle:nth-child(20),
-  .dot-w21 .dot-w21__sun circle:nth-child(24) {
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(14),
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(18),
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(20),
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(24) {
     animation-name: dotWeatherSunInnerLoop !important;
   }
   .dot-w11 .dot-w11__sun circle:nth-child(10),
@@ -4110,14 +4129,14 @@
   .dot-w11 .dot-w11__sun circle:nth-child(23),
   .dot-w11 .dot-w11__sun circle:nth-child(25),
   .dot-w11 .dot-w11__sun circle:nth-child(28),
-  .dot-w21 .dot-w21__sun circle:nth-child(10),
-  .dot-w21 .dot-w21__sun circle:nth-child(13),
-  .dot-w21 .dot-w21__sun circle:nth-child(15),
-  .dot-w21 .dot-w21__sun circle:nth-child(17),
-  .dot-w21 .dot-w21__sun circle:nth-child(21),
-  .dot-w21 .dot-w21__sun circle:nth-child(23),
-  .dot-w21 .dot-w21__sun circle:nth-child(25),
-  .dot-w21 .dot-w21__sun circle:nth-child(28) {
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(10),
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(13),
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(15),
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(17),
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(21),
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(23),
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(25),
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(28) {
     animation-name: dotWeatherSunMidLoop !important;
   }
   .dot-w11 .dot-w11__sun circle:nth-child(9),
@@ -4128,14 +4147,14 @@
   .dot-w11 .dot-w11__sun circle:nth-child(26),
   .dot-w11 .dot-w11__sun circle:nth-child(27),
   .dot-w11 .dot-w11__sun circle:nth-child(29),
-  .dot-w21 .dot-w21__sun circle:nth-child(9),
-  .dot-w21 .dot-w21__sun circle:nth-child(11),
-  .dot-w21 .dot-w21__sun circle:nth-child(12),
-  .dot-w21 .dot-w21__sun circle:nth-child(16),
-  .dot-w21 .dot-w21__sun circle:nth-child(22),
-  .dot-w21 .dot-w21__sun circle:nth-child(26),
-  .dot-w21 .dot-w21__sun circle:nth-child(27),
-  .dot-w21 .dot-w21__sun circle:nth-child(29) {
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(9),
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(11),
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(12),
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(16),
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(22),
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(26),
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(27),
+  .dot-w21 .dot-w21__sun:not(.dot-w21__sun--pair-rain) circle:nth-child(29) {
     animation-name: dotWeatherSunNearOuterLoop !important;
   }
   @keyframes dotWeatherFadeIn {

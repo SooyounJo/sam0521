@@ -43,9 +43,209 @@ function shouldUseZoomPreviewForRole(role) {
   return role === 'run-panel' || role === 'composite-set' || (typeof role === 'string' && role.indexOf('dot-') === 0);
 }
 
+var DOT_WEATHER_21_W = 168;
+var DOT_WEATHER_21_H = 82;
+var DOT_WEATHER_21_PAIR_GAP = 12;
+var DOT_CAMERA_PREVIEW_SHELL = 82;
+
+function isDotWeather21LightPairCard(card) {
+  return !!(card && card.role === 'dot-weather-2x1-v1-1' && (!card.variant || card.variant.theme !== 'dark'));
+}
+
+function previewRectForDotWeather21Pair(scale) {
+  return {
+    w: DOT_WEATHER_21_W * 2 + DOT_WEATHER_21_PAIR_GAP,
+    h: DOT_WEATHER_21_H,
+    scale: scale || TOOLKIT_PREVIEW_SCALE
+  };
+}
+
+function renderDotWeather21PairHtml(variant) {
+  if (typeof window.renderAtomicForRole !== 'function') return '';
+  var baseVariant = variant || {};
+  var tileRect = { w: DOT_WEATHER_21_W, h: DOT_WEATHER_21_H };
+  var left = window.renderAtomicForRole({ role: 'dot-weather-2x1-v1-1', variant: baseVariant }, tileRect);
+  var rightVariant = Object.assign({}, baseVariant, { sunIcon: 'pair-raindrop-dual', weather: 'Rainy' });
+  var right = window.renderAtomicForRole({ role: 'dot-weather-2x1-v1-1', variant: rightVariant }, tileRect);
+  var pairW = DOT_WEATHER_21_W * 2 + DOT_WEATHER_21_PAIR_GAP;
+  return '<div class="dot-weather21-pair" style="display:flex;flex-direction:row;align-items:flex-start;gap:' + DOT_WEATHER_21_PAIR_GAP + 'px;width:' + pairW + 'px;height:' + DOT_WEATHER_21_H + 'px;">' +
+    '<div style="flex:0 0 ' + DOT_WEATHER_21_W + 'px;width:' + DOT_WEATHER_21_W + 'px;height:' + DOT_WEATHER_21_H + 'px;">' + left + '</div>' +
+    '<div style="flex:0 0 ' + DOT_WEATHER_21_W + 'px;width:' + DOT_WEATHER_21_W + 'px;height:' + DOT_WEATHER_21_H + 'px;">' + right + '</div>' +
+  '</div>';
+}
+
+var _dotPairRainTimerIds = [];
+
+function clearDotPairRainMotionTimers() {
+  _dotPairRainTimerIds.forEach(function (id) { clearTimeout(id); });
+  _dotPairRainTimerIds = [];
+}
+
+function groupPairRainCirclesByRow(circleEls, tolerance) {
+  var tol = tolerance || 2.8;
+  var rows = [];
+  circleEls.forEach(function (c) {
+    var cy = parseFloat(c.getAttribute('cy'));
+    var row = null;
+    for (var i = 0; i < rows.length; i++) {
+      if (Math.abs(rows[i].cy - cy) < tol) {
+        row = rows[i];
+        break;
+      }
+    }
+    if (row) row.circles.push(c);
+    else rows.push({ cy: cy, circles: [c] });
+  });
+  rows.sort(function (a, b) { return a.cy - b.cy; });
+  return rows;
+}
+
+function pairRainDismissOrder(circleEls) {
+  return circleEls.slice().sort(function (a, b) {
+    var cyA = parseFloat(a.getAttribute('cy'));
+    var cyB = parseFloat(b.getAttribute('cy'));
+    if (cyB !== cyA) return cyB - cyA;
+    return parseFloat(a.getAttribute('cx')) - parseFloat(b.getAttribute('cx'));
+  });
+}
+
+function initDotPairRainMotion(pairRoot) {
+  if (!pairRoot) return;
+  var svg = pairRoot.querySelector('.dot-w21__sun--pair-rain');
+  if (!svg) return;
+
+  if (svg.__pairRainTimers) {
+    svg.__pairRainTimers.forEach(function (id) { clearTimeout(id); });
+  }
+  svg.__pairRainTimers = [];
+  svg.__pairRainRunId = (svg.__pairRainRunId || 0) + 1;
+  var runId = svg.__pairRainRunId;
+
+  var g1 = svg.querySelector('.dot-w21__rain-g--1');
+  var g2 = svg.querySelector('.dot-w21__rain-g--2');
+  var g1Circles = g1 ? Array.prototype.slice.call(g1.querySelectorAll('circle')) : [];
+  var g2Circles = g2 ? Array.prototype.slice.call(g2.querySelectorAll('circle')) : [];
+  if (!g1Circles.length && !g2Circles.length) return;
+
+  var rowStepMs = 90;
+  var rowPopMs = 200;
+  var g2GapMs = 120;
+  var holdMs = 5000;
+  var fallStepMs = 60;
+  var fallMs = 240;
+  var loopGapMs = 280;
+
+  function schedule(fn, ms) {
+    var id = setTimeout(fn, ms);
+    svg.__pairRainTimers.push(id);
+    _dotPairRainTimerIds.push(id);
+    return id;
+  }
+
+  function prepCircle(c) {
+    c.style.transformBox = 'fill-box';
+    c.style.transformOrigin = 'center';
+  }
+
+  function resetCircles(list) {
+    list.forEach(function (c) {
+      prepCircle(c);
+      c.style.transition = 'none';
+      c.style.opacity = '0';
+      c.style.transform = 'scale(0.35) translate(0, 0)';
+    });
+  }
+
+  function showRow(circlesInRow) {
+    circlesInRow.forEach(function (c) {
+      prepCircle(c);
+      c.style.transition = 'opacity ' + rowPopMs + 'ms ease, transform ' + rowPopMs + 'ms cubic-bezier(0.16, 1, 0.3, 1)';
+      c.style.opacity = '1';
+      c.style.transform = 'scale(1) translate(0, 0)';
+    });
+  }
+
+  function fallCircle(c) {
+    prepCircle(c);
+    c.style.transition = 'opacity ' + fallMs + 'ms ease, transform ' + fallMs + 'ms cubic-bezier(0.45, 0, 0.9, 0.55)';
+    c.style.opacity = '0';
+    c.style.transform = 'scale(1) translate(0, 16px)';
+  }
+
+  function runCycle() {
+    if (svg.__pairRainRunId !== runId) return;
+
+    var all = g1Circles.concat(g2Circles);
+    resetCircles(all);
+
+    var g1Rows = groupPairRainCirclesByRow(g1Circles, 2.5);
+    var g2Rows = groupPairRainCirclesByRow(g2Circles, 3);
+    var delay = 0;
+
+    g1Rows.forEach(function (row) {
+      (function (circlesInRow, at) {
+        schedule(function () {
+          if (svg.__pairRainRunId !== runId) return;
+          showRow(circlesInRow);
+        }, at);
+      })(row.circles, delay);
+      delay += rowStepMs;
+    });
+
+    delay += g2GapMs;
+
+    g2Rows.forEach(function (row) {
+      (function (circlesInRow, at) {
+        schedule(function () {
+          if (svg.__pairRainRunId !== runId) return;
+          showRow(circlesInRow);
+        }, at);
+      })(row.circles, delay);
+      delay += rowStepMs;
+    });
+
+    delay += rowPopMs + holdMs;
+
+    pairRainDismissOrder(g2Circles).forEach(function (c) {
+      (function (circle, at) {
+        schedule(function () {
+          if (svg.__pairRainRunId !== runId) return;
+          fallCircle(circle);
+        }, at);
+      })(c, delay);
+      delay += fallStepMs;
+    });
+
+    delay += fallMs;
+
+    pairRainDismissOrder(g1Circles).forEach(function (c) {
+      (function (circle, at) {
+        schedule(function () {
+          if (svg.__pairRainRunId !== runId) return;
+          fallCircle(circle);
+        }, at);
+      })(c, delay);
+      delay += fallStepMs;
+    });
+
+    delay += fallMs + loopGapMs;
+    schedule(runCycle, delay);
+  }
+
+  runCycle();
+}
+
+function mountDotPairRainMotionInStage(stage) {
+  if (!stage) return;
+  requestAnimationFrame(function () {
+    initDotPairRainMotion(stage.querySelector('.dot-weather21-pair'));
+  });
+}
+
 function previewRectForCard(card) {
   const role = card && card.role;
   const variant = (card && card.variant) || {};
+  if (isDotWeather21LightPairCard(card)) return previewRectForDotWeather21Pair(TOOLKIT_PREVIEW_SCALE);
   if (role === 'now-bar' && variant.type === 'charging') return { w: 248, h: 64, scale: TOOLKIT_PREVIEW_SCALE };
   if (role === 'now-bar' && variant.type === 'single-line') return { w: 381, h: 58, scale: TOOLKIT_PREVIEW_SCALE };
   // Navigation copies need width for distance + instruction + ETA; height can grow with 2-line clamp.
@@ -1203,6 +1403,9 @@ function renderPreviewGrid() {
     const previewRect = rect;
     const previewScale = previewRect.scale || 1;
     const useZoomPreview = shouldUseZoomPreviewForRole(card && card.role);
+    const isDotCameraCard = card.role === 'dot-camera';
+    const stageW = isDotCameraCard ? DOT_CAMERA_PREVIEW_SHELL : previewRect.w;
+    const stageH = isDotCameraCard ? DOT_CAMERA_PREVIEW_SHELL : previewRect.h;
     let html = '';
     try {
       if (card.role === 'composite-set') {
@@ -1240,6 +1443,9 @@ function renderPreviewGrid() {
           }
         });
         html += '</div>';
+      } else if (isDotWeather21LightPairCard(card)) {
+        html = renderDotWeather21PairHtml(card.variant);
+        if (!html) html = '<div style="padding:20px;color:var(--text-3);">renderer not loaded</div>';
       } else {
         const comp = { role: card.role, variant: card.variant, content: card.content || {} };
         if (typeof window.renderAtomicForRole === 'function') {
@@ -1255,12 +1461,12 @@ function renderPreviewGrid() {
       ? ('zoom:' + previewScale + ';transform:none;')
       : ('transform:scale(' + previewScale + ');');
     stage.innerHTML =
-      '<div class="stage-scale" style="width:' + previewRect.w + 'px;' +
-      'min-height:' + previewRect.h + 'px;height:auto;' +
+      '<div class="stage-scale" style="width:' + stageW + 'px;' +
+      'min-height:' + stageH + 'px;height:auto;' +
       scaleStyle + '">' + html + '</div>';
     const scaleRoot = stage.firstElementChild;
     const cardRoot = scaleRoot && scaleRoot.firstElementChild;
-    if (cardRoot) {
+    if (cardRoot && !isDotCameraCard) {
       cardRoot.style.width = previewRect.w + 'px';
       cardRoot.style.minHeight = previewRect.h + 'px';
       // Dot cards rely heavily on absolute positioning (fixed-size layouts).
@@ -1272,12 +1478,13 @@ function renderPreviewGrid() {
     }
     stripGradientsForFlat(stage);
     normalizeFlatTextForScheme(stage);
+    if (isDotWeather21LightPairCard(card)) mountDotPairRainMotionInStage(stage);
     if (scaleRoot) {
       void scaleRoot.offsetHeight;
       if (useZoomPreview) {
         // Dot cards are fixed-size: avoid measuring zoomed layout and double-scaling.
-        stage.style.width = Math.ceil(previewRect.w * previewScale) + 'px';
-        stage.style.height = Math.ceil(previewRect.h * previewScale) + 'px';
+        stage.style.width = Math.ceil(stageW * previewScale) + 'px';
+        stage.style.height = Math.ceil(stageH * previewScale) + 'px';
       } else {
         var crH = 0;
         if (cardRoot && typeof cardRoot.getBoundingClientRect === 'function') {
@@ -2578,6 +2785,7 @@ document.getElementById('preview-bg-swatches')?.addEventListener('click', functi
     renderPreviewGrid();
   }
 
+
   function renderDetailCard(card) {
     const detail = $('detail-view');
     const stage = $('detail-stage');
@@ -2588,7 +2796,9 @@ document.getElementById('preview-bg-swatches')?.addEventListener('click', functi
     const rect = previewRectForCard(card);
     const previewScale = rect.scale || 1;
     const useZoomPreview = shouldUseZoomPreviewForRole(card && card.role);
-    const html = window.renderAtomicForRole(card, rect);
+    const html = isDotWeather21LightPairCard(card)
+      ? renderDotWeather21PairHtml(card.variant)
+      : window.renderAtomicForRole(card, rect);
     const scaleStyle = useZoomPreview
       ? ('zoom:' + previewScale + ';transform:none;')
       : ('transform:scale(' + previewScale + ');');
@@ -2603,6 +2813,7 @@ document.getElementById('preview-bg-swatches')?.addEventListener('click', functi
 
     const cardEl = stage.querySelector('.dot-card, .focus-block, .notif-card, .now-bar, .media-card, .progress-track');
     if (cardEl) cardEl.setAttribute('data-state', 'idle');
+    if (isDotWeather21LightPairCard(card)) mountDotPairRainMotionInStage(stage);
 
     if (controls) {
       controls.innerHTML = '';
@@ -2671,6 +2882,8 @@ document.getElementById('preview-bg-swatches')?.addEventListener('click', functi
         }
       });
       html += '</div>';
+    } else if (isDotWeather21LightPairCard(card)) {
+      html = renderDotWeather21PairHtml(card.variant);
     } else {
       html = window.renderAtomicForRole(card, rect);
     }
@@ -2697,8 +2910,9 @@ document.getElementById('preview-bg-swatches')?.addEventListener('click', functi
     }
     
     // Reset state to idle
-    const cardEl = stage.querySelector('.dot-card, .focus-block, .notif-card, .now-bar, .media-card, .progress-track');
-    if (cardEl) cardEl.setAttribute('data-state', 'idle');
+    const cardEls = stage.querySelectorAll('.dot-card, .focus-block, .notif-card, .now-bar, .media-card, .progress-track');
+    cardEls.forEach(function (cardEl) { cardEl.setAttribute('data-state', 'idle'); });
+    if (isDotWeather21LightPairCard(card)) mountDotPairRainMotionInStage(stage);
 
     // Detail controls: dot-time-matrix time scrubber
     if (controls) {

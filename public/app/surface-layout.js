@@ -3972,7 +3972,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
     case 'dot-camera': {
       var camv = (comp && comp.variant) || {};
       return '' +
-        '<div class="dot-camera-motion" data-state="' + (camv.state || 'idle') + '">' +
+        '<div class="dot-cam dot-camera-motion" data-state="' + (camv.state || 'idle') + '">' +
           '<div class="dot-camera-motion__intro" aria-hidden="true">' +
             '<svg class="dot-camera-motion__introIcon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">' +
               '<path d="M6.66667 28C5.93333 28 5.30556 27.7389 4.78333 27.2167C4.26111 26.6944 4 26.0667 4 25.3333V20H6.66667V25.3333H12V28H6.66667ZM20 28V25.3333H25.3333V20H28V25.3333C28 26.0667 27.7389 26.6944 27.2167 27.2167C26.6944 27.7389 26.0667 28 25.3333 28H20ZM4 12V6.66667C4 5.93333 4.26111 5.30556 4.78333 4.78333C5.30556 4.26111 5.93333 4 6.66667 4H12V6.66667H6.66667V12H4ZM25.3333 12V6.66667H20V4H25.3333C26.0667 4 26.6944 4.26111 27.2167 4.78333C27.7389 5.30556 28 5.93333 28 6.66667V12H25.3333Z" fill="#1A1D1C"/>' +
@@ -4679,6 +4679,43 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
       var loc = w2.location || 'Sydney';
       var wt = w2.weather || 'Sunny';
       var darkClass = w2.theme === 'dark' ? ' dot-w21--dark' : '';
+      var pairRainG1Dots = [
+        [19.2358, 2.67541, 1.75533],
+        [17.3979, 6.35571, 1.75533], [21.4936, 6.35571, 1.75533],
+        [19.644, 10.5318, 1.75533], [23.7397, 10.5318, 1.75533], [15.5502, 10.532, 1.75533],
+        [11.4526, 14.6274, 1.75533], [15.5502, 14.6274, 1.75533],
+        [19.644, 14.6275, 1.75533], [23.7397, 14.6275, 1.75533], [27.8354, 14.6275, 1.75533],
+        [11.4526, 18.7238, 1.75533], [27.8354, 18.7234, 1.75533], [15.5502, 18.7238, 1.75533],
+        [19.644, 18.7234, 1.75533], [23.7397, 18.7234, 1.75533],
+        [11.4526, 22.8192, 1.75533], [27.8354, 22.819, 1.75533], [15.5502, 22.8192, 1.75533],
+        [19.644, 22.819, 1.75533], [23.7397, 22.819, 1.75533],
+        [15.5502, 26.9146, 1.75533], [19.644, 26.915, 1.75533], [23.7397, 26.915, 1.75533]
+      ];
+      var pairRainG2Dots = [
+        [40.493, 23.9777, 2.24889],
+        [38.1356, 28.6928, 2.24889], [43.3837, 28.6928, 2.24889],
+        [41.0126, 34.0432, 2.24889], [35.7665, 34.0434, 2.24889], [46.2606, 34.0432, 2.24889],
+        [30.5184, 39.2904, 2.24889], [35.7665, 39.2904, 2.24889],
+        [41.0126, 39.2904, 2.24889], [46.2606, 39.2904, 2.24889], [51.5067, 39.2904, 2.24889],
+        [30.5184, 44.5385, 2.24889], [35.7665, 44.5385, 2.24889],
+        [41.0126, 44.5381, 2.24889], [46.2606, 44.5381, 2.24889], [51.5067, 44.5381, 2.24889],
+        [30.5184, 49.7855, 2.24889], [35.7665, 49.7855, 2.24889],
+        [41.0126, 49.7853, 2.24889], [46.2606, 49.7853, 2.24889], [51.5067, 49.7853, 2.24889],
+        [35.7665, 55.0325, 2.24889], [41.0126, 55.033, 2.24889], [46.2606, 55.033, 2.24889]
+      ];
+      var _pairRainGroupHtml = function(dots) {
+        var out = '';
+        for (var pri = 0; pri < dots.length; pri++) {
+          var prd = dots[pri];
+          out += '<circle cx="' + prd[0] + '" cy="' + prd[1] + '" r="' + prd[2] + '" fill="#191919"/>';
+        }
+        return out;
+      };
+      var pairRainSunSvg =
+        '<svg class="dot-w21__sun dot-w21__sun--pair-rain" width="41.7" height="41.7" viewBox="0 0 65 69" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          '<g class="dot-w21__rain-g dot-w21__rain-g--1">' + _pairRainGroupHtml(pairRainG1Dots) + '</g>' +
+          '<g class="dot-w21__rain-g dot-w21__rain-g--2">' + _pairRainGroupHtml(pairRainG2Dots) + '</g>' +
+        '</svg>';
       
       // Helper for dot icons
       var _renderDots = function(type) {
@@ -4703,11 +4740,15 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
         return dots;
       };
 
+      var sunIconHtml = w2.sunIcon === 'pair-raindrop-dual'
+        ? pairRainSunSvg
+        : '<svg class="dot-w21__sun" width="41.7" height="41.7" viewBox="0 0 46.37 46.37" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+            _renderDots(wt) +
+          '</svg>';
+
       return '' +
         '<div class="dot-card dot-w21' + darkClass + '" data-state="' + (w2.state || 'idle') + '">' +
-          '<svg class="dot-w21__sun" width="41.7" height="41.7" viewBox="0 0 46.37 46.37" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-            _renderDots(wt) +
-          '</svg>' +
+          sunIconHtml +
           '<div class="dot-w21__text">' +
             '<div class="dot-w21__loc">' + loc + '</div>' +
             '<div class="dot-w21__weather">' + wt + '</div>' +
