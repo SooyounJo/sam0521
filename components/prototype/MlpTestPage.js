@@ -10,9 +10,9 @@ const PHONE_RADIUS = 30;
 const HOME_BG = "/assets/bg-new.png?v=2";
 
 const TESTS = [
-  { id: "test1", href: "/test1", label: "Persona 1", img: "/assets/persona-1.png" },
+  { id: "test1", href: "/test1", label: "Persona 1", img: "/assets/persona-1.png", disabled: true },
   { id: "test2", href: "/test2", label: "Persona 2", img: "/assets/persona-2.png" },
-  { id: "test3", href: "/test3", label: "Persona 3", img: "/assets/persona-3.png", disabled: true },
+  { id: "test3", href: "/test3", label: "Persona 3", img: "/assets/persona-3.png" },
 ];
 
 function TestScripts() {
@@ -30,6 +30,7 @@ function TestScripts() {
       <Script src="/app/atomics.js?v=4" strategy="beforeInteractive" />
       <Script src="/app/design-doc.js?v=2" strategy="beforeInteractive" />
       <Script src="/app/interaction-state.js?v=2" strategy="beforeInteractive" />
+      <Script src="/app/dot-pair-rain.js?v=1" strategy="beforeInteractive" />
       <Script src="/app/surface-layout.js?v=mlp-test3-music-1" strategy="beforeInteractive" />
       <Script src="/app/settings.js?v=2" strategy="beforeInteractive" />
       <Script src="/app/canvas.js?v=2" strategy="beforeInteractive" />

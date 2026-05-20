@@ -581,6 +581,13 @@
     background: #FF7F24 !important;
   }
 
+  #canvas[data-test-scope="test2"] #p2-slot .dot-sch__text.is-muted {
+    color: rgba(255, 255, 255, 0.78);
+  }
+  #canvas[data-test-scope="test2"] #p2-slot .dot-sch__time.is-time {
+    color: rgba(255, 255, 255, 0.92);
+  }
+
   #p2-slot.p2-reveal-swap .dot-card {
     animation: none !important;
   }
@@ -3595,7 +3602,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .dot-sch__text.is-muted { color: rgba(255, 255, 255, 0.78); }
+  .dot-sch__text.is-muted { color: rgba(255, 255, 255, 0.4); }
   .dot-sch__text.is-accent { color: #FF7F24; }
   .dot-sch__text.is-strong { color: #FFFFFF; }
 
@@ -3610,7 +3617,7 @@
     text-align: right;
     white-space: nowrap;
   }
-  .dot-sch__time.is-time { color: rgba(255, 255, 255, 0.92); }
+  .dot-sch__time.is-time { color: rgba(255, 255, 255, 0.8); }
   .dot-sch__time.is-strong { color: #FFFFFF; }
   .dot-sch__time-note {
     margin-left: auto;
@@ -4025,7 +4032,7 @@
     --dot-icon-cycle: 12s;
   }
   .dot-icon11--orange {
-    background: transparent;
+    background: #FF7F24;
     --dot-mask-bg: #FF7F24;
   }
   .dot-icon11__layer {
@@ -4041,15 +4048,11 @@
   .dot-icon11__layer--from {
     opacity: 1;
     filter: blur(0px);
+    animation: dotIconFromLoop var(--dot-icon-cycle) ease-in-out 0ms infinite;
   }
   .dot-icon11__layer--to {
     opacity: 0;
     filter: blur(10px);
-  }
-  .dot-icon11[data-state="active"] .dot-icon11__layer--from {
-    animation: dotIconFromLoop var(--dot-icon-cycle) ease-in-out 0ms infinite;
-  }
-  .dot-icon11[data-state="active"] .dot-icon11__layer--to {
     animation: dotIconToLoop var(--dot-icon-cycle) ease-in-out 0ms infinite;
   }
   .dot-icon11__grad {
@@ -4057,28 +4060,38 @@
     inset: 0;
     border-radius: inherit;
     overflow: hidden;
-    background: repeating-linear-gradient(
-      90deg,
-      rgba(255, 241, 118, 0) 0px,
-      rgba(255, 241, 118, 0.05) 60px,
-      rgba(255, 255, 150, 0.4) 140px,
-      rgba(255, 241, 118, 0.05) 220px,
-      rgba(255, 241, 118, 0) 444px
-    );
-    background-size: 444px 100%;
-    background-position: 0 50%;
-    animation: dotCallGradientFlow 5s linear infinite;
-    mix-blend-mode: screen;
-    opacity: 0.8;
-    z-index: 1;
-  }
-  @keyframes dotGradFlow {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 100% 50%; }
+    background: linear-gradient(90deg, #FF8517 0%, #FF8517 58%, #F9FF8B 100%);
   }
   .dot-icon11__grad::before,
   .dot-icon11__grad::after {
-    display: none;
+    content: "";
+    position: absolute;
+    inset: -52%;
+    border-radius: 999px;
+    filter: blur(12px);
+    opacity: 0.9;
+    will-change: transform;
+    mix-blend-mode: normal;
+  }
+  .dot-icon11__grad::before {
+    opacity: 0.72;
+    background: radial-gradient(circle at 40% 45%, rgba(249, 255, 139, 1) 0%, rgba(249, 255, 139, 0) 68%);
+    animation: dotGradBlobA 3600ms ease-in-out 0ms infinite alternate;
+  }
+  .dot-icon11__grad::after {
+    opacity: 1;
+    background: radial-gradient(circle at 55% 55%, rgba(255, 133, 23, 1) 0%, rgba(255, 133, 23, 0) 78%);
+    animation: dotGradBlobB 4200ms ease-in-out 0ms infinite alternate;
+  }
+  @keyframes dotGradBlobA {
+    0% { transform: translate(-6%, -4%) scale(1.05); }
+    50% { transform: translate(10%, 6%) scale(1.12); }
+    100% { transform: translate(-2%, 14%) scale(1.06); }
+  }
+  @keyframes dotGradBlobB {
+    0% { transform: translate(10%, 8%) scale(1.08); }
+    50% { transform: translate(-8%, -10%) scale(1.14); }
+    100% { transform: translate(-14%, 4%) scale(1.07); }
   }
   .dot-icon11__dotsSvg {
     position: absolute;
@@ -4399,6 +4412,19 @@
     height: 41.7px;
     left: 24px;
     top: 21px;
+  }
+  #canvas[data-test-scope="test3"] #test3-weather .dot-w21__sun--pair-rain {
+    width: 59px;
+    height: 62px;
+    left: 17px;
+    top: 18px;
+  }
+  #canvas[data-test-scope="test3"]:not([data-test3-weather-rain="1"]) #test3-weather .dot-w21__sun--pair-rain circle {
+    opacity: 1;
+    transform: scale(1);
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: none !important;
   }
   .dot-weather21-pair > div:first-child .dot-w21__sun {
     width: 43px;

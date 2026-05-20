@@ -399,7 +399,7 @@ window.composeSurfacePlan = function composeSurfacePlan(surfaceType, layout) {
               },
               _rect: { x: 24, y: 214, w: 340, h: 168 } } : null,
             { id: 'test3-weather', role: 'dot-weather-2x1-v1-1', zone: 'viewing',
-              variant: { location: 'Seoul', weather: 'Sunny', theme: 'dark' },
+              variant: { location: 'Seoul', weather: 'Rainy', sunIcon: 'pair-raindrop-dual' },
               _rect: { x: 24, y: 214, w: 168, h: 82 } },
             { id: 'test3-steps', role: 'dot-total-steps-2x1', zone: 'viewing',
               variant: { count: '5,543' },
@@ -5654,6 +5654,11 @@ window.__mlpTest3GoHome = function __mlpTest3GoHome() {
     window.__mlpTestConfig.homeStage = 'home';
     window.__mlpTest3MusicShifted = false;
     window.__mlpTest3MusicShiftRunId = (window.__mlpTest3MusicShiftRunId || 0) + 1;
+    window.__mlpTest3WeatherRainArmed = false;
+    if (window.__mlpTest3WeatherRainTimer) {
+      clearTimeout(window.__mlpTest3WeatherRainTimer);
+      window.__mlpTest3WeatherRainTimer = null;
+    }
     // Arm a one-shot "enter" animation for the first home render only.
     // (Keeping it always-on causes repeated re-render bounce / "drop" feel.)
     if (!window.__mlpTest3HomeEntered) {
@@ -5690,6 +5695,26 @@ window.__mlpTest3GoHome = function __mlpTest3GoHome() {
   setTimeout(completeOnce, 420);
 
   return true;
+};
+
+window.__mountTest3WeatherRainMotion = function __mountTest3WeatherRainMotion(delayMs) {
+  var wait = typeof delayMs === 'number' ? delayMs : 0;
+  if (window.__mlpTest3WeatherRainTimer) {
+    clearTimeout(window.__mlpTest3WeatherRainTimer);
+    window.__mlpTest3WeatherRainTimer = null;
+  }
+  window.__mlpTest3WeatherRainTimer = setTimeout(function () {
+    try {
+      var canvas = document.getElementById('canvas');
+      if (!canvas || canvas.getAttribute('data-test-scope') !== 'test3') return;
+      if (canvas.getAttribute('data-test3-music-shift') !== '1') return;
+      var weatherHost = canvas.querySelector('#test3-weather');
+      if (!weatherHost || typeof window.initDotPairRainMotion !== 'function') return;
+      canvas.setAttribute('data-test3-weather-rain', '1');
+      window.__mlpTest3WeatherRainArmed = true;
+      window.initDotPairRainMotion(weatherHost);
+    } catch (_) {}
+  }, wait);
 };
 
 // test3(헬스 홈) 전용: intro 상태에서 home 위젯 렌더를 미리 실행해 콜드스타트 완화
@@ -5908,11 +5933,17 @@ window.generateSurfaceScenario = function generateSurfaceScenario(surfaceType) {
       } else {
         window.__mlpTest3MusicShifted = false;
         window.__mlpTest3MusicShiftRunId = (window.__mlpTest3MusicShiftRunId || 0) + 1;
+        window.__mlpTest3WeatherRainArmed = false;
+        if (window.__mlpTest3WeatherRainTimer) {
+          clearTimeout(window.__mlpTest3WeatherRainTimer);
+          window.__mlpTest3WeatherRainTimer = null;
+        }
         if (window.__mlpTest3MusicShiftTimer) {
           clearTimeout(window.__mlpTest3MusicShiftTimer);
           window.__mlpTest3MusicShiftTimer = null;
         }
         canvas.removeAttribute('data-test3-music-shift');
+        canvas.removeAttribute('data-test3-weather-rain');
       }
     } else {
       canvas.removeAttribute('data-test3-home-enter');
@@ -5991,7 +6022,7 @@ window.generateSurfaceScenario = function generateSurfaceScenario(surfaceType) {
         window.__mlpTest3MusicShiftTimer = null;
       }
       var stage = window.__mlpTestConfig && window.__mlpTestConfig.homeStage;
-      if (stage === 'home') {
+      if (stage === 'home' && !window.__mlpTest3MusicShifted) {
         var musicShiftRunId = window.__mlpTest3MusicShiftRunId || 0;
         window.__mlpTest3MusicShiftTimer = setTimeout(function () {
           try {
@@ -6008,6 +6039,9 @@ window.generateSurfaceScenario = function generateSurfaceScenario(surfaceType) {
               window.generateSurfaceScenario('tab-root');
             } else {
               c.setAttribute('data-test3-music-shift', '1');
+            }
+            if (typeof window.__mountTest3WeatherRainMotion === 'function') {
+              window.__mountTest3WeatherRainMotion(1020);
             }
           } catch (_) {}
         }, 5600);

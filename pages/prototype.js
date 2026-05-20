@@ -465,15 +465,15 @@ export default function PrototypePage() {
 
         <div className="mlp-workspace">
           <aside className="mlp-left">
-            <Link href="/test1" className="persona-circle" style={{ cursor: 'pointer' }}>
+            <span className="persona-circle is-disabled" aria-disabled="true" title="준비 중">
               <img src="/assets/persona-1.png" alt="Persona 1" className="persona-img" />
-            </Link>
+            </span>
             <Link href="/test2" className="persona-circle" style={{ cursor: 'pointer', border: scenario === 'lockscreen-persona2' ? '3px solid #fff' : 'none' }}>
               <img src="/assets/persona-2.png" alt="Persona 2" className="persona-img" />
             </Link>
-            <span className="persona-circle is-disabled" aria-disabled="true" title="준비 중">
+            <Link href="/test3" className="persona-circle" style={{ cursor: 'pointer' }}>
               <img src="/assets/persona-3.png" alt="Persona 3" className="persona-img" />
-            </span>
+            </Link>
           </aside>
 
           <section className="mlp-right" ref={rightRef}>
