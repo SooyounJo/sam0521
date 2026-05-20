@@ -338,24 +338,26 @@ window.composeSurfacePlan = function composeSurfacePlan(surfaceType, layout) {
         };
       }
       if (window.__mlpTestConfig && window.__mlpTestConfig.id === 'test1') {
+        // Persona 1 Gen Home (Figma 75:13339) — Goal + Music + Steps + Jogging + dot clock
         return {
           surfaceType,
           components: [
             { id: 'status-bar', role: 'status-bar', zone: 'topSystem' },
             { id: 'p1-goal', role: 'dot-goal', zone: 'viewing',
               variant: { title: "Today's Goal", time: '01:42:43', timeSuffix: 'Within', distance: '15km' },
-              _rect: { x: 32, y: 70, w: 324, h: 132 } },
-            { id: 'p1-run', role: 'dot-running-compact', zone: 'viewing',
-              variant: { label: 'Jogging', time: '10:35' },
-              _rect: { x: 32, y: 210, w: 156, h: 62 } },
+              _rect: { x: 24, y: 42, w: 340, h: 168 } },
+            { id: 'p1-music', role: 'dot-music-1x1', zone: 'viewing',
+              variant: { artist: 'Jimmy Hall', album: 'Album', song: 'Concierto', current: '0:40', remaining: '-1:10', barFull: 120, barTrack: 31.48 },
+              _rect: { x: 24, y: 214, w: 168, h: 168 } },
             { id: 'p1-steps', role: 'dot-total-steps-2x1', zone: 'viewing',
               variant: { count: '5,543' },
-              _rect: { x: 192, y: 210, w: 164, h: 62 } },
+              _rect: { x: 196, y: 214, w: 168, h: 82 } },
+            { id: 'p1-run', role: 'dot-running-compact', zone: 'viewing',
+              variant: { label: 'Jogging', time: '10:35' },
+              _rect: { x: 196, y: 300, w: 168, h: 82 } },
             { id: 'p1-timemat', role: 'dot-time-matrix', zone: 'viewing',
-              variant: { bgColor: 'transparent', bgDotColor: 'rgba(25,45,74,0.28)', dotColor: '#FF7F24', time: '12:45', meta: 'MON', dayDigits: '  ' },
-              _rect: { x: 32, y: 280, w: 324, h: 150 } },
-            { id: 'test1-page-dots', role: 'test3-page-dots', zone: 'viewing',
-              _rect: { x: 0, y: 700, w: 388, h: 24 } },
+              variant: { bgColor: 'transparent', dotColor: '#FF7F24', time: '12:45', meta: 'MON', dayDigits: '  ' },
+              _rect: { x: 26, y: 386, w: 335, h: 165 } },
             { id: 'app-dock', role: 'app-dock', zone: 'bottomNav',
               content: { apps: ['Camera','Gallery','Maps','YT Music'] } },
             { id: 'gesture-bar', role: 'gestureBar', zone: 'bottomAction' }
@@ -363,21 +365,51 @@ window.composeSurfacePlan = function composeSurfacePlan(surfaceType, layout) {
         };
       }
       if (window.__mlpTestConfig && window.__mlpTestConfig.id === 'test3') {
+        var stage = window.__mlpTestConfig.homeStage || 'intro'; // 'intro' | 'home'
+        var musicShifted = !!window.__mlpTest3MusicShifted;
+        if (stage !== 'home') {
+          // Persona 3 (health home) intro: runner pill at top → click to reveal home widgets.
+          return {
+            surfaceType,
+            components: [
+              { id: 'status-bar', role: 'status-bar', zone: 'topSystem' },
+              { id: 'test3-intro-run', role: 'dot-running-compact', zone: 'viewing',
+                variant: { label: 'Jogging', time: '10:35', mlpAction: 'mlp-intro-to-home' },
+                _rect: { x: 112, y: 56, w: 164, h: 82 } },
+              { id: 'test3-page-dots', role: 'test3-page-dots', zone: 'viewing',
+                _rect: { x: 0, y: 714, w: 388, h: 24 } },
+              { id: 'app-dock', role: 'app-dock', zone: 'bottomNav',
+                content: { apps: ['Camera','Gallery','Maps','YT Music'] } },
+              { id: 'gesture-bar', role: 'gestureBar', zone: 'bottomAction' }
+            ]
+          };
+        }
         return {
           surfaceType,
           components: [
             { id: 'status-bar', role: 'status-bar', zone: 'topSystem' },
-            { id: 'test3-time-matrix', role: 'dot-time-matrix', zone: 'viewing',
-              variant: { bgColor: 'transparent', bgDotColor: 'rgba(25,45,74,0.34)', dotColor: '#FF9748', time: '12:45', meta: 'MON', dayDigits: '  ' },
-              _rect: { x: 28, y: 56, w: 322, h: 142 } },
-            { id: 'test3-orange-badge', role: 'dot-icon-orange-badge-1x1', zone: 'viewing',
-              _rect: { x: 38, y: 244, w: 58, h: 58 } },
+            { id: 'test3-goal', role: 'dot-goal', zone: 'viewing',
+              variant: { title: "Today's Goal", time: '01:42:43', timeSuffix: 'Within', distance: '15km' },
+              _rect: { x: 24, y: 42, w: 340, h: 168 } },
+            musicShifted ? { id: 'test3-music', role: 'dot-music-1x1', zone: 'viewing',
+              variant: {
+                compactTitle: '햇빛이 쨍쨍한\n날씨에 듣기 좋은\n곡을 찾아드릴게요',
+                iconTitle: '가벼운 러닝에는 부드럽고 상쾌한\nConcierto가 좋을거같아요!',
+                iconSubtitle: 'Jim Hall - Concierto'
+              },
+              _rect: { x: 24, y: 214, w: 340, h: 168 } } : null,
+            { id: 'test3-weather', role: 'dot-weather-2x1-v1-1', zone: 'viewing',
+              variant: { location: 'Seoul', weather: 'Sunny', theme: 'dark' },
+              _rect: { x: 24, y: 214, w: 168, h: 82 } },
+            { id: 'test3-steps', role: 'dot-total-steps-2x1', zone: 'viewing',
+              variant: { count: '5,543' },
+              _rect: { x: 196, y: 214, w: 168, h: 82 } },
             { id: 'test3-page-dots', role: 'test3-page-dots', zone: 'viewing',
               _rect: { x: 0, y: 714, w: 388, h: 24 } },
             { id: 'app-dock', role: 'app-dock', zone: 'bottomNav',
               content: { apps: ['Camera','Gallery','Maps','YT Music'] } },
             { id: 'gesture-bar', role: 'gestureBar', zone: 'bottomAction' }
-          ]
+          ].filter(Boolean)
         };
       }
       return {
@@ -3977,7 +4009,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
     case 'dot-camera': {
       var camv = (comp && comp.variant) || {};
       return '' +
-        '<div class="dot-camera-motion" data-state="' + (camv.state || 'idle') + '">' +
+        '<div class="dot-cam dot-camera-motion" data-state="' + (camv.state || 'idle') + '">' +
           '<div class="dot-camera-motion__intro" aria-hidden="true">' +
             '<svg class="dot-camera-motion__introIcon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">' +
               '<path d="M6.66667 28C5.93333 28 5.30556 27.7389 4.78333 27.2167C4.26111 26.6944 4 26.0667 4 25.3333V20H6.66667V25.3333H12V28H6.66667ZM20 28V25.3333H25.3333V20H28V25.3333C28 26.0667 27.7389 26.6944 27.2167 27.2167C26.6944 27.7389 26.0667 28 25.3333 28H20ZM4 12V6.66667C4 5.93333 4.26111 5.30556 4.78333 4.78333C5.30556 4.26111 5.93333 4 6.66667 4H12V6.66667H6.66667V12H4ZM25.3333 12V6.66667H20V4H25.3333C26.0667 4 26.6944 4.26111 27.2167 4.78333C27.7389 5.30556 28 5.93333 28 6.66667V12H25.3333Z" fill="#1A1D1C"/>' +
@@ -4003,7 +4035,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
       var mv = (comp && comp.variant) || {};
       var expandedBarW = mv.expandedBarFull != null ? mv.expandedBarFull : 292;
       var expandedBarTrack = mv.expandedBarTrack != null ? mv.expandedBarTrack : 77;
-      var iconTitle = mv.iconTitle || '오늘 날씨엔 부드럽고 상쾌한\nConcierto가 좋을거같아요!';
+      var iconTitle = mv.iconTitle || '가벼운 런닝에는 부드럽고 상쾌한\nConcierto가 좋을거같아요!';
       var iconSubtitle = mv.iconSubtitle || 'Jim Hall - Concierto';
       var iconHtml = window.renderAtomicForRole({
         role: 'dot-music-1x2-icon',
@@ -4014,7 +4046,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
           barTrack: expandedBarTrack
         }
       }, rect);
-      var compactTitle = mv.compactTitle || '햇빛이 쨍쨍한\n날씨에 듣기 좋은\n곡을 찾아드릴게요';
+      var compactTitle = mv.compactTitle || '런닝하며 운동할 때\n듣기 좋은 곡을 찾아\n드릴게요';
       var compactIconHtml = '' +
         '<svg class="dot-music1__noteSvg" width="32" height="32" viewBox="-2 -2 68 68" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
           '<circle cx="19.85" cy="3.49" r="3.5" fill="#000000"/><circle cx="27.98" cy="3.49" r="3.5" fill="#000000"/><circle cx="35.66" cy="3.49" r="3.5" fill="#000000"/><circle cx="44.25" cy="3.49" r="3.5" fill="#000000"/><circle cx="52.39" cy="3.49" r="3.5" fill="#000000"/><circle cx="60.52" cy="3.49" r="3.5" fill="#000000"/>' +
@@ -4684,6 +4716,43 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
       var loc = w2.location || 'Sydney';
       var wt = w2.weather || 'Sunny';
       var darkClass = w2.theme === 'dark' ? ' dot-w21--dark' : '';
+      var pairRainG1Dots = [
+        [19.2358, 2.67541, 1.75533],
+        [17.3979, 6.35571, 1.75533], [21.4936, 6.35571, 1.75533],
+        [19.644, 10.5318, 1.75533], [23.7397, 10.5318, 1.75533], [15.5502, 10.532, 1.75533],
+        [11.4526, 14.6274, 1.75533], [15.5502, 14.6274, 1.75533],
+        [19.644, 14.6275, 1.75533], [23.7397, 14.6275, 1.75533], [27.8354, 14.6275, 1.75533],
+        [11.4526, 18.7238, 1.75533], [27.8354, 18.7234, 1.75533], [15.5502, 18.7238, 1.75533],
+        [19.644, 18.7234, 1.75533], [23.7397, 18.7234, 1.75533],
+        [11.4526, 22.8192, 1.75533], [27.8354, 22.819, 1.75533], [15.5502, 22.8192, 1.75533],
+        [19.644, 22.819, 1.75533], [23.7397, 22.819, 1.75533],
+        [15.5502, 26.9146, 1.75533], [19.644, 26.915, 1.75533], [23.7397, 26.915, 1.75533]
+      ];
+      var pairRainG2Dots = [
+        [40.493, 23.9777, 2.24889],
+        [38.1356, 28.6928, 2.24889], [43.3837, 28.6928, 2.24889],
+        [41.0126, 34.0432, 2.24889], [35.7665, 34.0434, 2.24889], [46.2606, 34.0432, 2.24889],
+        [30.5184, 39.2904, 2.24889], [35.7665, 39.2904, 2.24889],
+        [41.0126, 39.2904, 2.24889], [46.2606, 39.2904, 2.24889], [51.5067, 39.2904, 2.24889],
+        [30.5184, 44.5385, 2.24889], [35.7665, 44.5385, 2.24889],
+        [41.0126, 44.5381, 2.24889], [46.2606, 44.5381, 2.24889], [51.5067, 44.5381, 2.24889],
+        [30.5184, 49.7855, 2.24889], [35.7665, 49.7855, 2.24889],
+        [41.0126, 49.7853, 2.24889], [46.2606, 49.7853, 2.24889], [51.5067, 49.7853, 2.24889],
+        [35.7665, 55.0325, 2.24889], [41.0126, 55.033, 2.24889], [46.2606, 55.033, 2.24889]
+      ];
+      var _pairRainGroupHtml = function(dots) {
+        var out = '';
+        for (var pri = 0; pri < dots.length; pri++) {
+          var prd = dots[pri];
+          out += '<circle cx="' + prd[0] + '" cy="' + prd[1] + '" r="' + prd[2] + '" fill="#191919"/>';
+        }
+        return out;
+      };
+      var pairRainSunSvg =
+        '<svg class="dot-w21__sun dot-w21__sun--pair-rain" width="41.7" height="41.7" viewBox="0 0 65 69" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          '<g class="dot-w21__rain-g dot-w21__rain-g--1">' + _pairRainGroupHtml(pairRainG1Dots) + '</g>' +
+          '<g class="dot-w21__rain-g dot-w21__rain-g--2">' + _pairRainGroupHtml(pairRainG2Dots) + '</g>' +
+        '</svg>';
       
       // Helper for dot icons
       var _renderDots = function(type) {
@@ -4708,11 +4777,15 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
         return dots;
       };
 
+      var sunIconHtml = w2.sunIcon === 'pair-raindrop-dual'
+        ? pairRainSunSvg
+        : '<svg class="dot-w21__sun" width="41.7" height="41.7" viewBox="0 0 46.37 46.37" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+            _renderDots(wt) +
+          '</svg>';
+
       return '' +
         '<div class="dot-card dot-w21' + darkClass + '" data-state="' + (w2.state || 'idle') + '">' +
-          '<svg class="dot-w21__sun" width="41.7" height="41.7" viewBox="0 0 46.37 46.37" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-            _renderDots(wt) +
-          '</svg>' +
+          sunIconHtml +
           '<div class="dot-w21__text">' +
             '<div class="dot-w21__loc">' + loc + '</div>' +
             '<div class="dot-w21__weather">' + wt + '</div>' +
@@ -5565,6 +5638,98 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
   }
 };
 
+// test3(헬스 홈) 전용: intro 러닝 pill 클릭 → home 위젯 구성으로 전환
+window.__mlpTest3GoHome = function __mlpTest3GoHome() {
+  var isTest3 =
+    (window.__mlpTestConfig && window.__mlpTestConfig.id === 'test3') ||
+    (document.body && document.body.dataset && document.body.dataset.mlpTest === 'test3');
+  if (!isTest3) return false;
+  if (!window.__mlpTestConfig) {
+    window.__mlpTestConfig = { id: 'test3', surfaceType: 'tab-root', homeStage: 'intro' };
+  }
+  if (window.__mlpTestConfig.homeStage === 'home') return true;
+  if (window.__mlpTest3Transitioning) return true;
+
+  function finishTransition() {
+    window.__mlpTestConfig.homeStage = 'home';
+    window.__mlpTest3MusicShifted = false;
+    window.__mlpTest3MusicShiftRunId = (window.__mlpTest3MusicShiftRunId || 0) + 1;
+    // Arm a one-shot "enter" animation for the first home render only.
+    // (Keeping it always-on causes repeated re-render bounce / "drop" feel.)
+    if (!window.__mlpTest3HomeEntered) {
+      window.__mlpTest3HomeEnterArmed = true;
+    }
+    if (typeof window.generateSurfaceScenario === 'function') {
+      window.generateSurfaceScenario('tab-root');
+    }
+    window.__mlpTest3Transitioning = false;
+  }
+
+  var canvas = document.getElementById('canvas');
+  var runEl = canvas && canvas.querySelector('#test3-intro-run');
+  if (!runEl) {
+    finishTransition();
+    return true;
+  }
+
+  window.__mlpTest3Transitioning = true;
+  runEl.classList.add('test3-intro-run-exit');
+
+  var done = false;
+  function completeOnce() {
+    if (done) return;
+    done = true;
+    finishTransition();
+  }
+
+  runEl.addEventListener('animationend', function onExitEnd(e) {
+    if (e.target !== runEl || e.animationName !== 'test3IntroRunExit') return;
+    runEl.removeEventListener('animationend', onExitEnd);
+    completeOnce();
+  });
+  setTimeout(completeOnce, 420);
+
+  return true;
+};
+
+// test3(헬스 홈) 전용: intro 상태에서 home 위젯 렌더를 미리 실행해 콜드스타트 완화
+window.__mlpTest3WarmHomeRender = function __mlpTest3WarmHomeRender(surfaceType) {
+  try {
+    var isTest3 =
+      (window.__mlpTestConfig && window.__mlpTestConfig.id === 'test3') ||
+      (document.body && document.body.dataset && document.body.dataset.mlpTest === 'test3');
+    if (!isTest3) return false;
+    if (!window.createOneUILayout || !window.composeSurfacePlan || !window.expandContainerComponents || !window.renderAtomicForRole || !window.resolveComponentRect) return false;
+    if (!window.__mlpTestConfig) window.__mlpTestConfig = { id: 'test3', surfaceType: surfaceType || 'tab-root', homeStage: 'intro' };
+
+    var cfg = window.__mlpTestConfig;
+    var prevStage = cfg.homeStage;
+    var prevSurface = cfg.surfaceType;
+    cfg.surfaceType = surfaceType || prevSurface || 'tab-root';
+    cfg.homeStage = 'home';
+
+    var viewport = { width: 388, height: 880 };
+    var layout = window.createOneUILayout(viewport, cfg.surfaceType);
+    var plan = window.composeSurfacePlan(cfg.surfaceType, layout);
+    window.expandContainerComponents(plan, layout);
+
+    var ids = { 'test3-goal': 1, 'test3-music': 1, 'test3-weather': 1, 'test3-steps': 1 };
+    for (var i = 0; i < plan.components.length; i++) {
+      var comp = plan.components[i];
+      if (!comp || !ids[comp.id]) continue;
+      var rect = window.resolveComponentRect(comp, layout, plan);
+      // Warm render paths without touching DOM.
+      window.renderAtomicForRole(comp, rect);
+    }
+
+    cfg.homeStage = prevStage;
+    cfg.surfaceType = prevSurface;
+    return true;
+  } catch (_) {
+    return false;
+  }
+};
+
 window.renderSurfacePlan = function renderSurfacePlan(canvas, plan, layout) {
   canvas.innerHTML = '';
   canvas.dataset.rulesMode = '1';
@@ -5584,6 +5749,13 @@ window.renderSurfacePlan = function renderSurfacePlan(canvas, plan, layout) {
     wrapper.dataset.role = comp.role;
     wrapper.setAttribute('data-role', comp.role);
     wrapper.dataset.nodeId = comp.id;
+    // test3 scope: prefer live config/body over stale canvas attribute from prior page.
+    var isTest3Scope =
+      (window.__mlpTestConfig && window.__mlpTestConfig.id === 'test3') ||
+      (document.body && document.body.dataset && document.body.dataset.mlpTest === 'test3');
+    if (isTest3Scope && comp && comp.variant && comp.variant.mlpAction) {
+      wrapper.setAttribute('data-mlp-action', comp.variant.mlpAction);
+    }
 
     wrapper.style.position = 'absolute';
     wrapper.style.left = rect.x + 'px';
@@ -5624,6 +5796,23 @@ window.renderSurfacePlan = function renderSurfacePlan(canvas, plan, layout) {
     // (pre-computed during container expansion).
     if (comp._rect && window.attachReorderHandlers) {
       window.attachReorderHandlers(wrapper, comp.id);
+    }
+
+    // test3 intro runner: direct click handler (canvas listener may bind before #canvas exists)
+    if (isTest3Scope && comp.id === 'test3-intro-run') {
+      wrapper.setAttribute('data-mlp-action', 'mlp-intro-to-home');
+      wrapper.style.cursor = 'pointer';
+      if (wrapper.dataset.mlpClickBound !== '1') {
+        wrapper.dataset.mlpClickBound = '1';
+        wrapper.addEventListener('click', function (ev) {
+          if (ev && (ev.metaKey || ev.ctrlKey)) return;
+          ev.preventDefault();
+          ev.stopPropagation();
+          if (typeof window.__mlpTest3GoHome === 'function') {
+            window.__mlpTest3GoHome();
+          }
+        });
+      }
     }
 
     canvas.appendChild(wrapper);
@@ -5700,21 +5889,132 @@ window.generateSurfaceScenario = function generateSurfaceScenario(surfaceType) {
   }
 
   const viewport = { width: 388, height: 880 };
-  const layout = window.createOneUILayout(viewport, surfaceType);
+  let layout = window.createOneUILayout(viewport, surfaceType);
   const plan = window.composeSurfacePlan(surfaceType, layout);
   // Expand compositional roles into individual editable nodes.
   window.expandContainerComponents(plan, layout);
-  window.renderSurfacePlan(canvas, plan, layout);
   if (testScope) {
     canvas.setAttribute('data-test-scope', testScope);
+    if (testScope === 'test3') {
+      var homeStage = window.__mlpTestConfig && window.__mlpTestConfig.homeStage;
+      var shouldEnter = (homeStage === 'home') && !!window.__mlpTest3HomeEnterArmed;
+      // Performance: avoid starting enter animation on the same frame as heavy DOM creation.
+      // Prep keeps widgets invisible; then we flip to "enter" on the next frame.
+      canvas.removeAttribute('data-test3-home-enter');
+      if (shouldEnter) canvas.setAttribute('data-test3-home-prep', '1');
+      else canvas.removeAttribute('data-test3-home-prep');
+      if (homeStage === 'home') {
+        canvas.setAttribute('data-test3-music-shift', window.__mlpTest3MusicShifted ? '1' : '0');
+      } else {
+        window.__mlpTest3MusicShifted = false;
+        window.__mlpTest3MusicShiftRunId = (window.__mlpTest3MusicShiftRunId || 0) + 1;
+        if (window.__mlpTest3MusicShiftTimer) {
+          clearTimeout(window.__mlpTest3MusicShiftTimer);
+          window.__mlpTest3MusicShiftTimer = null;
+        }
+        canvas.removeAttribute('data-test3-music-shift');
+      }
+    } else {
+      canvas.removeAttribute('data-test3-home-enter');
+      canvas.removeAttribute('data-test3-home-prep');
+      canvas.removeAttribute('data-test3-music-shift');
+    }
   } else {
     canvas.removeAttribute('data-test-scope');
+    canvas.removeAttribute('data-test3-home-enter');
+    canvas.removeAttribute('data-test3-home-prep');
+    canvas.removeAttribute('data-test3-music-shift');
+  }
+  window.renderSurfacePlan(canvas, plan, layout);
+  // test3: flip prep → enter on next frame, then tear down enter after animations complete
+  if (testScope === 'test3' && canvas.getAttribute('data-test3-home-prep') === '1') {
+    requestAnimationFrame(function () {
+      try {
+        var stillTest3 =
+          (window.__mlpTestConfig && window.__mlpTestConfig.id === 'test3') ||
+          (document.body && document.body.dataset && document.body.dataset.mlpTest === 'test3');
+        if (!stillTest3) return;
+        if (!canvas || canvas.getAttribute('data-test-scope') !== 'test3') return;
+        canvas.removeAttribute('data-test3-home-prep');
+        canvas.setAttribute('data-test3-home-enter', '1');
+        window.__mlpTest3HomeEnterArmed = false;
+        setTimeout(function () {
+          try {
+            var stillTest3Later =
+              (window.__mlpTestConfig && window.__mlpTestConfig.id === 'test3') ||
+              (document.body && document.body.dataset && document.body.dataset.mlpTest === 'test3');
+            if (!stillTest3Later) return;
+            if (canvas && canvas.getAttribute('data-test-scope') === 'test3') {
+              canvas.removeAttribute('data-test3-home-enter');
+            }
+            window.__mlpTest3HomeEntered = true;
+          } catch (_) {}
+        }, 860);
+      } catch (_) {}
+    });
+  }
+  if (typeof window.bindCanvasPointerTracking === 'function') {
+    window.bindCanvasPointerTracking();
   }
 
   // Single hydrate — emits one 'hydrate' event to subscribers.
   if (window.DesignDoc && typeof window.DesignDoc.hydrateFromPlan === 'function') {
     window.DesignDoc.hydrateFromPlan(plan, surfaceType);
   }
+
+  // test3 (health home): warm heavy home widget render paths during intro idle time
+  // so the first click doesn't pay the cold-start cost.
+  if (testScope === 'test3') {
+    try {
+      var stageAfter = window.__mlpTestConfig && window.__mlpTestConfig.homeStage;
+      if (stageAfter !== 'home' && !window.__mlpTest3HomeWidgetsPriming) {
+        window.__mlpTest3HomeWidgetsPriming = true;
+        var schedule = window.requestIdleCallback
+          ? function (fn) { window.requestIdleCallback(fn, { timeout: 650 }); }
+          : function (fn) { setTimeout(fn, 120); };
+        schedule(function () {
+          try {
+            if (typeof window.__mlpTest3WarmHomeRender === 'function') {
+              window.__mlpTest3WarmHomeRender(surfaceType);
+            }
+          } catch (_) {}
+        });
+      }
+    } catch (_) {}
+  }
+
+  // test3 (health home): after a beat on home, animate music appearance + layout shift
+  if (testScope === 'test3') {
+    try {
+      if (window.__mlpTest3MusicShiftTimer) {
+        clearTimeout(window.__mlpTest3MusicShiftTimer);
+        window.__mlpTest3MusicShiftTimer = null;
+      }
+      var stage = window.__mlpTestConfig && window.__mlpTestConfig.homeStage;
+      if (stage === 'home') {
+        var musicShiftRunId = window.__mlpTest3MusicShiftRunId || 0;
+        window.__mlpTest3MusicShiftTimer = setTimeout(function () {
+          try {
+            var stillTest3 =
+              (window.__mlpTestConfig && window.__mlpTestConfig.id === 'test3') ||
+              (document.body && document.body.dataset && document.body.dataset.mlpTest === 'test3');
+            if (!stillTest3) return;
+            if ((window.__mlpTest3MusicShiftRunId || 0) !== musicShiftRunId) return;
+            if (!window.__mlpTestConfig || window.__mlpTestConfig.homeStage !== 'home') return;
+            var c = document.getElementById('canvas');
+            if (!c || c.getAttribute('data-test-scope') !== 'test3') return;
+            window.__mlpTest3MusicShifted = true;
+            if (typeof window.generateSurfaceScenario === 'function') {
+              window.generateSurfaceScenario('tab-root');
+            } else {
+              c.setAttribute('data-test3-music-shift', '1');
+            }
+          } catch (_) {}
+        }, 5600);
+      }
+    } catch (_) {}
+  }
+
 };
 
 // ============================================================================
