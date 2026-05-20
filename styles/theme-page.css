@@ -1205,6 +1205,46 @@
   .detail-stage .dot-music1__noteSvg circle:nth-child(29) { animation-delay: 3.558s, 6.958s; }
   .detail-stage .dot-music1__noteSvg circle:nth-child(34) { animation-delay: 3.576s, 6.976s; }
   .detail-stage .dot-music1__noteSvg circle:nth-child(30) { animation-delay: 3.594s, 6.994s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle {
+    animation:
+      dotMusicIconDotSweep 1.8s steps(1, end) 3s 1 forwards,
+      dotMusicIconDotSweep 1.8s steps(1, end) 6.4s infinite,
+      dotMusicSecondDotFillWave 1.8s steps(1, end) 8s infinite;
+  }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(1) { animation-delay: 3.000s, 6.400s, 8.000s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(7) { animation-delay: 3.018s, 6.418s, 8.018s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(2) { animation-delay: 3.036s, 6.436s, 8.036s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(3) { animation-delay: 3.054s, 6.454s, 8.054s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(8) { animation-delay: 3.072s, 6.472s, 8.072s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(13) { animation-delay: 3.090s, 6.490s, 8.090s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(9) { animation-delay: 3.108s, 6.508s, 8.108s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(14) { animation-delay: 3.126s, 6.526s, 8.126s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(4) { animation-delay: 3.144s, 6.544s, 8.144s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(19) { animation-delay: 3.162s, 6.562s, 8.162s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(15) { animation-delay: 3.180s, 6.580s, 8.180s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(10) { animation-delay: 3.198s, 6.598s, 8.198s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(5) { animation-delay: 3.216s, 6.616s, 8.216s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(21) { animation-delay: 3.234s, 6.634s, 8.234s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(25) { animation-delay: 3.252s, 6.652s, 8.252s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(16) { animation-delay: 3.270s, 6.670s, 8.270s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(11) { animation-delay: 3.288s, 6.688s, 8.288s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(6) { animation-delay: 3.306s, 6.706s, 8.306s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(31) { animation-delay: 3.324s, 6.724s, 8.324s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(26) { animation-delay: 3.342s, 6.742s, 8.342s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(23) { animation-delay: 3.360s, 6.760s, 8.360s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(12) { animation-delay: 3.378s, 6.778s, 8.378s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(17) { animation-delay: 3.396s, 6.796s, 8.396s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(32) { animation-delay: 3.414s, 6.814s, 8.414s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(27) { animation-delay: 3.432s, 6.832s, 8.432s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(18) { animation-delay: 3.450s, 6.850s, 8.450s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(20) { animation-delay: 3.468s, 6.868s, 8.468s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(22) { animation-delay: 3.486s, 6.886s, 8.486s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(28) { animation-delay: 3.504s, 6.904s, 8.504s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(33) { animation-delay: 3.522s, 6.922s, 8.522s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(24) { animation-delay: 3.540s, 6.940s, 8.540s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(29) { animation-delay: 3.558s, 6.958s, 8.558s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(34) { animation-delay: 3.576s, 6.976s, 8.576s; }
+  .detail-stage .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(30) { animation-delay: 3.594s, 6.994s, 8.594s; }
   .detail-stage .dot-music1__compact--layout .dot-music1__iconBg {
     animation: dotMusicFirstIconBgToSecond 12s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
@@ -1370,42 +1410,43 @@
     transform-origin: center;
     animation:
       dotMusicNoteDotIn 60ms cubic-bezier(0.16, 1, 0.3, 1) both,
-      dotMusicNoteDotLoop 1.8s steps(1, end) infinite;
+      dotMusicNoteDotLoop 1.8s steps(1, end) infinite,
+      dotMusicSecondDotFillWave 1.8s steps(1, end) 12s infinite;
   }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(1) { animation-delay: 5.180s, 6.20s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(7) { animation-delay: 5.198s, 6.22s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(2) { animation-delay: 5.216s, 6.24s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(3) { animation-delay: 5.234s, 6.26s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(8) { animation-delay: 5.252s, 6.28s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(13) { animation-delay: 5.270s, 6.30s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(9) { animation-delay: 5.288s, 6.32s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(14) { animation-delay: 5.306s, 6.34s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(4) { animation-delay: 5.324s, 6.36s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(19) { animation-delay: 5.342s, 6.38s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(15) { animation-delay: 5.360s, 6.40s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(10) { animation-delay: 5.378s, 6.42s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(5) { animation-delay: 5.396s, 6.44s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(21) { animation-delay: 5.414s, 6.46s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(25) { animation-delay: 5.432s, 6.48s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(16) { animation-delay: 5.450s, 6.50s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(11) { animation-delay: 5.468s, 6.52s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(6) { animation-delay: 5.486s, 6.54s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(31) { animation-delay: 5.504s, 6.56s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(26) { animation-delay: 5.522s, 6.58s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(23) { animation-delay: 5.540s, 6.60s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(12) { animation-delay: 5.558s, 6.62s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(17) { animation-delay: 5.576s, 6.64s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(32) { animation-delay: 5.594s, 6.66s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(27) { animation-delay: 5.612s, 6.68s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(18) { animation-delay: 5.630s, 6.70s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(20) { animation-delay: 5.648s, 6.72s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(22) { animation-delay: 5.666s, 6.74s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(28) { animation-delay: 5.684s, 6.76s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(33) { animation-delay: 5.702s, 6.78s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(24) { animation-delay: 5.720s, 6.80s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(29) { animation-delay: 5.738s, 6.82s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(34) { animation-delay: 5.756s, 6.84s; }
-  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(30) { animation-delay: 5.774s, 6.86s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(1) { animation-delay: 5.180s, 6.20s, 12.000s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(7) { animation-delay: 5.198s, 6.22s, 12.018s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(2) { animation-delay: 5.216s, 6.24s, 12.036s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(3) { animation-delay: 5.234s, 6.26s, 12.054s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(8) { animation-delay: 5.252s, 6.28s, 12.072s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(13) { animation-delay: 5.270s, 6.30s, 12.090s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(9) { animation-delay: 5.288s, 6.32s, 12.108s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(14) { animation-delay: 5.306s, 6.34s, 12.126s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(4) { animation-delay: 5.324s, 6.36s, 12.144s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(19) { animation-delay: 5.342s, 6.38s, 12.162s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(15) { animation-delay: 5.360s, 6.40s, 12.180s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(10) { animation-delay: 5.378s, 6.42s, 12.198s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(5) { animation-delay: 5.396s, 6.44s, 12.216s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(21) { animation-delay: 5.414s, 6.46s, 12.234s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(25) { animation-delay: 5.432s, 6.48s, 12.252s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(16) { animation-delay: 5.450s, 6.50s, 12.270s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(11) { animation-delay: 5.468s, 6.52s, 12.288s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(6) { animation-delay: 5.486s, 6.54s, 12.306s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(31) { animation-delay: 5.504s, 6.56s, 12.324s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(26) { animation-delay: 5.522s, 6.58s, 12.342s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(23) { animation-delay: 5.540s, 6.60s, 12.360s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(12) { animation-delay: 5.558s, 6.62s, 12.378s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(17) { animation-delay: 5.576s, 6.64s, 12.396s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(32) { animation-delay: 5.594s, 6.66s, 12.414s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(27) { animation-delay: 5.612s, 6.68s, 12.432s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(18) { animation-delay: 5.630s, 6.70s, 12.450s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(20) { animation-delay: 5.648s, 6.72s, 12.468s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(22) { animation-delay: 5.666s, 6.74s, 12.486s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(28) { animation-delay: 5.684s, 6.76s, 12.504s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(33) { animation-delay: 5.702s, 6.78s, 12.522s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(24) { animation-delay: 5.720s, 6.80s, 12.540s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(29) { animation-delay: 5.738s, 6.82s, 12.558s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(34) { animation-delay: 5.756s, 6.84s, 12.576s; }
+  .detail-stage .dot-music1__icon .dot-music3__noteSvg circle:nth-child(30) { animation-delay: 5.774s, 6.86s, 12.594s; }
   .preview-cell .dot-music3__noteSvg circle {
     opacity: 0;
     transform-box: fill-box;
@@ -1533,6 +1574,86 @@
   .preview-cell .dot-music1__noteSvg circle:nth-child(29) { animation-delay: 3.558s, 6.958s; }
   .preview-cell .dot-music1__noteSvg circle:nth-child(34) { animation-delay: 3.576s, 6.976s; }
   .preview-cell .dot-music1__noteSvg circle:nth-child(30) { animation-delay: 3.594s, 6.994s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle {
+    animation:
+      dotMusicIconDotSweep 1.8s steps(1, end) 3s 1 forwards,
+      dotMusicIconDotSweep 1.8s steps(1, end) 6.4s infinite,
+      dotMusicSecondDotFillWave 1.8s steps(1, end) 12.6s infinite;
+  }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(1) { animation-delay: 3.000s, 6.400s, 12.600s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(7) { animation-delay: 3.018s, 6.418s, 12.618s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(2) { animation-delay: 3.036s, 6.436s, 12.636s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(3) { animation-delay: 3.054s, 6.454s, 12.654s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(8) { animation-delay: 3.072s, 6.472s, 12.672s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(13) { animation-delay: 3.090s, 6.490s, 12.690s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(9) { animation-delay: 3.108s, 6.508s, 12.708s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(14) { animation-delay: 3.126s, 6.526s, 12.726s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(4) { animation-delay: 3.144s, 6.544s, 12.744s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(19) { animation-delay: 3.162s, 6.562s, 12.762s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(15) { animation-delay: 3.180s, 6.580s, 12.780s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(10) { animation-delay: 3.198s, 6.598s, 12.798s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(5) { animation-delay: 3.216s, 6.616s, 12.816s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(21) { animation-delay: 3.234s, 6.634s, 12.834s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(25) { animation-delay: 3.252s, 6.652s, 12.852s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(16) { animation-delay: 3.270s, 6.670s, 12.870s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(11) { animation-delay: 3.288s, 6.688s, 12.888s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(6) { animation-delay: 3.306s, 6.706s, 12.906s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(31) { animation-delay: 3.324s, 6.724s, 12.924s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(26) { animation-delay: 3.342s, 6.742s, 12.942s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(23) { animation-delay: 3.360s, 6.760s, 12.960s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(12) { animation-delay: 3.378s, 6.778s, 12.978s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(17) { animation-delay: 3.396s, 6.796s, 12.996s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(32) { animation-delay: 3.414s, 6.814s, 13.014s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(27) { animation-delay: 3.432s, 6.832s, 13.032s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(18) { animation-delay: 3.450s, 6.850s, 13.050s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(20) { animation-delay: 3.468s, 6.868s, 13.068s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(22) { animation-delay: 3.486s, 6.886s, 13.086s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(28) { animation-delay: 3.504s, 6.904s, 13.104s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(33) { animation-delay: 3.522s, 6.922s, 13.122s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(24) { animation-delay: 3.540s, 6.940s, 13.140s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(29) { animation-delay: 3.558s, 6.958s, 13.158s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(34) { animation-delay: 3.576s, 6.976s, 13.176s; }
+  .preview-cell .dot-music1__compact--layout .dot-music1__noteSvg circle:nth-child(30) { animation-delay: 3.594s, 6.994s, 13.194s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle {
+    animation:
+      dotMusicNoteDotIn 60ms cubic-bezier(0.16, 1, 0.3, 1) both,
+      dotMusicNoteDotLoop 1.8s steps(1, end) infinite,
+      dotMusicSecondDotFillWave 1.8s steps(1, end) 12.6s infinite;
+  }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(1) { animation-delay: 0.10s, 1.10s, 12.600s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(7) { animation-delay: 0.118s, 1.12s, 12.618s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(2) { animation-delay: 0.136s, 1.14s, 12.636s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(3) { animation-delay: 0.154s, 1.16s, 12.654s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(8) { animation-delay: 0.172s, 1.18s, 12.672s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(13) { animation-delay: 0.190s, 1.20s, 12.690s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(9) { animation-delay: 0.208s, 1.22s, 12.708s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(14) { animation-delay: 0.226s, 1.24s, 12.726s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(4) { animation-delay: 0.244s, 1.26s, 12.744s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(19) { animation-delay: 0.262s, 1.28s, 12.762s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(15) { animation-delay: 0.280s, 1.30s, 12.780s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(10) { animation-delay: 0.298s, 1.32s, 12.798s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(5) { animation-delay: 0.316s, 1.34s, 12.816s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(21) { animation-delay: 0.334s, 1.36s, 12.834s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(25) { animation-delay: 0.352s, 1.38s, 12.852s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(16) { animation-delay: 0.370s, 1.40s, 12.870s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(11) { animation-delay: 0.388s, 1.42s, 12.888s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(6) { animation-delay: 0.406s, 1.44s, 12.906s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(31) { animation-delay: 0.424s, 1.46s, 12.924s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(26) { animation-delay: 0.442s, 1.48s, 12.942s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(23) { animation-delay: 0.460s, 1.50s, 12.960s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(12) { animation-delay: 0.478s, 1.52s, 12.978s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(17) { animation-delay: 0.496s, 1.54s, 12.996s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(32) { animation-delay: 0.514s, 1.56s, 13.014s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(27) { animation-delay: 0.532s, 1.58s, 13.032s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(18) { animation-delay: 0.550s, 1.60s, 13.050s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(20) { animation-delay: 0.568s, 1.62s, 13.068s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(22) { animation-delay: 0.586s, 1.64s, 13.086s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(28) { animation-delay: 0.604s, 1.66s, 13.104s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(33) { animation-delay: 0.622s, 1.68s, 13.122s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(24) { animation-delay: 0.640s, 1.70s, 13.140s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(29) { animation-delay: 0.658s, 1.72s, 13.158s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(34) { animation-delay: 0.676s, 1.74s, 13.176s; }
+  .preview-cell .dot-music1__icon .dot-music3__noteSvg circle:nth-child(30) { animation-delay: 0.694s, 1.76s, 13.194s; }
   .preview-cell .stage-scale > .dot-music2--actions .dot-music2__btn {
     opacity: 0;
     transform: translateX(14px) scale(0.96);
@@ -1804,6 +1925,23 @@
     8%, 100% {
       opacity: 1;
       transform: translateX(0) scale(1);
+    }
+  }
+  @keyframes dotMusicSecondDotFillWave {
+    0%, 5% {
+      fill: #000000;
+    }
+    6%, 7% {
+      fill: #7D614B;
+    }
+    8%, 14% {
+      fill: #FF9748;
+    }
+    15%, 22% {
+      fill: #7D614B;
+    }
+    23%, 100% {
+      fill: #000000;
     }
   }
   @keyframes dotMusicPreviewReveal {
