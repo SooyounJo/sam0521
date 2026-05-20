@@ -1675,7 +1675,7 @@
     }
   }
   @keyframes dotMusicPreviewIconHold {
-    0%, 63.16%, 100% {
+    0%, 63.16%, 92%, 100% {
       opacity: 0;
       transform: translateX(0) scale(1);
     }
@@ -1685,7 +1685,7 @@
     }
   }
   @keyframes dotMusicPreviewFirstTextOutHold {
-    0%, 26.32%, 100% { opacity: 1; }
+    0%, 26.32%, 92%, 100% { opacity: 1; }
     32.63%, 89.47% { opacity: 0; }
   }
   @keyframes dotMusicPreviewSecondBgInHold {
@@ -1697,7 +1697,7 @@
     41.05%, 63.16% { opacity: 1; }
   }
   @keyframes dotMusicPreviewFirstIconBgHold {
-    0%, 26.32%, 100% {
+    0%, 26.32%, 92%, 100% {
       width: 53.86px;
       height: 53.86px;
       left: 24px;
@@ -1717,7 +1717,7 @@
     }
   }
   @keyframes dotMusicPreviewFirstIconHold {
-    0%, 26.32%, 100% {
+    0%, 26.32%, 92%, 100% {
       width: 24.87px;
       height: 24.62px;
       left: 38.31px;
