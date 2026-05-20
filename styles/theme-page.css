@@ -1122,7 +1122,7 @@
     inset: 0;
     border-radius: inherit;
     padding: 2px;
-    background: conic-gradient(from 0deg, #000000 0deg, #DADADA 180deg, #000000 360deg);
+    background: conic-gradient(from 0deg, #000000 0deg, #4F4F4F 95deg, #DADADA 165deg, #DADADA 215deg, #4F4F4F 285deg, #000000 360deg);
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);
