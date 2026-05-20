@@ -1092,18 +1092,23 @@
     line-height: 130%;
     display: flex;
     align-items: center;
-    color: #000000;
-    background: linear-gradient(105.31deg, #000000 0.42%, #000000 73.94%);
+    color: #FFFFFF;
+    background: repeating-linear-gradient(105.31deg, #FFFFFF 0px, #FFFFFF 24px, rgba(255, 189, 139, 0.3) 66px, rgba(255, 189, 139, 0.3) 114px, #FFFFFF 156px, #FFFFFF 192px);
+    background-size: 192px 100%;
+    background-position: 0 50%;
     -webkit-background-clip: text;
     background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: #FFFFFF;
   }
   .detail-stage .dot-music1__singer-name {
-    animation: dotMusicSingerGradient 2.2s linear 3s infinite;
+    animation:
+      dotMusicSingerGradient 2.2s linear 3s infinite,
+      dotMusicSingerGradientFillIn 680ms cubic-bezier(0.16, 1, 0.3, 1) 3s forwards;
   }
   .detail-stage .dot-music1__compact--layout .dot-music1__singer-name {
     animation:
       dotMusicSingerGradient 2.2s linear 3s infinite,
+      dotMusicSingerGradientFillIn 680ms cubic-bezier(0.16, 1, 0.3, 1) 3s forwards,
       dotMusicFirstTextOut 12s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   .dot-music1__iconBg {
@@ -1475,6 +1480,7 @@
   .preview-cell .dot-music1__compact--layout .dot-music1__singer-name {
     animation:
       dotMusicSingerGradient 2.2s linear 3s infinite,
+      dotMusicPreviewSingerGradientFillHold 19s cubic-bezier(0.16, 1, 0.3, 1) infinite,
       dotMusicPreviewFirstTextOutHold 19s cubic-bezier(0.16, 1, 0.3, 1) infinite;
   }
   .preview-cell .dot-music1__compact--layout .dot-music1__iconBg {
@@ -1674,16 +1680,16 @@
     }
   }
   @keyframes dotMusicFirstTextOut {
-    0%, 41.67% {
+    0%, 66.67% {
       opacity: 1;
     }
-    52%, 100% {
+    76%, 100% {
       opacity: 0;
     }
   }
   @keyframes dotMusicSecondBgIn {
-    0%, 41.67% { opacity: 0; }
-    60%, 96% { opacity: 1; }
+    0%, 66.67% { opacity: 0; }
+    78%, 96% { opacity: 1; }
     100% { opacity: 0; }
   }
   @keyframes dotMusicSecondBgFlow {
@@ -1695,10 +1701,10 @@
     }
   }
   @keyframes dotMusicSecondTextIn {
-    0%, 55% {
+    0%, 76% {
       opacity: 0;
     }
-    64%, 96% {
+    84%, 96% {
       opacity: 1;
     }
     100% {
@@ -1706,7 +1712,7 @@
     }
   }
   @keyframes dotMusicFirstIconBgToSecond {
-    0%, 41.67% {
+    0%, 66.67% {
       width: 53.86px;
       height: 53.86px;
       left: 24px;
@@ -1715,7 +1721,7 @@
       background: #FF9950;
       opacity: 1;
     }
-    60%, 100% {
+    78%, 100% {
       width: 96.77px;
       height: 96.77px;
       left: 35.08px;
@@ -1726,23 +1732,23 @@
     }
   }
   @keyframes dotMusicFirstIconBgStrokeToSecond {
-    0%, 41.67% { opacity: 0; }
-    50% { opacity: 0.45; }
-    60%, 100% { opacity: 1; }
+    0%, 66.67% { opacity: 0; }
+    72% { opacity: 0.45; }
+    78%, 100% { opacity: 1; }
   }
   @keyframes dotMusicFirstIconBgStrokeRotate {
-    0%, 41.67% { --dot-music1-ring-angle: 0deg; }
+    0%, 66.67% { --dot-music1-ring-angle: 0deg; }
     96%, 100% { --dot-music1-ring-angle: 1440deg; }
   }
   @keyframes dotMusicFirstIconToSecond {
-    0%, 41.67% {
+    0%, 66.67% {
       width: 24.87px;
       height: 24.62px;
       left: 38.31px;
       top: 108.45px;
       opacity: 1;
     }
-    60%, 100% {
+    78%, 100% {
       width: 44.69px;
       height: 44.23px;
       left: 60.06px;
@@ -1752,14 +1758,30 @@
   }
   @keyframes dotMusicSingerGradient {
     0% {
-      background-image: repeating-linear-gradient(105.31deg, #000000 0px, #000000 44px, rgba(79, 79, 79, 0.3) 64px, #000000 88px, #000000 119px);
+      background-image: repeating-linear-gradient(105.31deg, #FFFFFF 0px, #FFFFFF 24px, rgba(255, 189, 139, 0.3) 66px, rgba(255, 189, 139, 0.3) 114px, #FFFFFF 156px, #FFFFFF 192px);
       background-position: 0 50%;
-      background-size: 119px 100%;
+      background-size: 192px 100%;
     }
     100% {
-      background-image: repeating-linear-gradient(105.31deg, #000000 0px, #000000 44px, rgba(79, 79, 79, 0.3) 64px, #000000 88px, #000000 119px);
-      background-position: 119px 50%;
-      background-size: 119px 100%;
+      background-image: repeating-linear-gradient(105.31deg, #FFFFFF 0px, #FFFFFF 24px, rgba(255, 189, 139, 0.3) 66px, rgba(255, 189, 139, 0.3) 114px, #FFFFFF 156px, #FFFFFF 192px);
+      background-position: 192px 50%;
+      background-size: 192px 100%;
+    }
+  }
+  @keyframes dotMusicSingerGradientFillIn {
+    0% {
+      -webkit-text-fill-color: #FFFFFF;
+    }
+    100% {
+      -webkit-text-fill-color: transparent;
+    }
+  }
+  @keyframes dotMusicPreviewSingerGradientFillHold {
+    0%, 15.79%, 92%, 100% {
+      -webkit-text-fill-color: #FFFFFF;
+    }
+    19.37%, 89.47% {
+      -webkit-text-fill-color: transparent;
     }
   }
   @keyframes dotMusicSecondTitleGradient {
@@ -1846,19 +1868,19 @@
     }
   }
   @keyframes dotMusicPreviewFirstTextOutHold {
-    0%, 26.32%, 92%, 100% { opacity: 1; }
-    32.63%, 89.47% { opacity: 0; }
+    0%, 42.11%, 92%, 100% { opacity: 1; }
+    48.42%, 89.47% { opacity: 0; }
   }
   @keyframes dotMusicPreviewSecondBgInHold {
-    0%, 26.32%, 66.32%, 100% { opacity: 0; }
-    37.89%, 63.16% { opacity: 1; }
+    0%, 42.11%, 66.32%, 100% { opacity: 0; }
+    53.68%, 63.16% { opacity: 1; }
   }
   @keyframes dotMusicPreviewSecondTextInHold {
-    0%, 34.74%, 66.32%, 100% { opacity: 0; }
-    41.05%, 63.16% { opacity: 1; }
+    0%, 50.53%, 66.32%, 100% { opacity: 0; }
+    56.84%, 63.16% { opacity: 1; }
   }
   @keyframes dotMusicPreviewFirstIconBgHold {
-    0%, 26.32%, 92%, 100% {
+    0%, 42.11%, 92%, 100% {
       width: 53.86px;
       height: 53.86px;
       left: 24px;
@@ -1867,7 +1889,7 @@
       background: #FF9950;
       opacity: 1;
     }
-    37.89%, 89.47% {
+    53.68%, 89.47% {
       width: 96.77px;
       height: 96.77px;
       left: 35.08px;
@@ -1878,23 +1900,23 @@
     }
   }
   @keyframes dotMusicPreviewFirstIconBgStrokeHold {
-    0%, 26.32%, 92%, 100% { opacity: 0; }
-    32.63% { opacity: 0.45; }
-    37.89%, 89.47% { opacity: 1; }
+    0%, 42.11%, 92%, 100% { opacity: 0; }
+    48.42% { opacity: 0.45; }
+    53.68%, 89.47% { opacity: 1; }
   }
   @keyframes dotMusicPreviewFirstIconBgStrokeRotate {
-    0%, 26.32%, 92%, 100% { --dot-music1-ring-angle: 0deg; }
+    0%, 42.11%, 92%, 100% { --dot-music1-ring-angle: 0deg; }
     63.16%, 89.47% { --dot-music1-ring-angle: 1440deg; }
   }
   @keyframes dotMusicPreviewFirstIconHold {
-    0%, 26.32%, 92%, 100% {
+    0%, 42.11%, 92%, 100% {
       width: 24.87px;
       height: 24.62px;
       left: 38.31px;
       top: 108.45px;
       opacity: 1;
     }
-    37.89%, 89.47% {
+    53.68%, 89.47% {
       width: 44.69px;
       height: 44.23px;
       left: 60.06px;
