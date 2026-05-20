@@ -355,7 +355,7 @@ window.composeSurfacePlan = function composeSurfacePlan(surfaceType, layout) {
               variant: { bgColor: 'transparent', bgDotColor: 'rgba(25,45,74,0.28)', dotColor: '#FF7F24', time: '12:45', meta: 'MON', dayDigits: '  ' },
               _rect: { x: 32, y: 280, w: 324, h: 150 } },
             { id: 'test1-page-dots', role: 'test3-page-dots', zone: 'viewing',
-              _rect: { x: 0, y: 642, w: 320, h: 24 } },
+              _rect: { x: 0, y: 700, w: 388, h: 24 } },
             { id: 'app-dock', role: 'app-dock', zone: 'bottomNav',
               content: { apps: ['Camera','Gallery','Maps','YT Music'] } },
             { id: 'gesture-bar', role: 'gestureBar', zone: 'bottomAction' }
