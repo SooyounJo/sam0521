@@ -1063,6 +1063,14 @@ window.resolveComponentRect = function resolveComponentRect(comp, layout, plan) 
       };
 
     case 'persona2-widgets':
+      if (window.__mlpTestConfig && window.__mlpTestConfig.id === 'test2') {
+        return {
+          x: 0,
+          y: 268,
+          w: vw,
+          h: 240
+        };
+      }
       return {
         x: 0,
         y: 310 + 46,
@@ -5355,6 +5363,47 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
       '</div>';
 
     case 'persona2-widgets':
+      if (window.__mlpTestConfig && window.__mlpTestConfig.id === 'test2') {
+        return '<div class="p2-widgets p2-widgets--compact" style="position:relative; width:100%; height:240px;">' +
+          '<div id="p2-area" class="p2-agent-shell" style="position:absolute; top:0; left:24px; right:24px; height:168px; overflow:visible;">' +
+            '<div id="p2-default-widgets" class="p2-agent-main" style="position:relative; width:100%; flex:1; min-height:0; transition:opacity 0.4s ease;">' +
+              '<div id="p2-result" class="p2-dark p2-obc-host p2-agent-card" style="position:absolute; inset:0; background:transparent; border-radius:36px; padding:0; box-sizing:border-box; overflow:hidden;">' +
+                '<div class="p2-result-loading" aria-hidden="true">' +
+                  '<div class="p2-result-loading__bg"></div>' +
+                  '<div class="p2-result-loading__shimmer"></div>' +
+                  '<div class="p2-result-loading__content">' +
+                    '<div class="p2-result-loading__text">' +
+                      '<div class="p2-result-loading__title">상황에 맞는 UI를 구성하는 중…</div>' +
+                      '<div class="p2-result-loading__sub"></div>' +
+                    '</div>' +
+                    '<div class="p2-result-loading__icon" aria-hidden="true">' +
+                      '<div class="p2-loading-dots">' +
+                        '<span></span><span></span><span></span><span></span><span></span>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="p2-agent-card__body">' +
+                  '<div class="p2-agent-greeting">' +
+                    '<span id="p2-pill-title">휴가는 즐거우셨나요?</span>' +
+                    '<span id="p2-pill-sub">업무 관련 주요 알림이 14건 있습니다.</span>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div id="p2-slot" class="p2-agent-slot" style="position:absolute; left:0; right:0; top:0; bottom:56px; opacity:0; pointer-events:none; overflow:hidden; border-radius:36px 36px 0 0;"></div>' +
+            '<div class="p2-agent-footer">' +
+              '<div class="p2-agent-input">업무용 연락 정리해줘</div>' +
+              '<button id="p2-star" type="button" aria-label="AI Voice">' +
+                '<div class="p2-breathing-chord" aria-hidden="true">' +
+                  '<span></span><span></span><span></span><span></span><span></span>' +
+                '</div>' +
+                window.renderAtomicForRole({ role: 'dot-icon-orange-badge-1x1' }, { w: 56, h: 56 }) +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }
       return '<div class="p2-widgets" style="position:relative; width: 100%; height: 450px;">' +
         // Pill
         '<div class="p2-pill" style="position:absolute; top:0; left: 24px; right: 24px; height: 80px; background: #FFFFFF; border-radius: 40px; display:flex; align-items:center; padding: 0 24px 0 12px; gap: 16px;">' +
