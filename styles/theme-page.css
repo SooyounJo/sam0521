@@ -286,6 +286,14 @@
   #canvas[data-test-scope="test2"] #p2-result {
     overflow: hidden;
   }
+  #canvas[data-test-scope="test2"] #p2-result.is-loading {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    height: 100%;
+    border-radius: 36px;
+    overflow: hidden;
+  }
   #canvas[data-test-scope="test2"] .p2-result-loading {
     position: absolute;
     inset: 0;
@@ -324,14 +332,14 @@
   #canvas[data-test-scope="test2"] .p2-result-loading__content {
     position: relative;
     z-index: 2;
-    padding: 18px 20px;
+    padding: 14px 16px;
     box-sizing: border-box;
     height: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: 10px;
     opacity: 0;
     transition: opacity 0.5s ease 0.55s;
   }
@@ -895,32 +903,48 @@
     background: #FFFFFF !important;
   }
 
-  /* test2: unified agent card — reference frame layout */
+  /* test2: unified agent card — #121210, compact default + JS-driven expand */
   #canvas[data-test-scope="test2"] .p2-agent-shell {
     display: flex;
     flex-direction: column;
-    background: #171614;
+    justify-content: flex-start;
+    gap: 11px;
+    width: auto !important;
+    min-height: 148px;
+    padding: 20px 16px 10px 20px;
+    box-sizing: border-box;
+    background: #121210;
     border-radius: 36px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
-    transition: background 0.55s ease, box-shadow 0.55s ease;
+    overflow: hidden;
+    transition: background 0.55s ease, box-shadow 0.55s ease, height 0.55s ease;
+  }
+  #canvas[data-test-scope="test2"] .p2-agent-shell:not(:has(#p2-result.is-loading)):not(:has(#p2-slot.p2-reveal-swap)):not(:has(#p2-slot.p2-seq-done)) {
+    height: 148px !important;
   }
   #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-result.is-loading) {
     background: linear-gradient(135deg, #FF8F28 0%, #FFB347 55%, #FFD06E 100%);
     box-shadow: 0 10px 36px rgba(255, 151, 72, 0.28);
+    height: 148px !important;
+    padding: 0;
+    gap: 0;
+    overflow: hidden;
   }
   #canvas[data-test-scope="test2"] .p2-widgets--compact {
-    height: 240px !important;
+    min-height: 148px;
+    height: auto !important;
   }
   #canvas[data-test-scope="test2"] .p2-agent-main {
     flex: 1;
     min-height: 0;
+    position: relative;
   }
   #canvas[data-test-scope="test2"] #p2-default-widgets #p2-result {
     left: 0;
     right: 0;
     width: 100% !important;
     background: transparent !important;
-    border-radius: 36px 36px 0 0;
+    border-radius: 0;
     transition: opacity 0.86s ease;
   }
   #canvas[data-test-scope="test2"] #p2-result.p2-result-expanded {
@@ -929,7 +953,7 @@
   #canvas[data-test-scope="test2"] .p2-agent-card__body {
     position: relative;
     z-index: 1;
-    padding: 18px 18px 10px;
+    padding: 0;
     box-sizing: border-box;
     height: 100%;
     display: flex;
@@ -939,7 +963,8 @@
   #canvas[data-test-scope="test2"] .p2-agent-greeting {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 3px;
+    padding-left: 10px;
   }
   #canvas[data-test-scope="test2"] .p2-agent-greeting #p2-pill-title {
     font-family: 'Pretendard', var(--font), sans-serif;
@@ -955,7 +980,7 @@
     font-family: 'Pretendard', var(--font), sans-serif;
     font-weight: 600;
     font-size: 13px;
-    line-height: 1.35;
+    line-height: 1.34;
     color: rgba(255, 151, 72, 0.78);
     background-image: none;
     -webkit-text-fill-color: rgba(255, 151, 72, 0.78);
@@ -965,11 +990,11 @@
     position: relative;
     flex-shrink: 0;
     height: 56px;
-    padding: 0 12px 12px 14px;
+    padding: 0 8px 12px 4px;
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     z-index: 15;
   }
   #canvas[data-test-scope="test2"] .p2-agent-input {
@@ -980,7 +1005,7 @@
     border-radius: 22px;
     display: flex;
     align-items: center;
-    padding: 0 18px;
+    padding: 0 16px;
     font-family: 'Pretendard', var(--font), sans-serif;
     font-size: 14px;
     font-weight: 500;
@@ -1020,6 +1045,23 @@
     width: 48px;
     height: 48px;
   }
+  /* 56px button keeps size; dot stage maps 80px animation coords into the circle */
+  #canvas[data-test-scope="test2"] .p2-agent-footer #p2-star .p2-breathing-chord {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
+  }
+  #canvas[data-test-scope="test2"] .p2-agent-footer #p2-star .p2-breathing-chord__stage {
+    position: absolute;
+    top: -12px;
+    left: -12px;
+    width: 80px;
+    height: 80px;
+    transform: scale(0.7);
+    transform-origin: 40px 40px;
+    pointer-events: none;
+  }
   #canvas[data-test-scope="test2"] #p2-result.is-loading {
     z-index: 20;
     border-radius: 36px;
@@ -1040,6 +1082,7 @@
   }
   #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-result.is-loading) .p2-agent-main {
     flex: 1;
+    min-height: 0;
   }
   #canvas[data-test-scope="test2"] #p2-result.has-swap .p2-agent-card__body,
   #canvas[data-test-scope="test2"] #p2-result.p2-default-hiding .p2-agent-card__body {
@@ -1047,13 +1090,38 @@
     pointer-events: none !important;
   }
   #canvas[data-test-scope="test2"] #p2-slot {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 56px;
     z-index: 8 !important;
+    border-radius: 36px 36px 0 0;
+  }
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-reveal-swap) .p2-agent-footer,
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-seq-done) .p2-agent-footer {
+    opacity: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-reveal-swap),
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-seq-done) {
+    padding: 0;
+    gap: 0;
+  }
+  #canvas[data-test-scope="test2"] #p2-slot.p2-reveal-swap,
+  #canvas[data-test-scope="test2"] #p2-slot.p2-seq-done {
+    bottom: 0 !important;
+    border-radius: 36px;
   }
   #canvas[data-test-scope="test2"] #p2-slot.p2-reveal-swap .p2-reveal-stage {
     left: 0;
     right: 0;
     width: 100% !important;
-    border-radius: 36px 36px 0 0;
+    height: var(--p2-reveal-h, 168px);
+    border-radius: 36px;
     overflow: hidden;
   }
   #canvas[data-test-scope="test2"] #p2-slot.p2-seq-color-active .dot-sch,

@@ -1066,7 +1066,7 @@ window.resolveComponentRect = function resolveComponentRect(comp, layout, plan) 
       if (window.__mlpTestConfig && window.__mlpTestConfig.id === 'test2') {
         return {
           x: 0,
-          y: 268,
+          y: 326,
           w: vw,
           h: 240
         };
@@ -5365,7 +5365,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
     case 'persona2-widgets':
       if (window.__mlpTestConfig && window.__mlpTestConfig.id === 'test2') {
         return '<div class="p2-widgets p2-widgets--compact" style="position:relative; width:100%; height:240px;">' +
-          '<div id="p2-area" class="p2-agent-shell" style="position:absolute; top:0; left:24px; right:24px; height:168px; overflow:visible;">' +
+          '<div id="p2-area" class="p2-agent-shell" style="position:absolute; top:0; left:24px; right:24px; height:148px; overflow:hidden;">' +
             '<div id="p2-default-widgets" class="p2-agent-main" style="position:relative; width:100%; flex:1; min-height:0; transition:opacity 0.4s ease;">' +
               '<div id="p2-result" class="p2-dark p2-obc-host p2-agent-card" style="position:absolute; inset:0; background:transparent; border-radius:36px; padding:0; box-sizing:border-box; overflow:hidden;">' +
                 '<div class="p2-result-loading" aria-hidden="true">' +
@@ -5391,12 +5391,14 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
                 '</div>' +
               '</div>' +
             '</div>' +
-            '<div id="p2-slot" class="p2-agent-slot" style="position:absolute; left:0; right:0; top:0; bottom:56px; opacity:0; pointer-events:none; overflow:hidden; border-radius:36px 36px 0 0;"></div>' +
+            '<div id="p2-slot" class="p2-agent-slot" style="opacity:0; pointer-events:none; overflow:hidden;"></div>' +
             '<div class="p2-agent-footer">' +
               '<div class="p2-agent-input">업무용 연락 정리해줘</div>' +
               '<button id="p2-star" type="button" aria-label="AI Voice">' +
                 '<div class="p2-breathing-chord" aria-hidden="true">' +
-                  '<span></span><span></span><span></span><span></span><span></span>' +
+                  '<div class="p2-breathing-chord__stage">' +
+                    '<span></span><span></span><span></span><span></span><span></span>' +
+                  '</div>' +
                 '</div>' +
                 window.renderAtomicForRole({ role: 'dot-icon-orange-badge-1x1' }, { w: 56, h: 56 }) +
               '</button>' +
