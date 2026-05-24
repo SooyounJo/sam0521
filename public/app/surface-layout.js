@@ -1533,6 +1533,82 @@ function _weatherIconSvg(name) {
   }
 }
 
+function _isTest2Scope() {
+  return !!(window.__mlpTestConfig && window.__mlpTestConfig.id === 'test2');
+}
+
+function _escP2Html(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function _computeP2ContactListHeight(itemCount) {
+  var count = Math.max(1, Math.min(itemCount || 3, 3));
+  var padTop = 20;
+  var padBottom = 16;
+  var headerBlock = 28;
+  var headerGap = 12;
+  var itemH = 68;
+  var itemGap = 8;
+  return padTop + headerBlock + headerGap + count * itemH + (count - 1) * itemGap + padBottom;
+}
+
+function _renderP2ContactList(variant, rect) {
+  var v = variant || {};
+  var w = (rect && rect.w) || 340;
+  var rawItems = Array.isArray(v.items) ? v.items : [];
+  var defaultTimes = ['3일 전', '2일 전', '4일 전'];
+  var defaultTitles = [
+    '체크아웃 개선 리서치 공유',
+    '슬랙: 신규 알림 2건',
+    'Figma: 디자인 시스템 업데이트'
+  ];
+  var defaultSubs = [
+    '이민재 · 프로토타입 확인 후 피드백 요청',
+    '김지훈 · 쇼핑몰 개편 2차 시안 준비',
+    '김지훈 · Figma 완료, Notion 문서화만 남음'
+  ];
+  var items = rawItems.slice(0, 3);
+  while (items.length < 3) {
+    var fillIdx = items.length;
+    items.push({
+      text: defaultTitles[fillIdx] || ('항목 ' + (fillIdx + 1)),
+      time: defaultTimes[fillIdx] || '',
+      subtitle: defaultSubs[fillIdx] || ''
+    });
+  }
+  var header = v.title || v.section || v.date || '휴가 중 디자인 피드백';
+  if (/^(summary|may\s+\d+|today|messages)$/i.test(String(header).trim())) {
+    header = '휴가 중 디자인 피드백';
+  }
+  var chevron = '<svg class="p2-contact-list__chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">' +
+    '<path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.5)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var rows = items.map(function (it, idx) {
+    var title = (it && it.text) || defaultTitles[idx] || ('항목 ' + (idx + 1));
+    var time = (it && it.time) || defaultTimes[idx] || '';
+    var sub = (it && (it.subtitle || it.note || it.meta)) || defaultSubs[idx] || '';
+    return '<div class="p2-contact-list__item dot-sch__row">' +
+      '<div class="p2-contact-list__icon" aria-hidden="true"></div>' +
+      '<div class="p2-contact-list__body">' +
+        '<div class="p2-contact-list__title-row">' +
+          '<span class="p2-contact-list__title">' + _escP2Html(title) + '</span>' +
+          (time ? '<span class="p2-contact-list__time">' + _escP2Html(time) + '</span>' : '') +
+        '</div>' +
+        (sub ? '<div class="p2-contact-list__subtitle">' + _escP2Html(sub) + '</div>' : '') +
+      '</div>' +
+      chevron +
+    '</div>';
+  }).join('');
+  return '' +
+    '<div class="dot-card p2-contact-list" data-item-count="' + items.length + '" style="width:' + w + 'px;">' +
+      '<div class="p2-contact-list__header dot-sch__date">' + _escP2Html(header) + '</div>' +
+      '<div class="p2-contact-list__items">' + rows + '</div>' +
+    '</div>';
+}
+
 window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
   const A = window.GalaxyAtomics || {};
 
@@ -3705,6 +3781,19 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
     case 'composite-set': {
       var cv = (comp && comp.variant) || {};
       var children = cv.children || [];
+      if (_isTest2Scope()) {
+        var scheduleOnly = null;
+        for (var sci = 0; sci < children.length; sci++) {
+          var srole = children[sci] && children[sci].role;
+          if (srole === 'dot-schedule-4x2' || srole === 'dot-schedule-2x2') {
+            scheduleOnly = children[sci];
+            break;
+          }
+        }
+        if (scheduleOnly) {
+          return _renderP2ContactList(scheduleOnly.variant || {}, { w: 340, h: (rect && rect.h) || 168 });
+        }
+      }
       var targetRect = rect || { w: 340, h: 340 };
       var maxBottom = 0;
       children.forEach(function(child) {
@@ -4397,6 +4486,9 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
     }
 
     case 'dot-schedule-2x2': {
+      if (_isTest2Scope()) {
+        return _renderP2ContactList((comp && comp.variant) || {}, rect);
+      }
       var sv = (comp && comp.variant) || {};
       var date = sv.date || '13 May';
       var items = Array.isArray(sv.items) ? sv.items : [
@@ -4447,6 +4539,9 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
     }
 
     case 'dot-schedule-4x2': {
+      if (_isTest2Scope()) {
+        return _renderP2ContactList((comp && comp.variant) || {}, rect);
+      }
       var sv2 = (comp && comp.variant) || {};
       var date2 = sv2.date || 'May 15';
       var items2 = Array.isArray(sv2.items) ? sv2.items : [];
@@ -5401,11 +5496,6 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
             '<div class="p2-agent-footer">' +
               '<div class="p2-agent-input">업무용 연락 정리해줘</div>' +
               '<button id="p2-star" type="button" aria-label="AI Voice">' +
-                '<div class="p2-breathing-chord" aria-hidden="true">' +
-                  '<div class="p2-breathing-chord__stage">' +
-                    '<span></span><span></span><span></span><span></span><span></span>' +
-                  '</div>' +
-                '</div>' +
                 window.renderAtomicForRole({ role: 'dot-icon-orange-badge-1x1' }, { w: 56, h: 56 }) +
               '</button>' +
             '</div>' +
@@ -5958,6 +6048,214 @@ window.attachReorderHandlers = function attachReorderHandlers(el, nodeId) {
 // single-event contract so scene-inspector + interaction-overlay don't
 // double-refresh.
 
+var _p2LayoutPatchToken = 0;
+var _p2LayoutPatchScheduled = false;
+
+function _unlockTest2ContactListNodes(slot) {
+  if (!slot) return;
+  slot.style.position = 'relative';
+  slot.style.top = 'auto';
+  slot.style.bottom = 'auto';
+  slot.style.left = '0';
+  slot.style.right = '0';
+  slot.style.height = 'auto';
+  slot.style.overflow = 'visible';
+
+  var stage = slot.querySelector('.p2-reveal-stage');
+  if (stage) {
+    stage.style.position = 'relative';
+    stage.style.top = 'auto';
+    stage.style.left = '0';
+    stage.style.right = 'auto';
+    stage.style.width = '100%';
+    stage.style.height = 'auto';
+    stage.style.minHeight = '0';
+    stage.style.overflow = 'visible';
+  }
+
+  slot.querySelectorAll('.p2-reveal-stage > div, .composite-set-container, .composite-child').forEach(function (el) {
+    el.style.position = 'relative';
+    el.style.left = '0';
+    el.style.top = '0';
+    el.style.width = '100%';
+    el.style.height = 'auto';
+    el.style.minHeight = '0';
+    el.style.transform = 'none';
+  });
+}
+
+function activateTest2ContactListLayout(slot) {
+  if (!_isTest2Scope() || !slot) return false;
+  var list = slot.querySelector('.p2-contact-list');
+  if (!list) return false;
+
+  var shell = document.getElementById('p2-area');
+  var main = document.getElementById('p2-default-widgets');
+  var result = document.getElementById('p2-result');
+  var footer = shell && shell.querySelector('.p2-agent-footer');
+
+  if (shell) shell.classList.add('p2-contact-layout-active');
+  if (main) {
+    main.style.display = 'none';
+    main.style.opacity = '0';
+    main.style.pointerEvents = 'none';
+  }
+  if (result) {
+    result.classList.remove('is-loading', 'p2-crossfade-out', 'p2-result-expanded');
+  }
+  if (footer) {
+    footer.style.position = 'relative';
+    footer.style.opacity = '1';
+    footer.style.height = '56px';
+    footer.style.pointerEvents = 'auto';
+  }
+
+  _unlockTest2ContactListNodes(slot);
+  syncTest2VoiceStarState(document.getElementById('canvas'));
+  return true;
+}
+
+function patchTest2ContactListLayout(slot) {
+  if (!slot) return;
+  var list = slot.querySelector('.p2-contact-list');
+  if (!list) {
+    slot.dataset.p2LayoutReady = '';
+    var shell = document.getElementById('p2-area');
+    if (shell) shell.classList.remove('p2-contact-layout-active');
+    return;
+  }
+
+  activateTest2ContactListLayout(slot);
+
+  var count = parseInt(list.getAttribute('data-item-count') || '3', 10) || 3;
+  var estimate = _computeP2ContactListHeight(count);
+  var layoutKey = count + ':' + estimate;
+  if (slot.dataset.p2LayoutReady === layoutKey) return;
+
+  var patchToken = ++_p2LayoutPatchToken;
+
+  function applyLayout(contentH) {
+    if (patchToken !== _p2LayoutPatchToken) return;
+    var shellH = contentH + 56;
+    var shellHpx = shellH + 'px';
+    var area = document.getElementById('p2-area');
+    var result = document.getElementById('p2-result');
+    var widgets = document.querySelector('.p2-widgets--compact');
+    var widgetsWrap = document.querySelector('[data-role="persona2-widgets"]');
+    var stage = slot.querySelector('.p2-reveal-stage');
+
+    _unlockTest2ContactListNodes(slot);
+
+    if (stage) {
+      stage.style.removeProperty('height');
+      stage.style.setProperty('--p2-reveal-h', contentH + 'px');
+    }
+
+    if (area && area.style.height !== shellHpx) {
+      area.style.height = shellHpx;
+      area.style.minHeight = shellHpx;
+      area.style.setProperty('--p2-shell-h', shellHpx);
+    }
+    if (widgets && widgets.style.height !== shellHpx) {
+      widgets.style.height = shellHpx;
+      widgets.style.minHeight = shellHpx;
+    }
+    if (widgetsWrap && widgetsWrap.style.height !== shellHpx) {
+      widgetsWrap.style.height = shellHpx;
+      widgetsWrap.style.minHeight = shellHpx;
+      widgetsWrap.style.overflow = 'visible';
+    }
+
+    var contentHpx = contentH + 'px';
+    if (slot.style.getPropertyValue('--p2-reveal-h') !== contentHpx) {
+      slot.style.setProperty('--p2-reveal-h', contentHpx);
+    }
+    if (result && result.style.getPropertyValue('--p2-reveal-h') !== contentHpx) {
+      result.style.setProperty('--p2-reveal-h', contentHpx);
+    }
+
+    slot.querySelectorAll('.p2-contact-list .dot-sch__date, .p2-contact-list .dot-sch__row').forEach(function (el) {
+      if (!el.classList.contains('p2-seq-text-hidden')) return;
+      el.classList.remove('p2-seq-text-hidden');
+      el.classList.add('p2-seq-text-visible');
+    });
+
+    slot.dataset.p2LayoutReady = layoutKey;
+  }
+
+  applyLayout(estimate);
+  requestAnimationFrame(function () {
+    if (patchToken !== _p2LayoutPatchToken) return;
+    requestAnimationFrame(function () {
+      if (patchToken !== _p2LayoutPatchToken) return;
+      var measured = Math.ceil(list.scrollHeight || list.offsetHeight || 0);
+      applyLayout(Math.max(measured, estimate));
+    });
+  });
+}
+
+function schedulePatchTest2ContactListLayout(slot) {
+  if (!slot || _p2LayoutPatchScheduled) return;
+  _p2LayoutPatchScheduled = true;
+  requestAnimationFrame(function () {
+    _p2LayoutPatchScheduled = false;
+    patchTest2ContactListLayout(slot);
+  });
+}
+
+window.patchTest2ContactListLayout = patchTest2ContactListLayout;
+window.activateTest2ContactListLayout = activateTest2ContactListLayout;
+
+function syncTest2VoiceStarState(canvas) {
+  if (!canvas || !_isTest2Scope()) return;
+  var star = document.getElementById('p2-star');
+  if (!star) return;
+  var active =
+    canvas.classList.contains('p2-listening') ||
+    canvas.classList.contains('p2-generating');
+  var icon = star.querySelector('.dot-icon11');
+  var grad = star.querySelector('.dot-icon11__grad');
+  var from = star.querySelector('.dot-icon11__layer--from');
+  var to = star.querySelector('.dot-icon11__layer--to');
+  var chord = star.querySelector('.p2-breathing-chord');
+
+  if (active) {
+    star.classList.add('p2-star-voice-live');
+    star.style.background = '#FF7F24';
+    star.style.borderRadius = '28px';
+    star.style.overflow = 'hidden';
+    if (chord) chord.style.display = 'none';
+    if (icon) {
+      icon.style.display = 'flex';
+      icon.style.background = '#FF7F24';
+      icon.style.opacity = '1';
+    }
+    if (grad) grad.style.opacity = '1';
+    if (from) from.style.opacity = '0';
+    if (to) {
+      to.style.opacity = '1';
+      to.style.filter = 'blur(0px)';
+    }
+  } else {
+    star.classList.remove('p2-star-voice-live');
+    star.style.removeProperty('background');
+    star.style.removeProperty('border-radius');
+    star.style.removeProperty('overflow');
+    if (chord) chord.style.removeProperty('display');
+    if (icon) {
+      icon.style.removeProperty('display');
+      icon.style.removeProperty('background');
+      icon.style.removeProperty('opacity');
+    }
+    if (grad) grad.style.removeProperty('opacity');
+    if (from) from.style.removeProperty('opacity');
+    if (to) {
+      to.style.removeProperty('opacity');
+      to.style.removeProperty('filter');
+    }
+  }
+}
+
 function installTest2P2TransitionBridge(canvas) {
   if (!canvas || canvas.dataset.test2P2Bridge === '1') return;
   if (!(window.__mlpTestConfig && window.__mlpTestConfig.id === 'test2')) return;
@@ -5974,19 +6272,59 @@ function installTest2P2TransitionBridge(canvas) {
     slot.style.removeProperty('transition');
   }
 
+  function syncContactListLayout(slot) {
+    if (!slot || !slot.querySelector('.p2-contact-list')) return;
+    softenSlotInlineStyles(slot);
+    slot.dataset.p2LayoutReady = '';
+    schedulePatchTest2ContactListLayout(slot);
+  }
+
   function bindSlot(slot) {
     if (!slot || slot.dataset.test2P2Bound === '1') return;
     slot.dataset.test2P2Bound = '1';
+    new MutationObserver(function (mutations) {
+      var shouldPatch = false;
+      for (var i = 0; i < mutations.length; i++) {
+        var m = mutations[i];
+        if (m.type === 'childList') {
+          shouldPatch = true;
+          slot.dataset.p2LayoutReady = '';
+          break;
+        }
+        if (m.type === 'attributes' && m.attributeName === 'class' && m.target === slot) {
+          shouldPatch = true;
+          break;
+        }
+      }
+      if (shouldPatch) syncContactListLayout(slot);
+    }).observe(slot, { attributes: true, attributeFilter: ['class'], childList: true, subtree: true });
+    syncContactListLayout(slot);
+  }
+
+  function bindResult(result) {
+    if (!result || result.dataset.test2P2ResultBound === '1') return;
+    result.dataset.test2P2ResultBound = '1';
     new MutationObserver(function () {
-      softenSlotInlineStyles(slot);
-    }).observe(slot, { attributes: true, attributeFilter: ['class', 'style'] });
-    softenSlotInlineStyles(slot);
+      if (!result.classList.contains('is-loading')) return;
+      var slot = document.getElementById('p2-slot');
+      if (slot && slot.querySelector('.p2-contact-list')) {
+        activateTest2ContactListLayout(slot);
+        schedulePatchTest2ContactListLayout(slot);
+      }
+    }).observe(result, { attributes: true, attributeFilter: ['class'] });
   }
 
   bindSlot(document.getElementById('p2-slot'));
+  bindResult(document.getElementById('p2-result'));
+  syncTest2VoiceStarState(canvas);
   new MutationObserver(function () {
     bindSlot(document.getElementById('p2-slot'));
+    bindResult(document.getElementById('p2-result'));
+    syncTest2VoiceStarState(canvas);
   }).observe(canvas, { childList: true, subtree: true });
+  new MutationObserver(function () {
+    syncTest2VoiceStarState(canvas);
+  }).observe(canvas, { attributes: true, attributeFilter: ['class'] });
 }
 
 window.generateSurfaceScenario = function generateSurfaceScenario(surfaceType) {
