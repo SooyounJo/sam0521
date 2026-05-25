@@ -73,30 +73,39 @@
     '  dist *= 1.0 - align * 0.10;',
     '  float depthIn = clamp(-sdf / max(u_radius * 2.4, 0.08), 0.0, 1.0);',
     '  float edgeProx = 1.0 - smoothstep(0.0, 0.26, depthIn);',
-    '  float wobble = (fbm(uv * 2.0 + time * 0.018) - 0.5)',
-    '    * (0.055 + early * 0.065) * max(s, 0.06);',
+    '  float wobble = (fbm(uv * 2.4 + time * 0.026) - 0.5)',
+    '    * (0.092 + early * 0.11) * max(s, 0.06);',
+    '  float ripple = sin(time * 1.18 + atan(rel.y, rel.x + 0.0001) * 5.0',
+    '    + fbm(rel * 3.6 + time * 0.055) * 3.0) * 0.038 * max(early, 0.28);',
+    '  float edgeShimmer = (fbm(uv * 4.2 + time * 0.09) - 0.5) * 0.042 * max(s, 0.12);',
+    '  dist += ripple + wobble * 0.52 + edgeShimmer;',
     '  float revealAt = s * 1.24 + early * 0.14;',
     '  float edgeBoost = edgeProx * (0.38 + early * 0.20);',
     '  float centerLag = depthIn * 0.20 * (1.0 - smoothstep(0.44, 1.08, s));',
     '  float localFront = revealAt + edgeBoost - centerLag;',
-    '  float softLead = max(0.26, 0.42 * s + early * 0.24 + audio * 0.028);',
-    '  float softTrail = softLead * 1.45;',
+    '  float softLead = max(0.34, 0.46 * s + early * 0.28 + audio * 0.024);',
+    '  float softTrail = softLead * 1.55;',
     '  float revealCore = 1.0 - smoothstep(',
     '    localFront - softLead * 0.72 + wobble,',
-    '    localFront + softTrail * 0.85 + wobble,',
+    '    localFront + softTrail * 0.78 + wobble,',
     '    dist',
     '  );',
     '  float revealWide = 1.0 - smoothstep(',
-    '    localFront - softLead * 1.65 + wobble * 0.8,',
-    '    localFront + softTrail * 2.05 + wobble * 0.8,',
+    '    localFront - softLead * 1.45 + wobble * 0.8,',
+    '    localFront + softTrail * 1.65 + wobble * 0.8,',
     '    dist',
     '  );',
-    '  float reveal = max(revealCore, revealWide * 0.62);',
-    '  float rel2 = dot(rel, rel);',
-    '  float originCore = exp(-rel2 * 4.8) * (1.0 + early * 0.22);',
-    '  float originHalo = exp(-rel2 * 1.6) * (0.68 + early * 0.34);',
-    '  float originWide = exp(-dist * 2.0) * (0.42 + early * 0.38);',
-    '  float originMist = exp(-dist * 0.95) * early * 0.52;',
+    '  float reveal = max(revealCore, revealWide * 0.38);',
+    '  vec2 pulseRel = rel + vec2(',
+    '    sin(time * 0.78) * 0.014,',
+    '    cos(time * 0.62) * 0.012',
+    '  ) * early;',
+    '  float rel2 = dot(pulseRel, pulseRel);',
+    '  float pulseDist = length(pulseRel * vec2(0.72, 1.0));',
+    '  float originCore = exp(-rel2 * 2.4) * (1.0 + early * 0.22);',
+    '  float originHalo = exp(-rel2 * 1.0) * (0.68 + early * 0.34);',
+    '  float originWide = exp(-pulseDist * 1.25) * (0.42 + early * 0.38);',
+    '  float originMist = exp(-pulseDist * 0.72) * early * 0.52;',
     '  float originPulse = (originCore + originHalo + originWide + originMist)',
     '    * (1.0 - smoothstep(0.18, 0.82, s)) * onset;',
     '  float travelMist = exp(-max(dist - localFront * 0.35, 0.0) * 2.4) * s * 0.28 * onset;',
@@ -135,42 +144,95 @@
     '  return col * 1.06;',
     '}',
     '',
+    'float edgeRingHandoff(vec2 uv, vec2 p, float sdf, float aspect, float tightness, float time) {',
+    '  float maxInward = mix(0.64, 0.28, clamp(tightness, 0.0, 1.0));',
+    '  float inward = clamp(-sdf, 0.0, maxInward);',
+    '  float edgeNorm = inward / maxInward;',
+    '  float distFromEdge = abs(sdf);',
+    '  float perimeter = exp(-distFromEdge * mix(18.0, 34.0, tightness));',
+    '  float insideFalloff = 1.0 - smoothstep(mix(0.03, 0.02, tightness), mix(0.56, 0.34, tightness), edgeNorm);',
+    '  float edgeBand = perimeter * insideFalloff;',
+    '  float outerBleed = exp(-max(sdf, 0.0) * 42.0) * (1.0 - smoothstep(0.0, 0.022, max(-sdf, 0.0)));',
+    '  edgeBand = max(edgeBand, outerBleed * mix(0.58, 0.72, tightness));',
+    '  float softAura = exp(-edgeNorm * mix(1.8, 3.2, tightness)) * mix(0.22, 0.14, tightness);',
+    '  float angle = atan(p.y, p.x * aspect + 0.0001);',
+    '  float wave = sin(time * 0.88 + angle * 5.2 + fbm(uv * 3.2 + time * 0.07) * 4.2) * 0.5 + 0.5;',
+    '  float ripple = sin(time * 1.12 + edgeNorm * 7.5 - angle * 2.8',
+    '    + fbm(uv * 2.6 + time * 0.09) * 3.6) * 0.5 + 0.5;',
+    '  float waver = 0.80 + wave * 0.12 + ripple * 0.08;',
+    '  vec2 ap = abs(p);',
+    '  vec2 hs = vec2(aspect * 0.5, 0.5);',
+    '  float cornerDist = length(max(ap - hs * 0.68, 0.0));',
+    '  float corner = exp(-cornerDist * mix(3.4, 5.2, tightness)) * mix(0.18, 0.12, tightness);',
+    '  float interiorKill = 1.0 - smoothstep(mix(0.52, 0.38, tightness), 0.88, edgeNorm);',
+    '  float ring = (edgeBand * waver * 0.76 + softAura * (0.86 + wave * 0.10)) * interiorKill;',
+    '  corner *= interiorKill * (0.88 + wave * 0.12);',
+    '  return clamp(ring + corner, 0.0, 1.0);',
+    '}',
+    '',
     'void main() {',
     '  vec2 uv = v_uv;',
     '  vec2 p = toPlane(uv);',
     '  vec2 halfSize = vec2(u_aspect * 0.5, 0.5);',
-    '  float sdf = sdRoundedBox(p, halfSize, u_radius);',
-    '  float shapeAlpha = 1.0 - smoothstep(-0.004, 0.014, sdf);',
+    '  float edgeBreath = (fbm(uv * 2.8 + u_time * 0.07) - 0.5)',
+    '    * 0.012 * max(u_spread, 0.08);',
+    '  float handoffT = clamp(u_fill, 0.0, 1.0);',
+    '  float morph = 1.0 - pow(1.0 - handoffT, 2.6);',
+    '  float edgeWobble = (fbm(uv * 2.5 + u_time * 0.05) - 0.5) * 0.010 * morph;',
+    '  float sdf = sdRoundedBox(p, halfSize, u_radius) + edgeBreath + edgeWobble;',
+    '  float morphEarly = smoothstep(0.02, 0.12, morph);',
+    '  float shapeAlpha = mix(',
+    '    1.0 - smoothstep(-0.012, 0.038, sdf),',
+    '    1.0 - smoothstep(-0.036, 0.062, sdf),',
+    '    morphEarly',
+    '  );',
     '  if (shapeAlpha < 0.001) discard;',
     '',
     '  float depth = clamp(-sdf / 0.36, 0.0, 1.0);',
-    '  float rimBand = smoothstep(0.06, 0.0, -sdf) * (1.0 - smoothstep(0.0, -0.18, -sdf));',
     '',
     '  vec2 rel = vec2((uv.x - u_origin.x) * u_aspect, uv.y - u_origin.y);',
     '',
     '  float reveal = organicReveal(uv, rel, sdf, u_spread, u_time, u_audio);',
     '',
     '  vec3 mesh = meshWarmGradient(uv, u_time, u_audio);',
-    '  float shimmer = 1.0 + 0.028 * sin(u_time * 0.85 + uv.x * 4.5 + uv.y * 3.2);',
-    '  vec3 color = mesh * shimmer;',
+    '  float tightness = smoothstep(0.38, 0.98, handoffT);',
+    '  float colorLift = morph > 0.04',
+    '    ? (1.0 + 0.016 * sin(u_time * 0.86 + fbm(uv * 2.6 + u_time * 0.05) * 4.8))',
+    '    : (1.0 + 0.048 * sin(u_time * 1.12 + uv.x * 5.2 + uv.y * 3.8)',
+    '      + 0.022 * sin(u_time * 0.72 + fbm(uv * 2.2 + u_time * 0.04) * 6.0));',
+    '  vec3 color = mesh * colorLift;',
+    '  float grain = (hash(floor(uv * 520.0) + floor(u_time * 6.0)) - 0.5) * 0.018;',
     '',
-    '  vec3 rimTint = mix(vec3(1.0, 0.880, 0.520), vec3(1.0, 0.980, 0.820), depth);',
-    '  color += rimTint * rimBand * reveal * 0.44;',
-    '  float grain = (hash(floor(uv * 520.0) + floor(u_time * 6.0)) - 0.5) * 0.028;',
-    '  color += grain * reveal;',
+    '  float fillMask = clamp(reveal * u_intensity, 0.0, 1.0);',
+    '  float edgeMask = edgeRingHandoff(uv, p, sdf, u_aspect, tightness, u_time);',
+    '  float centerFill = fillMask * (1.0 - morph);',
+    '  float edgeFill = edgeMask * u_intensity * morph * 0.84;',
+    '  float combinedMask = max(centerFill, edgeFill);',
+    '  color += mesh * edgeFill * 0.28;',
+    '  color += grain * combinedMask;',
     '',
-    '  float alpha = pow(reveal, 0.56) * u_intensity * shapeAlpha;',
+    '  float frontier = smoothstep(0.04, 0.42, combinedMask)',
+    '    * (1.0 - smoothstep(0.42, 0.96, combinedMask));',
+    '  vec3 liftedColor = color + color * frontier * 0.07;',
+    '  float alpha = combinedMask * shapeAlpha;',
     '  if (alpha < 0.004) discard;',
-    '  gl_FragColor = vec4(color * alpha, alpha);',
+    '  gl_FragColor = vec4(liftedColor * alpha, alpha);',
     '}'
   ].join('\n');
 
   var PHASES = {
     idle: { spread: 0.0, intensity: 0.0, fill: 0.0, duration: 850 },
     listening: { spread: 0.92, intensity: 1.0, fill: 0.0, duration: 7200 },
-    generating: { spread: 1.42, intensity: 1.0, fill: 0.0, duration: 1600 },
-    settling: { spread: 1.42, intensity: 0.68, fill: 0.0, duration: 1400 },
-    fadeOut: { spread: 0.0, intensity: 0.0, fill: 0.0, duration: 1250 }
+    generating: { spread: 1.42, intensity: 1.0, fill: 0.0, duration: 3200 },
+    hollowReveal: { spread: 1.42, intensity: 0.86, fill: 0.74, duration: 520 },
+    handoff: { spread: 1.42, intensity: 0.74, fill: 1.0, duration: 1100 },
+    settling: { spread: 1.42, intensity: 0.20, fill: 1.0, duration: 240 },
+    fadeOut: { spread: 1.42, intensity: 0.0, fill: 0.0, duration: 680 }
+  };
+
+  var TEST2_PHASE_CHAIN = {
+    hollowReveal: 'settling',
+    settling: 'fadeOut'
   };
 
   function clamp(v, min, max) {
@@ -211,6 +273,11 @@
   function easeListeningSpread(t) {
     if (t < 0.11) return easeInSoft(t / 0.11) * 0.20;
     return 0.20 + easeSmoothFill((t - 0.11) / 0.89) * 0.80;
+  }
+
+  function easeContinueSpread(t, fromSpread) {
+    if (fromSpread > 0.08) return easeSmoothFill(t);
+    return easeListeningSpread(t);
   }
 
   function lerp(a, b, t) {
@@ -276,6 +343,7 @@
     this.smoothAudio = 0;
     this.startTime = 0;
     this.layout = { aspect: 1, radius: 0.24 };
+    this._layoutCache = { w: 0, h: 0, aspect: 0 };
     this.resizeObserver = null;
     this.uniforms = {};
     this._onFrame = this._tick.bind(this);
@@ -306,20 +374,30 @@
     ];
   };
 
-  AgentFillGL.prototype._resize = function () {
+  AgentFillGL.prototype._resize = function (force) {
     if (!this.canvas || !this.gl || !this.shellEl) return;
     var rect = this.shellEl.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var w = Math.max(1, Math.round(rect.width * dpr));
     var h = Math.max(1, Math.round(rect.height * dpr));
-    if (this.canvas.width !== w || this.canvas.height !== h) {
+    var aspect = rect.width / rect.height;
+    var cache = this._layoutCache;
+    var sizeChanged = force || cache.w !== w || cache.h !== h;
+    if (sizeChanged) {
       this.canvas.width = w;
       this.canvas.height = h;
       this.canvas.style.width = rect.width + 'px';
       this.canvas.style.height = rect.height + 'px';
       this.gl.viewport(0, 0, w, h);
+      cache.w = w;
+      cache.h = h;
     }
-    this._updateLayout();
+    if (sizeChanged || Math.abs(cache.aspect - aspect) > 0.002) {
+      this.layout.aspect = aspect;
+      this.layout.radius = 36 / rect.height;
+      cache.aspect = aspect;
+    }
   };
 
   AgentFillGL.prototype._setPhaseTargets = function (phaseName) {
@@ -351,11 +429,20 @@
       }
     }
     if (this.shellEl) {
-      if (phaseName === 'generating' || phaseName === 'settling') {
+      if (
+        phaseName === 'listening' || phaseName === 'generating' ||
+        phaseName === 'hollowReveal' || phaseName === 'handoff' ||
+        phaseName === 'settling' || phaseName === 'fadeOut'
+      ) {
         this.shellEl.classList.add('p2-agent-shell--gl-fill');
-      } else if (phaseName === 'idle' || phaseName === 'fadeOut') {
+      } else if (phaseName === 'idle') {
         this.shellEl.classList.remove('p2-agent-shell--gl-fill');
       }
+    }
+    if (phaseName === 'fadeOut' && isTest2Scope()) {
+      try {
+        document.dispatchEvent(new CustomEvent('p2-test2-fill-fadeout'));
+      } catch (e) { /* noop */ }
     }
   };
 
@@ -376,15 +463,58 @@
     this.audio = clamp(Number(value) || 0, 0, 1);
   };
 
+  AgentFillGL.prototype.waitForPhaseProgress = function (phaseName, minProgress, timeoutMs) {
+    var self = this;
+    minProgress = clamp(Number(minProgress) || 1, 0, 1);
+    timeoutMs = Number(timeoutMs) || 4000;
+    return new Promise(function (resolve) {
+      if (!self.ready || prefersReducedMotion()) {
+        resolve();
+        return;
+      }
+      var start = performance.now();
+      function tick() {
+        if (performance.now() - start >= timeoutMs) {
+          resolve();
+          return;
+        }
+        if (phaseName === 'generating' && self.values.spread >= 1.22) {
+          resolve();
+          return;
+        }
+        var t = self.phaseDuration > 0
+          ? clamp((performance.now() - self.phaseStart) / self.phaseDuration, 0, 1)
+          : 1;
+        if (self.phase === phaseName && t >= minProgress) {
+          resolve();
+          return;
+        }
+        requestAnimationFrame(tick);
+      }
+      tick();
+    });
+  };
+
   AgentFillGL.prototype._updateValues = function (now) {
     var t = this.phaseDuration > 0
       ? clamp((now - this.phaseStart) / this.phaseDuration, 0, 1)
       : 1;
-    var eased = this.phase === 'listening'
-      ? easeListeningSpread(t)
-      : this.phase === 'generating'
-        ? easeOutCubic(t)
-        : easeOutExpo(t);
+    var eased;
+    if (this.phase === 'listening') {
+      eased = easeListeningSpread(t);
+    } else if (this.phase === 'generating') {
+      eased = easeContinueSpread(t, this.phaseFrom.spread);
+    } else if (this.phase === 'hollowReveal') {
+      eased = easeOutQuint(t);
+    } else if (this.phase === 'handoff') {
+      eased = easeInOutCubic(t);
+    } else if (this.phase === 'fadeOut') {
+      eased = easeOutCubic(t);
+    } else if (this.phase === 'settling') {
+      eased = easeInOutCubic(t);
+    } else {
+      eased = easeOutExpo(t);
+    }
     this.values.spread = lerp(this.phaseFrom.spread, this.phaseTo.spread, eased);
     this.values.intensity = lerp(
       this.phaseFrom.intensity,
@@ -392,13 +522,29 @@
       this.phase === 'listening' ? easeListenIntensity(t) : eased
     );
     this.values.fill = lerp(this.phaseFrom.fill, this.phaseTo.fill, eased);
+    this._maybeAdvancePhase(t);
+  };
+
+  AgentFillGL.prototype._maybeAdvancePhase = function (t) {
+    if (!isTest2Scope() || t < 0.999) return;
+    if (this._phaseChainLock) return;
+    var next = TEST2_PHASE_CHAIN[this.phase];
+    if (!next) return;
+    this._phaseChainLock = true;
+    var self = this;
+    requestAnimationFrame(function () {
+      self._phaseChainLock = false;
+      if (self.phase && TEST2_PHASE_CHAIN[self.phase] === next) {
+        self._setPhaseTargets(next);
+      }
+    });
   };
 
   AgentFillGL.prototype._draw = function (now) {
     if (!this.gl || !this.program) return;
     var gl = this.gl;
-    this._resize();
     this._updateValues(now);
+    this._resize();
     this.smoothAudio += (this.audio - this.smoothAudio) * (this.phase === 'listening' && this.values.spread < 0.18 ? 0.028 : 0.055);
 
     var origin = this._getOrigin();
@@ -530,12 +676,12 @@
     this.startTime = performance.now();
     this._setPhaseTargets('idle');
     this.fillEl.classList.add('p2-agent-fill--gl-ready');
-    this._resize();
+    this._resize(true);
 
     var self = this;
     if (typeof ResizeObserver !== 'undefined') {
       this.resizeObserver = new ResizeObserver(function () {
-        self._resize();
+        self._resize(true);
       });
       this.resizeObserver.observe(this.shellEl);
     }
@@ -565,6 +711,10 @@
     },
     setAudio: function (value) {
       instance.setAudio(value);
+    },
+    waitForPhaseProgress: function (phase, progress, timeoutMs) {
+      if (!ensureBound()) return Promise.resolve();
+      return instance.waitForPhaseProgress(phase, progress, timeoutMs);
     },
     destroy: function () {
       instance.destroy();

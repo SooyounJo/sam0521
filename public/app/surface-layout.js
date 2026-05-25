@@ -5463,6 +5463,8 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
           '<div id="p2-area" class="p2-agent-shell" style="position:absolute; top:0; left:24px; right:24px; height:148px; overflow:hidden;">' +
             '<div class="p2-agent-fill" aria-hidden="true">' +
               '<canvas class="p2-agent-fill__gl"></canvas>' +
+              '<div class="p2-agent-fill__edge" aria-hidden="true"></div>' +
+              '<div class="p2-agent-fill__edge-inner" aria-hidden="true"></div>' +
               '<div class="p2-agent-fill__bloom"></div>' +
               '<div class="p2-agent-fill__mist"></div>' +
               '<div class="p2-agent-fill__wave"></div>' +
@@ -5473,13 +5475,17 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
                   '<div class="p2-result-loading__bg"></div>' +
                   '<div class="p2-result-loading__shimmer"></div>' +
                   '<div class="p2-result-loading__content">' +
-                    '<div class="p2-result-loading__text">' +
-                      '<div class="p2-result-loading__title">상황에 맞는 UI를 구성하는 중…</div>' +
-                      '<div class="p2-result-loading__sub"></div>' +
+                    '<div class="p2-result-loading__head">' +
+                      '<div class="p2-result-loading__title">상황에 맞는 UI 생성중...</div>' +
+                      '<div class="p2-result-loading__status">요청하신 내용을 정리중입니다.</div>' +
+                      '<div class="p2-result-loading__sub" aria-hidden="true"></div>' +
                     '</div>' +
-                    '<div class="p2-result-loading__icon" aria-hidden="true">' +
-                      '<div class="p2-loading-dots">' +
-                        '<span></span><span></span><span></span><span></span><span></span>' +
+                    '<div class="p2-result-loading__footer">' +
+                      '<div class="p2-result-loading__input">업무용 연락 정리해줘</div>' +
+                      '<div class="p2-result-loading__icon" aria-hidden="true">' +
+                        '<div class="p2-loading-dots">' +
+                          '<span></span><span></span><span></span><span></span><span></span>' +
+                        '</div>' +
                       '</div>' +
                     '</div>' +
                   '</div>' +
@@ -6084,6 +6090,44 @@ function _unlockTest2ContactListNodes(slot) {
   });
 }
 
+function applyTest2ContactListShellHeight(slot) {
+  if (!slot) return;
+  var list = slot.querySelector('.p2-contact-list');
+  if (!list) return;
+  var count = parseInt(list.getAttribute('data-item-count') || '3', 10) || 3;
+  var contentH = _computeP2ContactListHeight(count);
+  var shellH = contentH + 56;
+  var shellHpx = shellH + 'px';
+  var contentHpx = contentH + 'px';
+  var area = document.getElementById('p2-area');
+  var result = document.getElementById('p2-result');
+  var widgets = document.querySelector('.p2-widgets--compact');
+  var widgetsWrap = document.querySelector('[data-role="persona2-widgets"]');
+  var stage = slot.querySelector('.p2-reveal-stage');
+
+  if (area) {
+    area.style.height = shellHpx;
+    area.style.minHeight = shellHpx;
+    area.style.setProperty('--p2-shell-h', shellHpx);
+  }
+  if (widgets) {
+    widgets.style.height = shellHpx;
+    widgets.style.minHeight = shellHpx;
+  }
+  if (widgetsWrap) {
+    widgetsWrap.style.height = shellHpx;
+    widgetsWrap.style.minHeight = shellHpx;
+    widgetsWrap.style.overflow = 'visible';
+  }
+  if (stage) {
+    stage.style.removeProperty('height');
+    stage.style.setProperty('--p2-reveal-h', contentHpx);
+  }
+  slot.style.setProperty('--p2-reveal-h', contentHpx);
+  if (result) result.style.setProperty('--p2-reveal-h', contentHpx);
+  slot.dataset.p2LayoutReady = count + ':' + contentH;
+}
+
 function activateTest2ContactListLayout(slot) {
   if (!_isTest2Scope() || !slot) return false;
   var list = slot.querySelector('.p2-contact-list');
@@ -6091,32 +6135,64 @@ function activateTest2ContactListLayout(slot) {
 
   var shell = document.getElementById('p2-area');
   var main = document.getElementById('p2-default-widgets');
-  var result = document.getElementById('p2-result');
   var footer = shell && shell.querySelector('.p2-agent-footer');
+  var count = parseInt(list.getAttribute('data-item-count') || '3', 10) || 3;
+  var shellHpx = (_computeP2ContactListHeight(count) + 56) + 'px';
+  var widgets = document.querySelector('.p2-widgets--compact');
+  var widgetsWrap = document.querySelector('[data-role="persona2-widgets"]');
 
-  if (shell) shell.classList.add('p2-contact-layout-active');
+  if (shell) {
+    shell.classList.add('p2-contact-layout-active');
+    shell.style.height = shellHpx;
+    shell.style.minHeight = shellHpx;
+    shell.style.setProperty('--p2-shell-h', shellHpx);
+  }
+  if (widgets) widgets.style.minHeight = shellHpx;
+  if (widgetsWrap) widgetsWrap.style.minHeight = shellHpx;
   if (main) {
     main.style.display = 'none';
     main.style.opacity = '0';
     main.style.pointerEvents = 'none';
-  }
-  if (result) {
-    result.classList.remove('is-loading', 'p2-crossfade-out', 'p2-result-expanded');
   }
   if (footer) {
     footer.style.position = 'relative';
     footer.style.opacity = '1';
     footer.style.height = '56px';
     footer.style.pointerEvents = 'auto';
+    footer.classList.add('p2-agent-footer--settled');
   }
+  var agentInput = footer && footer.querySelector('.p2-agent-input');
+  var star = document.getElementById('p2-star');
+  if (agentInput) {
+    agentInput.classList.remove('p2-seq-text-hidden', 'p2-seq-text-visible');
+    agentInput.classList.add('p2-agent-input--settled');
+  }
+  if (star) {
+    star.classList.remove('p2-seq-text-hidden', 'p2-seq-text-visible', 'p2-default-hiding');
+    star.classList.add('p2-agent-star--settled');
+  }
+  requestAnimationFrame(function () {
+    setTest2AgentInputGlow(false);
+  });
 
   _unlockTest2ContactListNodes(slot);
   syncTest2VoiceStarState(document.getElementById('canvas'));
   return true;
 }
 
-function patchTest2ContactListLayout(slot) {
+function _isTest2ContactLayoutReady(slot) {
+  if (!slot) return false;
+  return (
+    slot.classList.contains('p2-seq-color-active') ||
+    slot.classList.contains('p2-seq-done') ||
+    slot.classList.contains('p2-contact-reveal-active')
+  );
+}
+
+function patchTest2ContactListLayout(slot, opts) {
+  opts = opts || {};
   if (!slot) return;
+  if (slot.dataset.test2ContactRevealLock === '1' && !opts.force) return;
   var list = slot.querySelector('.p2-contact-list');
   if (!list) {
     slot.dataset.p2LayoutReady = '';
@@ -6125,7 +6201,9 @@ function patchTest2ContactListLayout(slot) {
     return;
   }
 
-  activateTest2ContactListLayout(slot);
+  if (_isTest2ContactLayoutReady(slot)) {
+    activateTest2ContactListLayout(slot);
+  }
 
   var count = parseInt(list.getAttribute('data-item-count') || '3', 10) || 3;
   var estimate = _computeP2ContactListHeight(count);
@@ -6174,12 +6252,6 @@ function patchTest2ContactListLayout(slot) {
       result.style.setProperty('--p2-reveal-h', contentHpx);
     }
 
-    slot.querySelectorAll('.p2-contact-list .dot-sch__date, .p2-contact-list .dot-sch__row').forEach(function (el) {
-      if (!el.classList.contains('p2-seq-text-hidden')) return;
-      el.classList.remove('p2-seq-text-hidden');
-      el.classList.add('p2-seq-text-visible');
-    });
-
     slot.dataset.p2LayoutReady = layoutKey;
   }
 
@@ -6203,8 +6275,152 @@ function schedulePatchTest2ContactListLayout(slot) {
   });
 }
 
+function deriveTest2LoadingStatus(userText) {
+  var t = String(userText || '').trim().replace(/[.…]+$/g, '');
+  if (!t) return '요청하신 내용을 정리중입니다.';
+  if (/업무|연락/.test(t)) return '업무 관련 연락을 정리중입니다.';
+  if (/피드백|디자인/.test(t)) return '디자인 피드백 관련 연락을 정리중입니다.';
+  if (/메시지|알림/.test(t)) return '메시지와 알림을 정리중입니다.';
+  var core = t.replace(/\s*(해\s*줘|해줘|부탁해).*$/i, '').trim();
+  if (!core) return '요청하신 내용을 정리중입니다.';
+  return core + ' 관련 내용을 정리중입니다.';
+}
+
+function setTest2AgentInputGlow(active) {
+  if (!_isTest2Scope()) return;
+  var agentInput = document.querySelector('.p2-agent-input');
+  if (!agentInput) return;
+  if (active) agentInput.classList.add('p2-agent-input--glow');
+  else agentInput.classList.remove('p2-agent-input--glow');
+}
+
+function syncTest2LoadingPresentation(result) {
+  if (!_isTest2Scope() || !result) return;
+  var loading = result.querySelector('.p2-result-loading');
+  if (!loading) return;
+
+  var sub = loading.querySelector('.p2-result-loading__sub');
+  var status = loading.querySelector('.p2-result-loading__status');
+  var input = loading.querySelector('.p2-result-loading__input');
+  var agentInput = document.querySelector('.p2-agent-input');
+  var raw = '';
+
+  if (sub && sub.textContent) {
+    raw = sub.textContent.replace(/^[\s"“]+|[\s"”]+$/g, '');
+  }
+  if (!raw && agentInput) raw = String(agentInput.textContent || '').trim();
+  if (!raw) return;
+
+  if (input && input.textContent !== raw) input.textContent = raw;
+  if (agentInput && agentInput.textContent !== raw) agentInput.textContent = raw;
+  if (status) {
+    var nextStatus = deriveTest2LoadingStatus(raw);
+    if (status.textContent !== nextStatus) status.textContent = nextStatus;
+  }
+  setTest2AgentInputGlow(true);
+}
+
+function beginTest2LoadingChromeExit(slot) {
+  if (!_isTest2Scope()) return;
+  var shell = document.getElementById('p2-area');
+  var result = document.getElementById('p2-result');
+
+  if (shell) shell.classList.add('p2-loading-chrome-exiting');
+  if (result) result.classList.add('p2-loading-ui-exiting');
+}
+
+function prepareTest2ContactListSequence(slot) {
+  if (!_isTest2Scope() || !slot) return false;
+  var list = slot.querySelector('.p2-contact-list');
+  if (!list) return false;
+
+  var header = list.querySelector('.p2-contact-list__header');
+  var rows = list.querySelectorAll('.p2-contact-list__item');
+
+  if (header) {
+    header.classList.add('p2-seq-text-hidden');
+    header.classList.remove('p2-seq-text-visible');
+  }
+  rows.forEach(function (row) {
+    row.classList.add('p2-seq-text-hidden');
+    row.classList.remove('p2-seq-text-visible');
+  });
+  return true;
+}
+
+function revealTest2ContactSequenceItem(el, delayMs) {
+  if (!el) return;
+  setTimeout(function () {
+    requestAnimationFrame(function () {
+      el.classList.remove('p2-seq-text-hidden');
+      el.classList.add('p2-seq-text-visible');
+    });
+  }, delayMs);
+}
+
+function staggerTest2ContactListRows(slot) {
+  if (!_isTest2Scope() || !slot) return;
+  if (slot.dataset.test2ContactStagger === '1') return;
+  if (!slot.classList.contains('p2-seq-color-active')) return;
+  var list = slot.querySelector('.p2-contact-list');
+  if (!list) return;
+
+  slot.dataset.test2ContactStagger = '1';
+  slot.dataset.test2ContactRevealLock = '1';
+  slot.classList.add('p2-contact-reveal-active');
+  installTest2FillFadeOutBridge(slot);
+  applyTest2ContactListShellHeight(slot);
+  activateTest2ContactListLayout(slot);
+
+  var header = list.querySelector('.p2-contact-list__header');
+  var rows = list.querySelectorAll('.p2-contact-list__item');
+  var baseDelay = 100;
+  var stepDelay = 155;
+  var seqIndex = 0;
+
+  revealTest2ContactSequenceItem(header, baseDelay + seqIndex++ * stepDelay);
+  rows.forEach(function (row) {
+    revealTest2ContactSequenceItem(row, baseDelay + seqIndex++ * stepDelay);
+  });
+
+  setTimeout(function () {
+    slot.dataset.test2ContactRevealLock = '';
+    patchTest2ContactListLayout(slot, { force: true });
+  }, baseDelay + seqIndex * stepDelay + 560);
+}
+
+function installTest2FillFadeOutBridge(slot) {
+  if (!slot || slot.dataset.test2FillFadeBound === '1') return;
+  slot.dataset.test2FillFadeBound = '1';
+  document.addEventListener('p2-test2-fill-fadeout', function onFadeOut() {
+    document.removeEventListener('p2-test2-fill-fadeout', onFadeOut);
+    slot.classList.add('p2-seq-done');
+    slot.style.pointerEvents = 'auto';
+    var result = document.getElementById('p2-result');
+    var defaults = document.getElementById('p2-default-widgets');
+        if (result) {
+          result.classList.remove('is-loading', 'p2-crossfade-out', 'p2-loading-ui-exiting');
+          result.classList.add('has-swap', 'p2-default-hiding');
+        }
+    if (defaults) {
+      defaults.style.opacity = '0';
+      defaults.style.display = 'none';
+    }
+    var flowShell = document.getElementById('p2-area');
+    if (flowShell) {
+          setTimeout(function () {
+            flowShell.classList.remove('p2-agent-shell--flow-handoff', 'p2-loading-chrome-exiting');
+          }, 900);
+    }
+  });
+}
+
 window.patchTest2ContactListLayout = patchTest2ContactListLayout;
+window.applyTest2ContactListShellHeight = applyTest2ContactListShellHeight;
+window.beginTest2LoadingChromeExit = beginTest2LoadingChromeExit;
 window.activateTest2ContactListLayout = activateTest2ContactListLayout;
+window.syncTest2LoadingPresentation = syncTest2LoadingPresentation;
+window.setTest2AgentInputGlow = setTest2AgentInputGlow;
 
 function syncTest2VoiceStarState(canvas) {
   if (!canvas || !_isTest2Scope()) return;
@@ -6221,6 +6437,7 @@ function syncTest2VoiceStarState(canvas) {
 
   if (active) {
     star.classList.add('p2-star-voice-live');
+    star.classList.remove('p2-star-voice-settled');
     star.style.background = '#FF7F24';
     star.style.borderRadius = '28px';
     star.style.overflow = 'hidden';
@@ -6238,6 +6455,7 @@ function syncTest2VoiceStarState(canvas) {
     }
   } else {
     star.classList.remove('p2-star-voice-live');
+    star.classList.add('p2-star-voice-settled');
     star.style.removeProperty('background');
     star.style.removeProperty('border-radius');
     star.style.removeProperty('overflow');
@@ -6272,33 +6490,45 @@ function installTest2P2TransitionBridge(canvas) {
     slot.style.removeProperty('transition');
   }
 
-  function syncContactListLayout(slot) {
+  function syncContactListLayout(slot, opts) {
+    opts = opts || {};
     if (!slot || !slot.querySelector('.p2-contact-list')) return;
     softenSlotInlineStyles(slot);
-    slot.dataset.p2LayoutReady = '';
-    schedulePatchTest2ContactListLayout(slot);
+
+    if (opts.mount) {
+      slot.dataset.p2LayoutReady = '';
+      prepareTest2ContactListSequence(slot);
+    }
+
+    if (slot.classList.contains('p2-seq-color-active')) {
+      staggerTest2ContactListRows(slot);
+    } else if (slot.classList.contains('p2-seq-done')) {
+      activateTest2ContactListLayout(slot);
+      if (!slot.dataset.p2LayoutReady) {
+        schedulePatchTest2ContactListLayout(slot);
+      }
+    }
   }
 
   function bindSlot(slot) {
     if (!slot || slot.dataset.test2P2Bound === '1') return;
     slot.dataset.test2P2Bound = '1';
     new MutationObserver(function (mutations) {
-      var shouldPatch = false;
+      var shouldSync = false;
+      var isMount = false;
       for (var i = 0; i < mutations.length; i++) {
         var m = mutations[i];
         if (m.type === 'childList') {
-          shouldPatch = true;
-          slot.dataset.p2LayoutReady = '';
+          shouldSync = true;
+          isMount = true;
           break;
         }
         if (m.type === 'attributes' && m.attributeName === 'class' && m.target === slot) {
-          shouldPatch = true;
-          break;
+          shouldSync = true;
         }
       }
-      if (shouldPatch) syncContactListLayout(slot);
+      if (shouldSync) syncContactListLayout(slot, { mount: isMount });
     }).observe(slot, { attributes: true, attributeFilter: ['class'], childList: true, subtree: true });
-    syncContactListLayout(slot);
   }
 
   function bindResult(result) {
@@ -6306,12 +6536,11 @@ function installTest2P2TransitionBridge(canvas) {
     result.dataset.test2P2ResultBound = '1';
     new MutationObserver(function () {
       if (!result.classList.contains('is-loading')) return;
-      var slot = document.getElementById('p2-slot');
-      if (slot && slot.querySelector('.p2-contact-list')) {
-        activateTest2ContactListLayout(slot);
-        schedulePatchTest2ContactListLayout(slot);
-      }
+      syncTest2LoadingPresentation(result);
     }).observe(result, { attributes: true, attributeFilter: ['class'] });
+    if (result.classList.contains('is-loading')) {
+      syncTest2LoadingPresentation(result);
+    }
   }
 
   bindSlot(document.getElementById('p2-slot'));

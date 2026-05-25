@@ -40,8 +40,8 @@ function TestScripts() {
       <Script src="/app/cached-screens.js?v=2" strategy="beforeInteractive" />
       <Script src="/app/ui-panels.js?v=2" strategy="beforeInteractive" />
       <Script src="/app/main.js?v=2" strategy="beforeInteractive" />
-      <Script src="/app/p2-agent-fill-gl.js?v=14" strategy="beforeInteractive" />
-      <Script src="/prototype-logic.js?v=mlp-test-split-1" strategy="lazyOnload" />
+      <Script src="/app/p2-agent-fill-gl.js?v=22" strategy="beforeInteractive" />
+      <Script src="/prototype-logic.js?v=mlp-test-split-3" strategy="lazyOnload" />
     </>
   );
 }
