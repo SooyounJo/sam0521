@@ -459,11 +459,11 @@
       seqRowStagger: 100
     };
     var P2_TEST2_REVEAL_TIMING = {
-      phase1: 280,
-      phase2Pause: 120,
-      seqColor: 0,
-      seqAfterTitle: 180,
-      seqRowStagger: 72
+      phase1: 420,
+      phase2Pause: 200,
+      seqColor: 160,
+      seqAfterTitle: 280,
+      seqRowStagger: 110
     };
 
     function wrapP2RevealStage(innerHtml, contentH) {
@@ -561,14 +561,16 @@
 
       if (isTest2 && hasContactList) {
         slot.classList.add('p2-seq-title');
-        if (typeof window.beginTest2LoadingChromeExit === 'function') {
-          window.beginTest2LoadingChromeExit(slot);
-        }
+        setTimeout(function () {
+          if (typeof window.beginTest2LoadingChromeExit === 'function') {
+            window.beginTest2LoadingChromeExit(slot);
+          }
+        }, 220);
         setTimeout(function () {
           if (window.P2AgentFillGL && window.P2AgentFillGL.setPhase) {
             window.P2AgentFillGL.setPhase('settling');
           }
-        }, 80);
+        }, 520);
         return;
       }
 
@@ -833,7 +835,7 @@
         
         // Brief pause for dramatic "UI Reconstruction" effect
         await new Promise(function (resolve) {
-          setTimeout(resolve, isTest2 ? 520 : 1500);
+          setTimeout(resolve, isTest2 ? 680 : 1500);
         });
 
         applyTheme(resolved && resolved.themeKey);

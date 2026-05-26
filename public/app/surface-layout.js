@@ -6374,8 +6374,8 @@ function staggerTest2ContactListRows(slot) {
 
   var header = list.querySelector('.p2-contact-list__header');
   var rows = list.querySelectorAll('.p2-contact-list__item');
-  var baseDelay = 100;
-  var stepDelay = 155;
+  var baseDelay = 280;
+  var stepDelay = 210;
   var seqIndex = 0;
 
   revealTest2ContactSequenceItem(header, baseDelay + seqIndex++ * stepDelay);
@@ -6386,7 +6386,7 @@ function staggerTest2ContactListRows(slot) {
   setTimeout(function () {
     slot.dataset.test2ContactRevealLock = '';
     patchTest2ContactListLayout(slot, { force: true });
-  }, baseDelay + seqIndex * stepDelay + 560);
+  }, baseDelay + seqIndex * stepDelay + 920);
 }
 
 function installTest2FillFadeOutBridge(slot) {
@@ -6405,12 +6405,6 @@ function installTest2FillFadeOutBridge(slot) {
     if (defaults) {
       defaults.style.opacity = '0';
       defaults.style.display = 'none';
-    }
-    var flowShell = document.getElementById('p2-area');
-    if (flowShell) {
-          setTimeout(function () {
-            flowShell.classList.remove('p2-agent-shell--flow-handoff', 'p2-loading-chrome-exiting');
-          }, 900);
     }
   });
 }

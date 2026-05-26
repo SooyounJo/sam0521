@@ -257,6 +257,10 @@
     return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
   }
 
+  function easeGlowRetire(t) {
+    return 1 - Math.pow(1 - t, 2.35);
+  }
+
   function easeOutCubic(t) {
     return 1 - Math.pow(1 - t, 3);
   }
@@ -400,10 +404,51 @@
     }
   };
 
-  AgentFillGL.prototype._setPhaseTargets = function (phaseName) {
+  function getPhaseConfig(phaseName) {
     var next = PHASES[phaseName] || PHASES.idle;
+    if (!isTest2Scope()) return next;
+    if (phaseName === 'hollowReveal') {
+      return { spread: 1.42, intensity: 0.86, fill: 0.74, duration: 1040 };
+    }
+    if (phaseName === 'settling') {
+      return { spread: 1.42, intensity: 0.20, fill: 1.0, duration: 560 };
+    }
+    if (phaseName === 'fadeOut') {
+      return { spread: 1.42, intensity: 0.0, fill: 0.0, duration: 1320 };
+    }
+    return next;
+  }
+
+  AgentFillGL.prototype._finishFadeOutTail = function () {
+    if (this._fadeTailDone || !isTest2Scope()) return;
+    this._fadeTailDone = true;
+    var self = this;
+    var shell = this.shellEl;
+    var fill = this.fillEl;
+    setTimeout(function () {
+      self.phase = 'idle';
+      if (fill) {
+        fill.classList.remove('p2-agent-fill--gl-active');
+        fill.classList.remove('p2-agent-fill--gl-fading');
+      }
+      if (shell) shell.classList.remove('p2-agent-shell--gl-fill');
+      self._stopLoop(true);
+      setTimeout(function () {
+        if (!shell) return;
+        shell.classList.remove(
+          'p2-agent-shell--glow-retire',
+          'p2-agent-shell--flow-handoff',
+          'p2-loading-chrome-exiting'
+        );
+      }, 560);
+    }, 420);
+  };
+
+  AgentFillGL.prototype._setPhaseTargets = function (phaseName) {
+    var next = getPhaseConfig(phaseName);
     this.phase = phaseName;
     this.phaseStart = performance.now();
+    this._fadeTailDone = false;
     this.phaseFrom = {
       spread: this.values.spread,
       intensity: this.values.intensity,
@@ -424,11 +469,15 @@
         this.fillEl.classList.remove('p2-agent-fill--gl-fading');
       }
       if (phaseName === 'fadeOut') {
-        this.fillEl.classList.remove('p2-agent-fill--gl-active');
         this.fillEl.classList.add('p2-agent-fill--gl-fading');
       }
     }
     if (this.shellEl) {
+      if (phaseName === 'fadeOut' && isTest2Scope()) {
+        this.shellEl.classList.add('p2-agent-shell--glow-retire');
+      } else if (isTest2Scope()) {
+        this.shellEl.classList.remove('p2-agent-shell--glow-retire');
+      }
       if (
         phaseName === 'listening' || phaseName === 'generating' ||
         phaseName === 'hollowReveal' || phaseName === 'handoff' ||
@@ -440,9 +489,13 @@
       }
     }
     if (phaseName === 'fadeOut' && isTest2Scope()) {
-      try {
-        document.dispatchEvent(new CustomEvent('p2-test2-fill-fadeout'));
-      } catch (e) { /* noop */ }
+      var fadeMs = next.duration;
+      var layoutMs = Math.round(fadeMs * 0.86);
+      setTimeout(function () {
+        try {
+          document.dispatchEvent(new CustomEvent('p2-test2-fill-fadeout'));
+        } catch (e) { /* noop */ }
+      }, layoutMs);
     }
   };
 
@@ -509,7 +562,7 @@
     } else if (this.phase === 'handoff') {
       eased = easeInOutCubic(t);
     } else if (this.phase === 'fadeOut') {
-      eased = easeOutCubic(t);
+      eased = easeGlowRetire(t);
     } else if (this.phase === 'settling') {
       eased = easeInOutCubic(t);
     } else {
@@ -568,13 +621,17 @@
       this._stopLoop(true);
     }
     if (this.phase === 'fadeOut' && now - this.phaseStart >= this.phaseDuration) {
-      this.phase = 'idle';
-      if (this.fillEl) {
-        this.fillEl.classList.remove('p2-agent-fill--gl-active');
-        this.fillEl.classList.remove('p2-agent-fill--gl-fading');
+      if (isTest2Scope()) {
+        this._finishFadeOutTail();
+      } else {
+        this.phase = 'idle';
+        if (this.fillEl) {
+          this.fillEl.classList.remove('p2-agent-fill--gl-active');
+          this.fillEl.classList.remove('p2-agent-fill--gl-fading');
+        }
+        if (this.shellEl) this.shellEl.classList.remove('p2-agent-shell--gl-fill');
+        this._stopLoop(true);
       }
-      if (this.shellEl) this.shellEl.classList.remove('p2-agent-shell--gl-fill');
-      this._stopLoop(true);
     }
   };
 
