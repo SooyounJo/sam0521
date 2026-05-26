@@ -473,9 +473,12 @@
       }
     }
     if (this.shellEl) {
-      if (phaseName === 'fadeOut' && isTest2Scope()) {
+      if (isTest2Scope() && (phaseName === 'fadeOut' || phaseName === 'settling')) {
         this.shellEl.classList.add('p2-agent-shell--glow-retire');
-      } else if (isTest2Scope()) {
+      } else if (
+        isTest2Scope() &&
+        (phaseName === 'idle' || phaseName === 'listening' || phaseName === 'generating')
+      ) {
         this.shellEl.classList.remove('p2-agent-shell--glow-retire');
       }
       if (
@@ -490,7 +493,7 @@
     }
     if (phaseName === 'fadeOut' && isTest2Scope()) {
       var fadeMs = next.duration;
-      var layoutMs = Math.round(fadeMs * 0.86);
+      var layoutMs = Math.round(fadeMs * 0.94);
       setTimeout(function () {
         try {
           document.dispatchEvent(new CustomEvent('p2-test2-fill-fadeout'));

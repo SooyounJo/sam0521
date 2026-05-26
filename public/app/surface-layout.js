@@ -5481,7 +5481,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
                       '<div class="p2-result-loading__sub" aria-hidden="true"></div>' +
                     '</div>' +
                     '<div class="p2-result-loading__footer">' +
-                      '<div class="p2-result-loading__input">업무용 연락 정리해줘</div>' +
+                      '<div class="p2-result-loading__input"><span class="p2-input-text">업무용 연락 정리해줘</span></div>' +
                       '<div class="p2-result-loading__icon" aria-hidden="true">' +
                         '<div class="p2-loading-dots">' +
                           '<span></span><span></span><span></span><span></span><span></span>' +
@@ -5500,7 +5500,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
             '</div>' +
             '<div id="p2-slot" class="p2-agent-slot" style="opacity:0; pointer-events:none; overflow:hidden;"></div>' +
             '<div class="p2-agent-footer">' +
-              '<div class="p2-agent-input">업무용 연락 정리해줘</div>' +
+              '<div class="p2-agent-input"><span class="p2-input-text">업무용 연락 정리해줘</span></div>' +
               '<button id="p2-star" type="button" aria-label="AI Voice">' +
                 window.renderAtomicForRole({ role: 'dot-icon-orange-badge-1x1' }, { w: 56, h: 56 }) +
               '</button>' +
@@ -6284,10 +6284,41 @@ function deriveTest2LoadingStatus(userText) {
   return core + ' 관련 내용을 정리중입니다.';
 }
 
+function ensureTest2InputTextSpan(inputEl) {
+  if (!inputEl) return null;
+  var span = inputEl.querySelector('.p2-input-text');
+  if (span) return span;
+  var raw = String(inputEl.textContent || '').trim();
+  span = document.createElement('span');
+  span.className = 'p2-input-text';
+  span.textContent = raw;
+  inputEl.textContent = '';
+  inputEl.appendChild(span);
+  return span;
+}
+
+function getTest2InputDisplayText(inputEl) {
+  if (!inputEl) return '';
+  var span = inputEl.querySelector('.p2-input-text');
+  return String((span || inputEl).textContent || '').trim();
+}
+
+function setTest2InputDisplayText(inputEl, text) {
+  if (!inputEl) return;
+  var span = ensureTest2InputTextSpan(inputEl);
+  var next = String(text || '');
+  if (span) {
+    if (span.textContent !== next) span.textContent = next;
+    return;
+  }
+  if (inputEl.textContent !== next) inputEl.textContent = next;
+}
+
 function setTest2AgentInputGlow(active) {
   if (!_isTest2Scope()) return;
   var agentInput = document.querySelector('.p2-agent-input');
   if (!agentInput) return;
+  ensureTest2InputTextSpan(agentInput);
   if (active) agentInput.classList.add('p2-agent-input--glow');
   else agentInput.classList.remove('p2-agent-input--glow');
 }
@@ -6306,11 +6337,11 @@ function syncTest2LoadingPresentation(result) {
   if (sub && sub.textContent) {
     raw = sub.textContent.replace(/^[\s"“]+|[\s"”]+$/g, '');
   }
-  if (!raw && agentInput) raw = String(agentInput.textContent || '').trim();
+  if (!raw && agentInput) raw = getTest2InputDisplayText(agentInput);
   if (!raw) return;
 
-  if (input && input.textContent !== raw) input.textContent = raw;
-  if (agentInput && agentInput.textContent !== raw) agentInput.textContent = raw;
+  if (input) setTest2InputDisplayText(input, raw);
+  if (agentInput) setTest2InputDisplayText(agentInput, raw);
   if (status) {
     var nextStatus = deriveTest2LoadingStatus(raw);
     if (status.textContent !== nextStatus) status.textContent = nextStatus;
@@ -6366,6 +6397,12 @@ function staggerTest2ContactListRows(slot) {
   slot.dataset.test2ContactStagger = '1';
   slot.dataset.test2ContactRevealLock = '1';
   slot.classList.add('p2-contact-reveal-active');
+
+  var shell = document.getElementById('p2-area');
+  var canvas = document.getElementById('canvas');
+  if (shell) shell.classList.add('p2-agent-shell--glow-retire');
+  if (canvas) canvas.classList.remove('p2-generating');
+
   installTest2FillFadeOutBridge(slot);
   applyTest2ContactListShellHeight(slot);
   activateTest2ContactListLayout(slot);
@@ -6387,19 +6424,38 @@ function staggerTest2ContactListRows(slot) {
   }, baseDelay + seqIndex * stepDelay + 920);
 }
 
+function finalizeTest2ContactListVisibility(slot) {
+  if (!_isTest2Scope() || !slot) return;
+  var list = slot.querySelector('.p2-contact-list');
+  if (!list) return;
+  list.querySelectorAll('.p2-seq-text-hidden').forEach(function (el) {
+    el.classList.remove('p2-seq-text-hidden');
+    el.classList.add('p2-seq-text-visible');
+  });
+}
+
 function installTest2FillFadeOutBridge(slot) {
   if (!slot || slot.dataset.test2FillFadeBound === '1') return;
   slot.dataset.test2FillFadeBound = '1';
   document.addEventListener('p2-test2-fill-fadeout', function onFadeOut() {
     document.removeEventListener('p2-test2-fill-fadeout', onFadeOut);
+    finalizeTest2ContactListVisibility(slot);
     slot.classList.add('p2-seq-done');
     slot.style.pointerEvents = 'auto';
     var result = document.getElementById('p2-result');
     var defaults = document.getElementById('p2-default-widgets');
-        if (result) {
-          result.classList.remove('is-loading', 'p2-crossfade-out', 'p2-loading-ui-exiting');
-          result.classList.add('has-swap', 'p2-default-hiding');
-        }
+    var shellHandoff = document.getElementById('p2-area');
+    if (shellHandoff) {
+      shellHandoff.classList.add('p2-agent-shell--glow-retire');
+      shellHandoff.classList.remove('p2-agent-shell--flow-handoff');
+    }
+    if (result) {
+      result.classList.add('p2-loading-ui-exiting');
+      result.classList.add('has-swap', 'p2-default-hiding');
+      setTimeout(function () {
+        result.classList.remove('is-loading', 'p2-crossfade-out', 'p2-loading-ui-exiting');
+      }, 380);
+    }
     if (defaults) {
       defaults.style.opacity = '0';
       defaults.style.display = 'none';
@@ -6413,6 +6469,9 @@ window.beginTest2LoadingChromeExit = beginTest2LoadingChromeExit;
 window.activateTest2ContactListLayout = activateTest2ContactListLayout;
 window.syncTest2LoadingPresentation = syncTest2LoadingPresentation;
 window.setTest2AgentInputGlow = setTest2AgentInputGlow;
+window.ensureTest2InputTextSpan = ensureTest2InputTextSpan;
+window.setTest2InputDisplayText = setTest2InputDisplayText;
+window.getTest2InputDisplayText = getTest2InputDisplayText;
 
 function syncTest2VoiceStarState(canvas) {
   if (!canvas || !_isTest2Scope()) return;

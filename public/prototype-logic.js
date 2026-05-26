@@ -566,11 +566,6 @@
             window.beginTest2LoadingChromeExit(slot);
           }
         }, 220);
-        setTimeout(function () {
-          if (window.P2AgentFillGL && window.P2AgentFillGL.setPhase) {
-            window.P2AgentFillGL.setPhase('settling');
-          }
-        }, 520);
         return;
       }
 
@@ -759,7 +754,11 @@
       if (isTest2) {
         var agentInput = document.querySelector('.p2-agent-input');
         if (agentInput) {
-          agentInput.textContent = userText;
+          if (typeof window.setTest2InputDisplayText === 'function') {
+            window.setTest2InputDisplayText(agentInput, userText);
+          } else {
+            agentInput.textContent = userText;
+          }
           agentInput.classList.add('p2-agent-input--glow');
         }
         var loadingSubEarly = el.querySelector('.p2-result-loading__sub');

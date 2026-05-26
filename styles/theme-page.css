@@ -524,26 +524,17 @@
     font-weight: 500;
     font-size: 14px;
     line-height: 1.3;
+    overflow: hidden;
+    background: none;
+    color: rgba(255, 255, 255, 0.72);
+  }
+  #canvas[data-test-scope="test2"] .p2-input-text {
+    display: inline-block;
+    max-width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    background: none;
-    background-image: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.92) 0%,
-      #FFFFFF 24%,
-      rgba(255, 255, 255, 0.88) 52%,
-      #FFFFFF 78%,
-      rgba(255, 255, 255, 0.92) 100%
-    );
-    background-size: 220% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: p2Test2InputGlow 2.8s ease-in-out infinite;
-    filter:
-      drop-shadow(0 0 5px rgba(255, 255, 255, 0.55))
-      drop-shadow(0 0 12px rgba(255, 240, 200, 0.35));
+    vertical-align: middle;
   }
   #canvas[data-test-scope="test2"] .p2-result-loading__input::before {
     content: "";
@@ -556,9 +547,10 @@
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
     z-index: -1;
   }
-  @keyframes p2Test2InputGlow {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+  /* ShinyText-style sweep: 150% → -50% */
+  @keyframes p2Test2ShinyTextSweep {
+    0% { background-position: 150% center; }
+    100% { background-position: -50% center; }
   }
   #canvas[data-test-scope="test2"] .p2-result-loading__icon {
     flex-shrink: 0;
@@ -815,6 +807,13 @@
   }
   #p2-slot.p2-seq-color-active .dot-card:not(.dot-sch) {
     opacity: 1;
+  }
+  /* test2 contact list: keep card visible after color handoff (seq-color may stay for shell CSS) */
+  #canvas[data-test-scope="test2"] #p2-slot.p2-reveal-swap.p2-contact-reveal-active .dot-card.p2-contact-list,
+  #canvas[data-test-scope="test2"] #p2-slot.p2-reveal-swap.p2-seq-done .dot-card.p2-contact-list,
+  #canvas[data-test-scope="test2"] #p2-slot.p2-contact-reveal-active .dot-card:not(.dot-sch),
+  #canvas[data-test-scope="test2"] #p2-slot.p2-seq-done .dot-card:not(.dot-sch) {
+    opacity: 1 !important;
   }
 
   /* Step B & C: title then rows — never flash visible early */
@@ -1131,10 +1130,10 @@
       background 1.15s cubic-bezier(0.22, 0.82, 0.24, 1),
       box-shadow 1.2s cubic-bezier(0.22, 0.82, 0.24, 1) !important;
   }
-  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-reveal-swap),
-  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-seq-color-active),
-  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-contact-reveal-active),
-  #canvas[data-test-scope="test2"] .p2-agent-shell.p2-agent-shell--flow-handoff:has(#p2-result.is-loading) {
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-reveal-swap):not(.p2-agent-shell--glow-retire):not(.p2-contact-layout-active):not(:has(#p2-slot.p2-seq-done)),
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-seq-color-active):not(.p2-agent-shell--glow-retire):not(.p2-contact-layout-active):not(:has(#p2-slot.p2-seq-done)),
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-contact-reveal-active):not(.p2-agent-shell--glow-retire):not(.p2-contact-layout-active):not(:has(#p2-slot.p2-seq-done)),
+  #canvas[data-test-scope="test2"] .p2-agent-shell.p2-agent-shell--flow-handoff:has(#p2-result.is-loading):not(.p2-agent-shell--glow-retire):not(.p2-contact-layout-active) {
     background: linear-gradient(
       148deg,
       rgba(255, 198, 90, 0.22) 0%,
@@ -1324,19 +1323,27 @@
     );
     animation: none;
   }
-  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-reveal-swap) .p2-agent-fill__edge,
-  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-seq-color-active) .p2-agent-fill__edge,
-  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-contact-reveal-active) .p2-agent-fill__edge,
-  #canvas[data-test-scope="test2"] .p2-agent-shell.p2-agent-shell--flow-handoff .p2-agent-fill__edge {
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-reveal-swap):not(.p2-agent-shell--glow-retire):not(:has(#p2-slot.p2-contact-reveal-active)) .p2-agent-fill__edge,
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-seq-color-active):not(.p2-agent-shell--glow-retire):not(:has(#p2-slot.p2-contact-reveal-active)) .p2-agent-fill__edge,
+  #canvas[data-test-scope="test2"] .p2-agent-shell.p2-agent-shell--flow-handoff:not(.p2-agent-shell--glow-retire) .p2-agent-fill__edge {
     opacity: 0.82;
     transition-delay: 0.28s;
   }
-  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-reveal-swap) .p2-agent-fill__edge-inner,
-  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-seq-color-active) .p2-agent-fill__edge-inner,
-  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-contact-reveal-active) .p2-agent-fill__edge-inner,
-  #canvas[data-test-scope="test2"] .p2-agent-shell.p2-agent-shell--flow-handoff .p2-agent-fill__edge-inner {
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-reveal-swap):not(.p2-agent-shell--glow-retire):not(:has(#p2-slot.p2-contact-reveal-active)) .p2-agent-fill__edge-inner,
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-seq-color-active):not(.p2-agent-shell--glow-retire):not(:has(#p2-slot.p2-contact-reveal-active)) .p2-agent-fill__edge-inner,
+  #canvas[data-test-scope="test2"] .p2-agent-shell.p2-agent-shell--flow-handoff:not(.p2-agent-shell--glow-retire) .p2-agent-fill__edge-inner {
     opacity: 0.62;
     transition-delay: 0.42s;
+  }
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-contact-reveal-active) .p2-agent-fill__edge,
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-contact-reveal-active) .p2-agent-fill__edge-inner,
+  #canvas[data-test-scope="test2"] .p2-agent-shell.p2-agent-shell--glow-retire .p2-agent-fill__edge,
+  #canvas[data-test-scope="test2"] .p2-agent-shell.p2-agent-shell--glow-retire .p2-agent-fill__edge-inner {
+    opacity: 0 !important;
+    filter: blur(24px) brightness(0.9);
+    transition:
+      opacity 1.28s cubic-bezier(0.22, 0.82, 0.24, 1),
+      filter 1.35s cubic-bezier(0.22, 0.82, 0.24, 1) !important;
   }
   #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-seq-done) .p2-agent-fill__edge,
   #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-seq-done) .p2-agent-fill__edge-inner {
@@ -1421,7 +1428,9 @@
     animation: none !important;
     transition: opacity 0.92s cubic-bezier(0.22, 0.82, 0.24, 1) !important;
   }
-  #canvas[data-test-scope="test2"] .p2-agent-fill.p2-agent-fill--gl-fading::after {
+  #canvas[data-test-scope="test2"] .p2-agent-fill.p2-agent-fill--gl-fading::after,
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-contact-reveal-active) .p2-agent-fill::after,
+  #canvas[data-test-scope="test2"] .p2-agent-shell.p2-agent-shell--glow-retire .p2-agent-fill::after {
     opacity: 0 !important;
     animation: none !important;
     transition: opacity 1.12s cubic-bezier(0.22, 0.82, 0.24, 1) !important;
@@ -1883,6 +1892,21 @@
     visibility: visible !important;
     transition: opacity 0.72s cubic-bezier(0.22, 0.82, 0.24, 1), visibility 0s linear 0s;
   }
+  #canvas[data-test-scope="test2"] #p2-result.has-swap .p2-result-loading,
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-contact-reveal-active) #p2-result .p2-result-loading,
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-seq-done) #p2-result .p2-result-loading {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition: opacity 0.48s cubic-bezier(0.22, 0.82, 0.24, 1), visibility 0s linear 0.48s !important;
+  }
+  #canvas[data-test-scope="test2"] #p2-result.has-swap .p2-result-loading__bg,
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-contact-reveal-active) #p2-result .p2-result-loading__bg,
+  #canvas[data-test-scope="test2"] #p2-result.p2-loading-ui-exiting .p2-result-loading__bg {
+    opacity: 0 !important;
+    animation: none !important;
+    transition: opacity 0.42s cubic-bezier(0.22, 0.82, 0.24, 1) !important;
+  }
   #canvas[data-test-scope="test2"] #p2-result.is-loading .p2-result-loading__footer {
     display: none !important;
   }
@@ -1911,23 +1935,35 @@
     position: relative;
     isolation: isolate;
     background: none;
-    color: transparent;
+    color: rgba(255, 255, 255, 0.72);
+  }
+  /* ShinyText sweep on inner span — flex parent + background-clip:text hides text */
+  #canvas[data-test-scope="test2"] .p2-result-loading__input .p2-input-text,
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-result.is-loading):not(.p2-contact-layout-active) .p2-agent-footer .p2-agent-input:not(.p2-agent-input--settled) .p2-input-text,
+  #canvas[data-test-scope="test2"].p2-generating:not(:has(.p2-contact-layout-active)) .p2-agent-footer .p2-agent-input:not(.p2-agent-input--settled) .p2-input-text,
+  #canvas[data-test-scope="test2"] .p2-agent-input.p2-agent-input--glow:not(.p2-agent-input--settled) .p2-input-text {
+    font-weight: 600;
     background-image: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.88) 0%,
-      #FFFFFF 24%,
-      rgba(255, 255, 255, 0.84) 52%,
-      #FFFFFF 78%,
-      rgba(255, 255, 255, 0.88) 100%
+      120deg,
+      rgba(255, 255, 255, 0.3) 0%,
+      rgba(255, 255, 255, 0.3) 26%,
+      rgba(255, 255, 255, 0.82) 40%,
+      #ffffff 50%,
+      rgba(255, 245, 220, 1) 54%,
+      rgba(255, 255, 255, 0.82) 60%,
+      rgba(255, 255, 255, 0.3) 74%,
+      rgba(255, 255, 255, 0.3) 100%
     );
-    background-size: 220% 100%;
+    background-size: 260% auto;
+    background-position: 150% center;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: p2Test2InputGlow 2.8s ease-in-out infinite;
+    color: transparent;
+    animation: p2Test2ShinyTextSweep 1.55s linear infinite;
     filter:
-      drop-shadow(0 0 5px rgba(255, 255, 255, 0.55))
-      drop-shadow(0 0 12px rgba(255, 240, 200, 0.35));
+      drop-shadow(0 0 5px rgba(255, 255, 255, 0.65))
+      drop-shadow(0 0 12px rgba(255, 210, 150, 0.45));
   }
   #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-result.is-loading):not(.p2-contact-layout-active):not(:has(#p2-slot.p2-seq-color-active)):not(:has(#p2-slot.p2-contact-reveal-active)) .p2-agent-footer .p2-agent-input::before,
   #canvas[data-test-scope="test2"].p2-generating:not(:has(.p2-contact-layout-active)) .p2-agent-footer .p2-agent-input::before,
@@ -2012,7 +2048,9 @@
   }
   #canvas[data-test-scope="test2"] #p2-slot.p2-reveal-swap .p2-reveal-stage,
   #canvas[data-test-scope="test2"] #p2-slot.p2-seq-color-active .p2-reveal-stage,
-  #canvas[data-test-scope="test2"] #p2-slot.p2-contact-reveal-active .p2-reveal-stage {
+  #canvas[data-test-scope="test2"] #p2-slot.p2-contact-reveal-active .p2-reveal-stage,
+  #canvas[data-test-scope="test2"] #p2-slot.p2-reveal-swap.p2-seq-done .p2-reveal-stage,
+  #canvas[data-test-scope="test2"] #p2-slot.p2-seq-done .p2-reveal-stage {
     opacity: 1;
     overflow: visible;
     height: auto !important;
@@ -2173,6 +2211,22 @@
       color 0.72s cubic-bezier(0.22, 0.82, 0.24, 1),
       -webkit-text-fill-color 0.72s cubic-bezier(0.22, 0.82, 0.24, 1) !important;
   }
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-seq-color-active) .p2-agent-input .p2-input-text,
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-contact-reveal-active) .p2-agent-input .p2-input-text,
+  #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-seq-done) .p2-agent-input .p2-input-text,
+  #canvas[data-test-scope="test2"] .p2-agent-shell.p2-agent-shell--glow-retire .p2-agent-input .p2-input-text,
+  #canvas[data-test-scope="test2"] .p2-agent-shell.p2-contact-layout-active .p2-agent-input .p2-input-text,
+  #canvas[data-test-scope="test2"] .p2-agent-input.p2-agent-input--settled .p2-input-text {
+    font-weight: 500 !important;
+    background-image: none !important;
+    background-position: 50% center !important;
+    -webkit-background-clip: border-box !important;
+    background-clip: border-box !important;
+    -webkit-text-fill-color: currentColor !important;
+    color: inherit !important;
+    animation: none !important;
+    filter: none !important;
+  }
   #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-seq-color-active) .p2-agent-footer #p2-star,
   #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-contact-reveal-active) .p2-agent-footer #p2-star,
   #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-seq-done) .p2-agent-footer #p2-star,
@@ -2243,6 +2297,16 @@
       opacity 0.78s cubic-bezier(0.22, 0.82, 0.24, 1),
       transform 0.88s cubic-bezier(0.22, 0.82, 0.24, 1),
       filter 0.72s cubic-bezier(0.22, 0.82, 0.24, 1);
+  }
+  /* settled contact list: never collapse rows after reveal completes */
+  #canvas[data-test-scope="test2"] #p2-slot.p2-seq-done .p2-contact-list__header:not(.p2-seq-text-hidden),
+  #canvas[data-test-scope="test2"] #p2-slot.p2-seq-done .p2-contact-list__item:not(.p2-seq-text-hidden),
+  #canvas[data-test-scope="test2"] #p2-slot.p2-contact-reveal-active.p2-seq-done .p2-contact-list__header,
+  #canvas[data-test-scope="test2"] #p2-slot.p2-contact-reveal-active.p2-seq-done .p2-contact-list__item {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    pointer-events: auto !important;
   }
   #canvas[data-test-scope="test2"] #p2-slot.p2-contact-reveal-active .p2-contact-list__item {
     transform-origin: center top;
@@ -2419,14 +2483,19 @@
     #canvas[data-test-scope="test2"] .p2-result-loading__bg {
       animation: none !important;
     }
-    #canvas[data-test-scope="test2"] .p2-agent-input.p2-agent-input--glow,
-    #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-result.is-loading) .p2-agent-footer .p2-agent-input,
-    #canvas[data-test-scope="test2"].p2-generating .p2-agent-footer .p2-agent-input {
+    #canvas[data-test-scope="test2"] .p2-agent-input.p2-agent-input--glow .p2-input-text,
+    #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-result.is-loading) .p2-agent-footer .p2-agent-input .p2-input-text,
+    #canvas[data-test-scope="test2"].p2-generating .p2-agent-footer .p2-agent-input .p2-input-text,
+    #canvas[data-test-scope="test2"] .p2-result-loading__input .p2-input-text {
+      font-weight: 500 !important;
       animation: none !important;
-      background-position: 50% 50% !important;
-      -webkit-text-fill-color: rgba(255, 255, 255, 0.92);
-      color: rgba(255, 255, 255, 0.92);
-      filter: none;
+      background-image: none !important;
+      background-position: 50% center !important;
+      -webkit-background-clip: border-box !important;
+      background-clip: border-box !important;
+      -webkit-text-fill-color: rgba(255, 255, 255, 0.92) !important;
+      color: rgba(255, 255, 255, 0.92) !important;
+      filter: none !important;
     }
     #canvas[data-test-scope="test2"] .p2-agent-fill {
       animation: none !important;
