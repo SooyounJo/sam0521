@@ -5483,9 +5483,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
                     '<div class="p2-result-loading__footer">' +
                       '<div class="p2-result-loading__input"><span class="p2-input-text">놓친 보고서 요약해줘</span></div>' +
                       '<div class="p2-result-loading__icon" aria-hidden="true">' +
-                        '<div class="p2-loading-dots">' +
-                          '<span></span><span></span><span></span><span></span><span></span>' +
-                        '</div>' +
+                        '<canvas class="p2-galaxy-star__canvas p2-galaxy-star__canvas--loading" width="112" height="112" aria-hidden="true"></canvas>' +
                       '</div>' +
                     '</div>' +
                   '</div>' +
@@ -5502,6 +5500,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
             '<div class="p2-agent-footer">' +
               '<div class="p2-agent-input"><span class="p2-input-text">놓친 보고서 요약해줘</span></div>' +
               '<button id="p2-star" type="button" aria-label="AI Voice" class="p2-galaxy-star-btn">' +
+                '<span class="p2-galaxy-star__grad" aria-hidden="true"></span>' +
                 '<canvas class="p2-galaxy-star__canvas" width="112" height="112" aria-hidden="true"></canvas>' +
               '</button>' +
             '</div>' +
@@ -6474,13 +6473,45 @@ window.ensureTest2InputTextSpan = ensureTest2InputTextSpan;
 window.setTest2InputDisplayText = setTest2InputDisplayText;
 window.getTest2InputDisplayText = getTest2InputDisplayText;
 
+function isTest2P2RevealStarted() {
+  if (!_isTest2Scope()) return false;
+  var result = document.getElementById('p2-result');
+  var slot = document.getElementById('p2-slot');
+  var shell = document.getElementById('p2-area');
+
+  if (result) {
+    if (result.classList.contains('p2-result-expanded')) return true;
+    if (result.classList.contains('p2-crossfade-out')) return true;
+    if (result.classList.contains('p2-loading-ui-exiting')) return true;
+    if (result.classList.contains('has-swap')) return true;
+  }
+  if (slot) {
+    if (slot.classList.contains('p2-reveal-swap')) return true;
+    if (slot.classList.contains('p2-seq-color-active')) return true;
+    if (slot.classList.contains('p2-contact-reveal-active')) return true;
+    if (slot.classList.contains('p2-seq-done')) return true;
+    if (slot.classList.contains('p2-reveal-visible')) return true;
+  }
+  if (shell) {
+    if (shell.classList.contains('p2-loading-chrome-exiting')) return true;
+    if (shell.classList.contains('p2-contact-layout-active')) return true;
+  }
+  return false;
+}
+
+window.isTest2P2RevealStarted = isTest2P2RevealStarted;
+
 function syncTest2VoiceStarState(canvas) {
   if (!canvas || !_isTest2Scope()) return;
   var star = document.getElementById('p2-star');
   if (!star) return;
+  var result = document.getElementById('p2-result');
+  var isLoading = !!(result && result.classList.contains('is-loading'));
+  var revealStarted = isTest2P2RevealStarted();
   var active =
     canvas.classList.contains('p2-listening') ||
-    canvas.classList.contains('p2-generating');
+    canvas.classList.contains('p2-generating') ||
+    (isLoading && !revealStarted);
 
   if (active) {
     star.classList.add('p2-star-voice-live');
@@ -6517,7 +6548,7 @@ function installTest2GalaxyStar(canvas) {
   }
 
   var script = document.createElement('script');
-  script.src = '/app/p2-galaxy-star.js?v=4';
+  script.src = '/app/p2-galaxy-star.js?v=10';
   script.dataset.p2GalaxyStar = '1';
   script.onload = boot;
   document.head.appendChild(script);
@@ -6574,6 +6605,7 @@ function installTest2P2TransitionBridge(canvas) {
         }
         if (m.type === 'attributes' && m.attributeName === 'class' && m.target === slot) {
           shouldSync = true;
+          syncTest2VoiceStarState(document.getElementById('canvas'));
         }
       }
       if (shouldSync) syncContactListLayout(slot, { mount: isMount });
@@ -6584,6 +6616,7 @@ function installTest2P2TransitionBridge(canvas) {
     if (!result || result.dataset.test2P2ResultBound === '1') return;
     result.dataset.test2P2ResultBound = '1';
     new MutationObserver(function () {
+      syncTest2VoiceStarState(document.getElementById('canvas'));
       if (!result.classList.contains('is-loading')) return;
       syncTest2LoadingPresentation(result);
     }).observe(result, { attributes: true, attributeFilter: ['class'] });
