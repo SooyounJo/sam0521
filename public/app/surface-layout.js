@@ -5473,6 +5473,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
               '<div id="p2-result" class="p2-dark p2-obc-host p2-agent-card" style="position:absolute; inset:0; background:transparent; border-radius:36px; padding:0; box-sizing:border-box; overflow:hidden;">' +
                 '<div class="p2-result-loading" aria-hidden="true">' +
                   '<div class="p2-result-loading__bg"></div>' +
+                  '<div class="p2-result-loading__border-sweep" aria-hidden="true"></div>' +
                   '<div class="p2-result-loading__shimmer"></div>' +
                   '<div class="p2-result-loading__content">' +
                     '<div class="p2-result-loading__head">' +
@@ -6323,10 +6324,21 @@ function setTest2AgentInputGlow(active) {
   else agentInput.classList.remove('p2-agent-input--glow');
 }
 
+function ensureTest2LoadingBorderSweep(loading) {
+  if (!loading || loading.querySelector('.p2-result-loading__border-sweep')) return;
+  var sweep = document.createElement('div');
+  sweep.className = 'p2-result-loading__border-sweep';
+  sweep.setAttribute('aria-hidden', 'true');
+  var shimmer = loading.querySelector('.p2-result-loading__shimmer');
+  if (shimmer) loading.insertBefore(sweep, shimmer);
+  else loading.appendChild(sweep);
+}
+
 function syncTest2LoadingPresentation(result) {
   if (!_isTest2Scope() || !result) return;
   var loading = result.querySelector('.p2-result-loading');
   if (!loading) return;
+  ensureTest2LoadingBorderSweep(loading);
 
   var sub = loading.querySelector('.p2-result-loading__sub');
   var status = loading.querySelector('.p2-result-loading__status');

@@ -1410,6 +1410,56 @@
       filter: blur(12px) brightness(1.07);
     }
   }
+  @keyframes p2Test2ListenEdgeSweep {
+    0% {
+      opacity: 0;
+      transform: rotate(0deg) scale(0.992);
+      filter: blur(16px) brightness(0.96);
+    }
+    10% {
+      opacity: 0.88;
+    }
+    100% {
+      opacity: 0.96;
+      transform: rotate(360deg) scale(1.018);
+      filter: blur(22px) brightness(1.14);
+    }
+  }
+  #canvas[data-test-scope="test2"].p2-listening .p2-agent-fill:not(.p2-agent-fill--gl-ready) .p2-agent-fill__edge {
+    inset: -28px;
+    opacity: 1 !important;
+    animation: p2Test2ListenEdgeSweep 1.18s cubic-bezier(0.22, 0.82, 0.24, 1) forwards;
+    -webkit-mask: radial-gradient(
+      ellipse 100% 100% at 50% 50%,
+      transparent 48%,
+      rgba(0, 0, 0, 0.55) 68%,
+      rgba(0, 0, 0, 0.92) 84%,
+      transparent 100%
+    );
+    mask: radial-gradient(
+      ellipse 100% 100% at 50% 50%,
+      transparent 48%,
+      rgba(0, 0, 0, 0.55) 68%,
+      rgba(0, 0, 0, 0.92) 84%,
+      transparent 100%
+    );
+  }
+  #canvas[data-test-scope="test2"].p2-listening .p2-agent-fill:not(.p2-agent-fill--gl-ready) .p2-agent-fill__edge-inner {
+    opacity: 0.72 !important;
+    animation: p2Test2ListenEdgeSweep 1.18s cubic-bezier(0.22, 0.82, 0.24, 1) 0.05s forwards;
+    -webkit-mask: radial-gradient(
+      ellipse 100% 100% at 50% 50%,
+      transparent 54%,
+      rgba(0, 0, 0, 0.62) 78%,
+      transparent 100%
+    );
+    mask: radial-gradient(
+      ellipse 100% 100% at 50% 50%,
+      transparent 54%,
+      rgba(0, 0, 0, 0.62) 78%,
+      transparent 100%
+    );
+  }
   #canvas[data-test-scope="test2"] .p2-agent-fill::before {
     display: none !important;
   }
@@ -1571,6 +1621,26 @@
   #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-reveal-swap) .p2-agent-fill--gl-ready,
   #canvas[data-test-scope="test2"] .p2-agent-shell:has(#p2-slot.p2-seq-color-active) .p2-agent-fill--gl-ready {
     transition: opacity 0.78s cubic-bezier(0.22, 0.82, 0.24, 1);
+  }
+  #canvas[data-test-scope="test2"].p2-listening .p2-agent-fill:not(.p2-agent-fill--gl-ready) .p2-agent-fill__bloom {
+    transform: translate(0%, 0%) scale(1);
+    opacity: 0.88;
+    filter: blur(32px);
+    animation: p2Test2BloomRipple 3.8s ease-in-out 5.8s infinite;
+    transition:
+      transform 5.8s cubic-bezier(0.12, 0.9, 0.16, 1) 1.18s,
+      opacity 4.4s cubic-bezier(0.18, 0.88, 0.22, 1) 1.12s,
+      filter 5.2s cubic-bezier(0.14, 0.88, 0.2, 1) 1.14s;
+  }
+  #canvas[data-test-scope="test2"].p2-listening .p2-agent-fill:not(.p2-agent-fill--gl-ready) .p2-agent-fill__mist {
+    transform: translate(-4%, -2%) scale(1.15);
+    opacity: 0.72;
+    filter: blur(40px);
+    animation: p2Test2MistRipple 4.4s ease-in-out 6.2s infinite;
+    transition:
+      transform 6.2s cubic-bezier(0.12, 0.9, 0.16, 1) 1.24s,
+      opacity 4.8s cubic-bezier(0.18, 0.88, 0.22, 1) 1.18s,
+      filter 5.4s cubic-bezier(0.14, 0.88, 0.2, 1) 1.2s;
   }
   #canvas[data-test-scope="test2"].p2-listening .p2-agent-fill__bloom {
     transform: translate(0%, 0%) scale(1);

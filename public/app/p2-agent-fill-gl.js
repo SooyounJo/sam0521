@@ -20,6 +20,7 @@
     'uniform float u_spread;',
     'uniform float u_intensity;',
     'uniform float u_fill;',
+    'uniform float u_sweep;',
     'uniform float u_audio;',
     '',
     'float hash(vec2 p) {',
@@ -181,6 +182,42 @@
     '  return clamp(ring + corner, 0.0, 1.0);',
     '}',
     '',
+    'float edgePerimeterSweep(vec2 uv, vec2 p, float sdf, float aspect, float sweep, float time) {',
+    '  if (sweep <= 0.001) return 0.0;',
+    '  float distFromEdge = abs(sdf);',
+    '  float perimeter = exp(-distFromEdge * mix(13.0, 18.0, sweep));',
+    '  float depthIn = clamp(-sdf / max(u_radius * 1.55, 0.06), 0.0, 1.0);',
+    '  float edgeBand = perimeter * (1.0 - smoothstep(0.0, 0.50, depthIn));',
+    '  float softRing = exp(-distFromEdge * 9.5) * (1.0 - smoothstep(0.0, 0.62, depthIn));',
+    '  float outerBleed = exp(-max(sdf, 0.0) * 18.0)',
+    '    * (1.0 - smoothstep(0.0, 0.034, max(-sdf, 0.0))) * 0.62;',
+    '  edgeBand = max(edgeBand, max(softRing * 0.78, outerBleed));',
+    '  vec2 originPlane = vec2((u_origin.x - 0.5) * aspect, u_origin.y - 0.5);',
+    '  float startAngle = atan(originPlane.y, originPlane.x + 0.0001);',
+    '  float pointAngle = atan(p.y, p.x + 0.0001);',
+    '  float posFromStart = fract((pointAngle - startAngle) / 6.28318530718 + 1.0);',
+    '  float head = clamp(sweep, 0.0, 1.0);',
+    '  float passed = 1.0 - smoothstep(head - 0.018, head + 0.028, posFromStart);',
+    '  float trailDist = head - posFromStart;',
+    '  if (trailDist < 0.0) trailDist = 0.0;',
+    '  float trail = smoothstep(0.0, 0.06, trailDist)',
+    '    * (1.0 - smoothstep(0.14, 0.44, trailDist));',
+    '  float headDist = abs(posFromStart - head);',
+    '  headDist = min(headDist, 1.0 - headDist);',
+    '  float headGlow = exp(-headDist * 20.0) * smoothstep(0.02, 0.10, head);',
+    '  float headWide = exp(-headDist * 9.0) * 0.48 * smoothstep(0.02, 0.10, head);',
+    '  float wave = sin(time * 1.28 + posFromStart * 6.28318530718',
+    '    + fbm(uv * 3.1 + time * 0.08) * 4.4) * 0.5 + 0.5;',
+    '  float ripple = sin(time * 1.62 + depthIn * 7.4 - posFromStart * 11.0',
+    '    + fbm(uv * 2.5 + time * 0.09) * 3.2) * 0.5 + 0.5;',
+    '  float waver = 0.82 + wave * 0.12 + ripple * 0.08;',
+    '  float lit = max(max(trail * 0.92, headGlow * 1.34 + headWide), passed * trail * 0.58);',
+    '  lit *= waver;',
+    '  float handoff = 1.0 - smoothstep(0.90, 1.0, sweep) * smoothstep(0.0, 0.18, u_spread);',
+    '  lit *= mix(1.0, max(handoff, 0.42), smoothstep(0.92, 1.0, sweep));',
+    '  return clamp(edgeBand * lit * 1.12, 0.0, 1.0);',
+    '}',
+    '',
     'void main() {',
     '  vec2 uv = v_uv;',
     '  vec2 p = toPlane(uv);',
@@ -203,9 +240,11 @@
     '',
     '  vec2 rel = vec2((uv.x - u_origin.x) * u_aspect, uv.y - u_origin.y);',
     '',
-    '  float reveal = organicReveal(uv, rel, sdf, u_spread, u_time, u_audio);',
+    '  float reveal = organicReveal(uv, rel, sdf, u_spread, u_time, u_audio)',
+    '    * smoothstep(0.82, 0.98, u_sweep);',
     '',
     '  vec3 mesh = meshWarmGradient(uv, u_time, u_audio);',
+    '  float sweepMask = edgePerimeterSweep(uv, p, sdf, u_aspect, u_sweep, u_time);',
     '  float tightness = smoothstep(0.38, 0.98, handoffT);',
     '  float spreadShimmer = 1.0 - smoothstep(0.04, 0.78, u_spread);',
     '  float colorLift = morph > 0.04',
@@ -218,10 +257,13 @@
     '',
     '  float fillMask = clamp(reveal * u_intensity, 0.0, 1.0);',
     '  float edgeMask = edgeRingHandoff(uv, p, sdf, u_aspect, tightness, u_time);',
+    '  float edgeSweepFill = sweepMask * u_intensity * (1.0 - smoothstep(0.0, 0.24, u_spread));',
     '  float centerFill = fillMask * (1.0 - morph);',
     '  float edgeFill = edgeMask * u_intensity * morph * 0.84;',
-    '  float combinedMask = max(centerFill, edgeFill);',
+    '  float combinedMask = max(max(centerFill, edgeFill), edgeSweepFill);',
     '  color += mesh * edgeFill * 0.28;',
+    '  color += mesh * edgeSweepFill * 0.42;',
+    '  color += vec3(0.10, 0.05, 0.08) * edgeSweepFill * 0.36;',
     '  color += grain * combinedMask;',
     '',
     '  float frontier = smoothstep(0.04, 0.42, combinedMask)',
@@ -341,6 +383,8 @@
     return program;
   }
 
+  var LISTEN_SWEEP_PORTION = 0.28;
+
   function AgentFillGL() {
     this.canvas = null;
     this.fillEl = null;
@@ -355,7 +399,7 @@
     this.phaseFrom = { spread: 0, intensity: 0, fill: 0 };
     this.phaseTo = { spread: 0, intensity: 0, fill: 0 };
     this.phaseDuration = 0;
-    this.values = { spread: 0, intensity: 0, fill: 0 };
+    this.values = { spread: 0, intensity: 0, fill: 0, sweep: 0 };
     this.audio = 0;
     this.smoothAudio = 0;
     this.startTime = 0;
@@ -524,6 +568,7 @@
       this.values.spread = 0;
       this.values.intensity = 0;
       this.values.fill = 0;
+      this.values.sweep = 0;
       this.smoothAudio = 0;
     }
     this._setPhaseTargets(phaseName || 'idle');
@@ -573,8 +618,31 @@
       : 1;
     var eased;
     if (this.phase === 'listening') {
-      eased = easeListeningSpread(t);
-    } else if (this.phase === 'generating') {
+      if (t < LISTEN_SWEEP_PORTION) {
+        var sweepT = t / LISTEN_SWEEP_PORTION;
+        this.values.sweep = easeOutCubic(sweepT);
+        this.values.spread = 0;
+        this.values.intensity = easeListenIntensity(sweepT * 0.78);
+        this.values.fill = 0;
+      } else {
+        var fillT = (t - LISTEN_SWEEP_PORTION) / (1 - LISTEN_SWEEP_PORTION);
+        this.values.sweep = 1;
+        this.values.spread = lerp(
+          this.phaseFrom.spread,
+          this.phaseTo.spread,
+          easeListeningSpread(fillT)
+        );
+        this.values.intensity = lerp(
+          this.phaseFrom.intensity,
+          this.phaseTo.intensity,
+          easeListenIntensity(0.62 + fillT * 0.38)
+        );
+        this.values.fill = 0;
+      }
+      this._maybeAdvancePhase(t);
+      return;
+    }
+    if (this.phase === 'generating') {
       eased = easeContinueSpread(t, this.phaseFrom.spread);
     } else if (this.phase === 'hollowReveal') {
       eased = isTest2Scope() ? easeOutCubic(t) : easeOutQuint(t);
@@ -630,6 +698,7 @@
     gl.uniform1f(this.uniforms.spread, this.values.spread);
     gl.uniform1f(this.uniforms.intensity, this.values.intensity);
     gl.uniform1f(this.uniforms.fill, this.values.fill);
+    gl.uniform1f(this.uniforms.sweep, this.values.sweep);
     gl.uniform1f(this.uniforms.audio, this.smoothAudio);
 
     gl.clearColor(0, 0, 0, 0);
@@ -745,6 +814,7 @@
       spread: gl.getUniformLocation(program, 'u_spread'),
       intensity: gl.getUniformLocation(program, 'u_intensity'),
       fill: gl.getUniformLocation(program, 'u_fill'),
+      sweep: gl.getUniformLocation(program, 'u_sweep'),
       audio: gl.getUniformLocation(program, 'u_audio')
     };
 
