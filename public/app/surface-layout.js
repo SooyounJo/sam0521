@@ -1107,7 +1107,7 @@ window.resolveComponentRect = function resolveComponentRect(comp, layout, plan) 
       var isRight = comp.role === 'shortcutRight';
       var sideGap = 28;
       var bottomGap = 16;
-      var size = 54;
+      var size = (window.__mlpTestConfig && window.__mlpTestConfig.id === 'test2') ? 47 : 54;
       return {
         x: isRight ? (vw - sideGap - size) : sideGap,
         y: vh - bottomGap - size - 8,
@@ -1535,6 +1535,25 @@ function _weatherIconSvg(name) {
 
 function _isTest2Scope() {
   return !!(window.__mlpTestConfig && window.__mlpTestConfig.id === 'test2');
+}
+
+function renderTest2LockShortcutCircle(icon) {
+  var iconAsset = icon === 'camera' ? 'camera-icon.svg' : 'phone-icon.svg';
+  var iconInset = icon === 'camera' ? '21.21% 12.5% 17.42% 12.5%' : '8.33% 36.15% 7.65% 33.33%';
+  var assetBase = '/assets/figma/lock-screen/';
+  return '<div style="width:100%;height:100%;position:relative;' +
+    'background:rgba(55,55,55,0.3);' +
+    '-webkit-backdrop-filter:blur(4.63px);backdrop-filter:blur(4.63px);' +
+    'border:0.193px solid rgba(55,55,55,0.3);' +
+    'border-radius:50%;overflow:hidden;box-sizing:border-box;">' +
+    '<div style="position:absolute;left:calc(50% + 0.5px);top:18.09%;bottom:18.09%;aspect-ratio:1/1;transform:translateX(-50%);">' +
+      '<div style="position:relative;width:100%;height:100%;">' +
+        '<div style="position:absolute;inset:' + iconInset + ';">' +
+          '<img src="' + assetBase + iconAsset + '" style="width:100%;height:100%;display:block;" alt="" />' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
 }
 
 function _escP2Html(str) {
@@ -5113,6 +5132,9 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
       // right). variant.icon picks the glyph.
       var scv = (comp && comp.variant) || {};
       var scIcon = scv.icon || (comp.role === 'shortcutRight' ? 'camera' : 'phone');
+      if (_isTest2Scope()) {
+        return renderTest2LockShortcutCircle(scIcon);
+      }
       var SHORTCUT_SVGS = {
         'phone':  '<path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v3a2 2 0 0 1-2 2 17 17 0 0 1-16-16 2 2 0 0 1 2-2z" fill="currentColor"/>',
         'camera': '<path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z" stroke="currentColor" strokeWidth="1.6" fill="none"/><circle cx="12" cy="13" r="3.5" stroke="currentColor" strokeWidth="1.6" fill="none"/>',
@@ -5473,6 +5495,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
               '<div id="p2-result" class="p2-dark p2-obc-host p2-agent-card" style="position:absolute; inset:0; background:transparent; border-radius:36px; padding:0; box-sizing:border-box; overflow:hidden;">' +
                 '<div class="p2-result-loading" aria-hidden="true">' +
                   '<div class="p2-result-loading__bg"></div>' +
+                  '<div class="p2-result-loading__border-sweep" aria-hidden="true"></div>' +
                   '<div class="p2-result-loading__shimmer"></div>' +
                   '<div class="p2-result-loading__content">' +
                     '<div class="p2-result-loading__head">' +
@@ -5481,11 +5504,9 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
                       '<div class="p2-result-loading__sub" aria-hidden="true"></div>' +
                     '</div>' +
                     '<div class="p2-result-loading__footer">' +
-                      '<div class="p2-result-loading__input">업무용 연락 정리해줘</div>' +
+                      '<div class="p2-result-loading__input"><span class="p2-input-text">놓친 보고서 요약해줘</span></div>' +
                       '<div class="p2-result-loading__icon" aria-hidden="true">' +
-                        '<div class="p2-loading-dots">' +
-                          '<span></span><span></span><span></span><span></span><span></span>' +
-                        '</div>' +
+                        '<canvas class="p2-galaxy-star__canvas p2-galaxy-star__canvas--loading" width="112" height="112" aria-hidden="true"></canvas>' +
                       '</div>' +
                     '</div>' +
                   '</div>' +
@@ -5500,9 +5521,10 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
             '</div>' +
             '<div id="p2-slot" class="p2-agent-slot" style="opacity:0; pointer-events:none; overflow:hidden;"></div>' +
             '<div class="p2-agent-footer">' +
-              '<div class="p2-agent-input">업무용 연락 정리해줘</div>' +
-              '<button id="p2-star" type="button" aria-label="AI Voice">' +
-                window.renderAtomicForRole({ role: 'dot-icon-orange-badge-1x1' }, { w: 56, h: 56 }) +
+              '<div class="p2-agent-input"><span class="p2-input-text">놓친 보고서 요약해줘</span></div>' +
+              '<button id="p2-star" type="button" aria-label="AI Voice" class="p2-galaxy-star-btn">' +
+                '<span class="p2-galaxy-star__grad" aria-hidden="true"></span>' +
+                '<canvas class="p2-galaxy-star__canvas" width="112" height="112" aria-hidden="true"></canvas>' +
               '</button>' +
             '</div>' +
           '</div>' +
@@ -6171,9 +6193,7 @@ function activateTest2ContactListLayout(slot) {
     star.classList.remove('p2-seq-text-hidden', 'p2-seq-text-visible', 'p2-default-hiding');
     star.classList.add('p2-agent-star--settled');
   }
-  requestAnimationFrame(function () {
-    setTest2AgentInputGlow(false);
-  });
+  setTest2AgentInputGlow(false);
 
   _unlockTest2ContactListNodes(slot);
   syncTest2VoiceStarState(document.getElementById('canvas'));
@@ -6278,6 +6298,7 @@ function schedulePatchTest2ContactListLayout(slot) {
 function deriveTest2LoadingStatus(userText) {
   var t = String(userText || '').trim().replace(/[.…]+$/g, '');
   if (!t) return '요청하신 내용을 정리중입니다.';
+  if (/보고서|요약/.test(t)) return '놓친 보고서를 요약중입니다.';
   if (/업무|연락/.test(t)) return '업무 관련 연락을 정리중입니다.';
   if (/피드백|디자인/.test(t)) return '디자인 피드백 관련 연락을 정리중입니다.';
   if (/메시지|알림/.test(t)) return '메시지와 알림을 정리중입니다.';
@@ -6286,18 +6307,60 @@ function deriveTest2LoadingStatus(userText) {
   return core + ' 관련 내용을 정리중입니다.';
 }
 
+function ensureTest2InputTextSpan(inputEl) {
+  if (!inputEl) return null;
+  var span = inputEl.querySelector('.p2-input-text');
+  if (span) return span;
+  var raw = String(inputEl.textContent || '').trim();
+  span = document.createElement('span');
+  span.className = 'p2-input-text';
+  span.textContent = raw;
+  inputEl.textContent = '';
+  inputEl.appendChild(span);
+  return span;
+}
+
+function getTest2InputDisplayText(inputEl) {
+  if (!inputEl) return '';
+  var span = inputEl.querySelector('.p2-input-text');
+  return String((span || inputEl).textContent || '').trim();
+}
+
+function setTest2InputDisplayText(inputEl, text) {
+  if (!inputEl) return;
+  var span = ensureTest2InputTextSpan(inputEl);
+  var next = String(text || '');
+  if (span) {
+    if (span.textContent !== next) span.textContent = next;
+    return;
+  }
+  if (inputEl.textContent !== next) inputEl.textContent = next;
+}
+
 function setTest2AgentInputGlow(active) {
   if (!_isTest2Scope()) return;
   var agentInput = document.querySelector('.p2-agent-input');
   if (!agentInput) return;
+  ensureTest2InputTextSpan(agentInput);
   if (active) agentInput.classList.add('p2-agent-input--glow');
   else agentInput.classList.remove('p2-agent-input--glow');
+}
+
+function ensureTest2LoadingBorderSweep(loading) {
+  if (!loading || loading.querySelector('.p2-result-loading__border-sweep')) return;
+  var sweep = document.createElement('div');
+  sweep.className = 'p2-result-loading__border-sweep';
+  sweep.setAttribute('aria-hidden', 'true');
+  var shimmer = loading.querySelector('.p2-result-loading__shimmer');
+  if (shimmer) loading.insertBefore(sweep, shimmer);
+  else loading.appendChild(sweep);
 }
 
 function syncTest2LoadingPresentation(result) {
   if (!_isTest2Scope() || !result) return;
   var loading = result.querySelector('.p2-result-loading');
   if (!loading) return;
+  ensureTest2LoadingBorderSweep(loading);
 
   var sub = loading.querySelector('.p2-result-loading__sub');
   var status = loading.querySelector('.p2-result-loading__status');
@@ -6308,11 +6371,11 @@ function syncTest2LoadingPresentation(result) {
   if (sub && sub.textContent) {
     raw = sub.textContent.replace(/^[\s"“]+|[\s"”]+$/g, '');
   }
-  if (!raw && agentInput) raw = String(agentInput.textContent || '').trim();
+  if (!raw && agentInput) raw = getTest2InputDisplayText(agentInput);
   if (!raw) return;
 
-  if (input && input.textContent !== raw) input.textContent = raw;
-  if (agentInput && agentInput.textContent !== raw) agentInput.textContent = raw;
+  if (input) setTest2InputDisplayText(input, raw);
+  if (agentInput) setTest2InputDisplayText(agentInput, raw);
   if (status) {
     var nextStatus = deriveTest2LoadingStatus(raw);
     if (status.textContent !== nextStatus) status.textContent = nextStatus;
@@ -6368,14 +6431,20 @@ function staggerTest2ContactListRows(slot) {
   slot.dataset.test2ContactStagger = '1';
   slot.dataset.test2ContactRevealLock = '1';
   slot.classList.add('p2-contact-reveal-active');
+
+  var shell = document.getElementById('p2-area');
+  var canvas = document.getElementById('canvas');
+  if (shell) shell.classList.add('p2-agent-shell--glow-retire');
+  if (canvas) canvas.classList.remove('p2-generating');
+
   installTest2FillFadeOutBridge(slot);
   applyTest2ContactListShellHeight(slot);
   activateTest2ContactListLayout(slot);
 
   var header = list.querySelector('.p2-contact-list__header');
   var rows = list.querySelectorAll('.p2-contact-list__item');
-  var baseDelay = 100;
-  var stepDelay = 155;
+  var baseDelay = 280;
+  var stepDelay = 210;
   var seqIndex = 0;
 
   revealTest2ContactSequenceItem(header, baseDelay + seqIndex++ * stepDelay);
@@ -6386,7 +6455,17 @@ function staggerTest2ContactListRows(slot) {
   setTimeout(function () {
     slot.dataset.test2ContactRevealLock = '';
     patchTest2ContactListLayout(slot, { force: true });
-  }, baseDelay + seqIndex * stepDelay + 560);
+  }, baseDelay + seqIndex * stepDelay + 920);
+}
+
+function finalizeTest2ContactListVisibility(slot) {
+  if (!_isTest2Scope() || !slot) return;
+  var list = slot.querySelector('.p2-contact-list');
+  if (!list) return;
+  list.querySelectorAll('.p2-seq-text-hidden').forEach(function (el) {
+    el.classList.remove('p2-seq-text-hidden');
+    el.classList.add('p2-seq-text-visible');
+  });
 }
 
 function installTest2FillFadeOutBridge(slot) {
@@ -6394,23 +6473,26 @@ function installTest2FillFadeOutBridge(slot) {
   slot.dataset.test2FillFadeBound = '1';
   document.addEventListener('p2-test2-fill-fadeout', function onFadeOut() {
     document.removeEventListener('p2-test2-fill-fadeout', onFadeOut);
+    finalizeTest2ContactListVisibility(slot);
     slot.classList.add('p2-seq-done');
     slot.style.pointerEvents = 'auto';
     var result = document.getElementById('p2-result');
     var defaults = document.getElementById('p2-default-widgets');
-        if (result) {
-          result.classList.remove('is-loading', 'p2-crossfade-out', 'p2-loading-ui-exiting');
-          result.classList.add('has-swap', 'p2-default-hiding');
-        }
+    var shellHandoff = document.getElementById('p2-area');
+    if (shellHandoff) {
+      shellHandoff.classList.add('p2-agent-shell--glow-retire');
+      shellHandoff.classList.remove('p2-agent-shell--flow-handoff');
+    }
+    if (result) {
+      result.classList.add('p2-loading-ui-exiting');
+      result.classList.add('has-swap', 'p2-default-hiding');
+      setTimeout(function () {
+        result.classList.remove('is-loading', 'p2-crossfade-out', 'p2-loading-ui-exiting');
+      }, 380);
+    }
     if (defaults) {
       defaults.style.opacity = '0';
       defaults.style.display = 'none';
-    }
-    var flowShell = document.getElementById('p2-area');
-    if (flowShell) {
-          setTimeout(function () {
-            flowShell.classList.remove('p2-agent-shell--flow-handoff', 'p2-loading-chrome-exiting');
-          }, 900);
     }
   });
 }
@@ -6421,57 +6503,89 @@ window.beginTest2LoadingChromeExit = beginTest2LoadingChromeExit;
 window.activateTest2ContactListLayout = activateTest2ContactListLayout;
 window.syncTest2LoadingPresentation = syncTest2LoadingPresentation;
 window.setTest2AgentInputGlow = setTest2AgentInputGlow;
+window.ensureTest2InputTextSpan = ensureTest2InputTextSpan;
+window.setTest2InputDisplayText = setTest2InputDisplayText;
+window.getTest2InputDisplayText = getTest2InputDisplayText;
+
+function isTest2P2RevealStarted() {
+  if (!_isTest2Scope()) return false;
+  var result = document.getElementById('p2-result');
+  var slot = document.getElementById('p2-slot');
+  var shell = document.getElementById('p2-area');
+
+  if (result) {
+    if (result.classList.contains('p2-result-expanded')) return true;
+    if (result.classList.contains('p2-crossfade-out')) return true;
+    if (result.classList.contains('p2-loading-ui-exiting')) return true;
+    if (result.classList.contains('has-swap')) return true;
+  }
+  if (slot) {
+    if (slot.classList.contains('p2-reveal-swap')) return true;
+    if (slot.classList.contains('p2-seq-color-active')) return true;
+    if (slot.classList.contains('p2-contact-reveal-active')) return true;
+    if (slot.classList.contains('p2-seq-done')) return true;
+    if (slot.classList.contains('p2-reveal-visible')) return true;
+  }
+  if (shell) {
+    if (shell.classList.contains('p2-loading-chrome-exiting')) return true;
+    if (shell.classList.contains('p2-contact-layout-active')) return true;
+  }
+  return false;
+}
+
+window.isTest2P2RevealStarted = isTest2P2RevealStarted;
 
 function syncTest2VoiceStarState(canvas) {
   if (!canvas || !_isTest2Scope()) return;
   var star = document.getElementById('p2-star');
   if (!star) return;
+  var result = document.getElementById('p2-result');
+  var isLoading = !!(result && result.classList.contains('is-loading'));
+  var revealStarted = isTest2P2RevealStarted();
   var active =
     canvas.classList.contains('p2-listening') ||
-    canvas.classList.contains('p2-generating');
-  var icon = star.querySelector('.dot-icon11');
-  var grad = star.querySelector('.dot-icon11__grad');
-  var from = star.querySelector('.dot-icon11__layer--from');
-  var to = star.querySelector('.dot-icon11__layer--to');
-  var chord = star.querySelector('.p2-breathing-chord');
+    canvas.classList.contains('p2-generating') ||
+    (isLoading && !revealStarted);
 
   if (active) {
     star.classList.add('p2-star-voice-live');
     star.classList.remove('p2-star-voice-settled');
-    star.style.background = '#FF7F24';
-    star.style.borderRadius = '28px';
-    star.style.overflow = 'hidden';
-    if (chord) chord.style.display = 'none';
-    if (icon) {
-      icon.style.display = 'flex';
-      icon.style.background = '#FF7F24';
-      icon.style.opacity = '1';
-    }
-    if (grad) grad.style.opacity = '1';
-    if (from) from.style.opacity = '0';
-    if (to) {
-      to.style.opacity = '1';
-      to.style.filter = 'blur(0px)';
-    }
   } else {
     star.classList.remove('p2-star-voice-live');
     star.classList.add('p2-star-voice-settled');
-    star.style.removeProperty('background');
-    star.style.removeProperty('border-radius');
-    star.style.removeProperty('overflow');
-    if (chord) chord.style.removeProperty('display');
-    if (icon) {
-      icon.style.removeProperty('display');
-      icon.style.removeProperty('background');
-      icon.style.removeProperty('opacity');
-    }
-    if (grad) grad.style.removeProperty('opacity');
-    if (from) from.style.removeProperty('opacity');
-    if (to) {
-      to.style.removeProperty('opacity');
-      to.style.removeProperty('filter');
-    }
   }
+
+  if (window.P2GalaxyStar && typeof window.P2GalaxyStar.syncFromCanvas === 'function') {
+    window.P2GalaxyStar.syncFromCanvas(canvas);
+  }
+}
+
+function installTest2GalaxyStar(canvas) {
+  if (!canvas || !_isTest2Scope()) return;
+
+  function boot() {
+    var star = document.getElementById('p2-star');
+    if (!star || !window.P2GalaxyStar) return;
+    window.P2GalaxyStar.mount(star);
+    syncTest2VoiceStarState(canvas);
+  }
+
+  if (window.P2GalaxyStar) {
+    boot();
+    return;
+  }
+
+  var existing = document.querySelector('script[data-p2-galaxy-star]');
+  if (existing) {
+    existing.addEventListener('load', boot, { once: true });
+    return;
+  }
+
+  var script = document.createElement('script');
+  script.src = '/app/p2-galaxy-star.js?v=10';
+  script.dataset.p2GalaxyStar = '1';
+  script.onload = boot;
+  document.head.appendChild(script);
 }
 
 function installTest2P2TransitionBridge(canvas) {
@@ -6525,6 +6639,7 @@ function installTest2P2TransitionBridge(canvas) {
         }
         if (m.type === 'attributes' && m.attributeName === 'class' && m.target === slot) {
           shouldSync = true;
+          syncTest2VoiceStarState(document.getElementById('canvas'));
         }
       }
       if (shouldSync) syncContactListLayout(slot, { mount: isMount });
@@ -6535,6 +6650,7 @@ function installTest2P2TransitionBridge(canvas) {
     if (!result || result.dataset.test2P2ResultBound === '1') return;
     result.dataset.test2P2ResultBound = '1';
     new MutationObserver(function () {
+      syncTest2VoiceStarState(document.getElementById('canvas'));
       if (!result.classList.contains('is-loading')) return;
       syncTest2LoadingPresentation(result);
     }).observe(result, { attributes: true, attributeFilter: ['class'] });
@@ -6615,6 +6731,7 @@ window.generateSurfaceScenario = function generateSurfaceScenario(surfaceType) {
   if (testScope === 'test2') {
     try {
       installTest2P2TransitionBridge(canvas);
+      installTest2GalaxyStar(canvas);
     } catch (_) {}
   }
   // test3: flip prep → enter on next frame, then tear down enter after animations complete
