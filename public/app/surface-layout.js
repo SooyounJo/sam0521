@@ -1107,7 +1107,7 @@ window.resolveComponentRect = function resolveComponentRect(comp, layout, plan) 
       var isRight = comp.role === 'shortcutRight';
       var sideGap = 28;
       var bottomGap = 16;
-      var size = 54;
+      var size = (window.__mlpTestConfig && window.__mlpTestConfig.id === 'test2') ? 47 : 54;
       return {
         x: isRight ? (vw - sideGap - size) : sideGap,
         y: vh - bottomGap - size - 8,
@@ -1535,6 +1535,25 @@ function _weatherIconSvg(name) {
 
 function _isTest2Scope() {
   return !!(window.__mlpTestConfig && window.__mlpTestConfig.id === 'test2');
+}
+
+function renderTest2LockShortcutCircle(icon) {
+  var iconAsset = icon === 'camera' ? 'camera-icon.svg' : 'phone-icon.svg';
+  var iconInset = icon === 'camera' ? '21.21% 12.5% 17.42% 12.5%' : '8.33% 36.15% 7.65% 33.33%';
+  var assetBase = '/assets/figma/lock-screen/';
+  return '<div style="width:100%;height:100%;position:relative;' +
+    'background:rgba(55,55,55,0.3);' +
+    '-webkit-backdrop-filter:blur(4.63px);backdrop-filter:blur(4.63px);' +
+    'border:0.193px solid rgba(55,55,55,0.3);' +
+    'border-radius:50%;overflow:hidden;box-sizing:border-box;">' +
+    '<div style="position:absolute;left:calc(50% + 0.5px);top:18.09%;bottom:18.09%;aspect-ratio:1/1;transform:translateX(-50%);">' +
+      '<div style="position:relative;width:100%;height:100%;">' +
+        '<div style="position:absolute;inset:' + iconInset + ';">' +
+          '<img src="' + assetBase + iconAsset + '" style="width:100%;height:100%;display:block;" alt="" />' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
 }
 
 function _escP2Html(str) {
@@ -5113,6 +5132,9 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
       // right). variant.icon picks the glyph.
       var scv = (comp && comp.variant) || {};
       var scIcon = scv.icon || (comp.role === 'shortcutRight' ? 'camera' : 'phone');
+      if (_isTest2Scope()) {
+        return renderTest2LockShortcutCircle(scIcon);
+      }
       var SHORTCUT_SVGS = {
         'phone':  '<path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v3a2 2 0 0 1-2 2 17 17 0 0 1-16-16 2 2 0 0 1 2-2z" fill="currentColor"/>',
         'camera': '<path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z" stroke="currentColor" strokeWidth="1.6" fill="none"/><circle cx="12" cy="13" r="3.5" stroke="currentColor" strokeWidth="1.6" fill="none"/>',
