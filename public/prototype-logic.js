@@ -459,7 +459,7 @@
       seqRowStagger: 100
     };
     var P2_TEST2_REVEAL_TIMING = {
-      phase1: 420,
+      phase1: 220,
       phase2Pause: 200,
       seqColor: 160,
       seqAfterTitle: 280,
@@ -565,7 +565,7 @@
           if (typeof window.beginTest2LoadingChromeExit === 'function') {
             window.beginTest2LoadingChromeExit(slot);
           }
-        }, 220);
+        }, 90);
         return;
       }
 
@@ -834,7 +834,7 @@
         
         // Brief pause for dramatic "UI Reconstruction" effect
         await new Promise(function (resolve) {
-          setTimeout(resolve, isTest2 ? 680 : 1500);
+          setTimeout(resolve, isTest2 ? 340 : 1500);
         });
 
         applyTheme(resolved && resolved.themeKey);
